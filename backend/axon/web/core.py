@@ -70,48 +70,32 @@ class ServiceRegistry(object):
     Every service that you add to your application is a JSON service that is accessed via a POST request.
     This is not quite a RESTful API, not quite JSON-RPC either. It's basically just a really convenient way for
     defining a "typed" JSON messaging interface.
-
-    # Define a service registry
-    registry = ServiceRegistry("MyRegistry")
-
-    @registry.register("addPerson")
-    class PersonService:
-        RequestType = MyServiceReq
-        ResponseType = MyServiceReply
-
-        def handle(req):
-            # handles response type
-            return ResponseType(name="Benjamin Button", age=23)
-
-    registry.serve("0.0.0.0", 9090)
     """
     def __init__(self, name="DefaultRegistry"):
         self.name = name
         self.services = {}  # Blank dictionary
 
-    def register(self, name):
+    def register(self, name, callee, RequestType=None, ResponseType=None):
         """Register a new service with the given name.
-        This should be used as a decorator, see the class-level documentation in ServiceRegistry.
+        This should be used either as a decorator or a simple function call.
         """
         if name in self.services.keys():
             raise ValueError("Cannot re-register service with name {}".format(name))
 
-        def decorator(cls):
-            # Wraps a class, registering that it exists
-            if cls.__dict__.get("RequestType") == None or cls.__dict__.get("ResponseType") == None:
-                raise AttributeError("Class {} must define members RequestType, ResponseType at the class-level.".format(cls.__name__))
-            elif not isinstance(cls.__dict__.get("RequestType"), Type):
-                raise AttributeError("Request Type {} must be an instance of Type.".format(cls.__dict__.get("RequestType")))
-            elif not isinstance(cls.__dict__.get("ResponseType"), Type):
-                raise AttributeError("Response Type {} must be an instance of Type.".format(cls.__dict__.get("ResponseType")))
-            elif cls.__dict__.get("__call__") == None or type(cls.__dict__.get("__call__")) != types.FunctionType:
-                raise AttributeError("Class {} must define a method __call__(self, req) that takes an argument of type RequestType and returns ResponseType".format(cls.__name__))
+        if not callable(callee):
+            raise ValueError("Registered object must be callable")
 
-            # Create an instance of the class. The class should take no arguments in the constructor.
-            self.services[name] = cls()
-            return cls
+        if RequestType == None or ResponseType == None:
+            RequestType = callee.RequestType
+            ResponseType = callee.ResponseType
 
-        return decorator
+        if not isinstance(RequestType, Type):
+            raise AttributeError("Request Type {} must be an instance of Type.".format(RequestType))
+        if not isinstance(ResponseType, Type):
+            raise AttributeError("Response Type {} must be an instance of Type.".format(ResponseType))
+
+        # Create an instance of the class. The class should take no arguments in the constructor.
+        self.services[name] = (callee, RequestType, ResponseType)
 
     def serve(self, host="127.0.0.1", port=9090):
         """Serve all registered services based on their identifier. See the class-level docstring for an
@@ -130,12 +114,14 @@ class ServiceRegistry(object):
 
             # Dispatch to one of the registered services
             try:
-                handler = self.services[path]
-                typed_req = handler.RequestType(request.get_json())
+                print(self.services)
+                handler, RequestType, ResponseType = self.services[path]
+                typed_req = RequestType(request.get_json())
                 typed_resp = handler(typed_req)
                 return Response(response=typed_resp.json(), status=200, mimetype="application/json")
             except Exception as e:
                 # Serialize the exception and send back to the user.
-                return Response(status=500, response=str(e))
+                #return Response(status=500, response=str(e))
+                raise e
 
         app.run(host, port)
