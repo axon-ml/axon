@@ -94,19 +94,17 @@ class ServiceRegistry(object):
         if not isinstance(ResponseType, Type):
             raise AttributeError("Response Type {} must be an instance of Type.".format(ResponseType))
 
-        # Create an instance of the class. The class should take no arguments in the constructor.
         self.services[name] = (callee, RequestType, ResponseType)
 
     def serve(self, host="127.0.0.1", port=9090):
         """Serve all registered services based on their identifier. See the class-level docstring for an
         example usage of this method.
         """
-        # Create a Flask App and setup a multiplexer that can handle this.
+        # Create a Flask App and setup a multiplexer that proxies to one of the registered services.
         app = Flask(self.name)
 
         @app.route("/<path:path>", methods=["POST"])
         def multiplexer(path):
-            # Make sure the incoming data is a JSON request.
             if path not in self.services:
                 return Response(status=404, response="{} is not a registered service".format(path))
             if not request.is_json:
@@ -114,14 +112,12 @@ class ServiceRegistry(object):
 
             # Dispatch to one of the registered services
             try:
-                print(self.services)
                 handler, RequestType, ResponseType = self.services[path]
                 typed_req = RequestType(request.get_json())
                 typed_resp = handler(typed_req)
                 return Response(response=typed_resp.json(), status=200, mimetype="application/json")
             except Exception as e:
                 # Serialize the exception and send back to the user.
-                #return Response(status=500, response=str(e))
-                raise e
+                return Response(status=500, response=str(e))
 
         app.run(host, port)

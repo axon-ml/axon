@@ -27,7 +27,7 @@ class PeopleLookupService(object):
 personService = PeopleLookupService()
 
 # Create a registry, and add the services we wish to expose.
-registry = ServiceRegistry("SimpleService")
+registry = ServiceRegistry("PersonService")
 
 registry.register("person/add", personService.add_person, RequestType = PersonType, ResponseType = UuidType)
 registry.register("person/find", personService.find_person, RequestType = UuidType, ResponseType = PersonType)
