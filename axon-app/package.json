@@ -1,0 +1,20 @@
+{
+  "name": "axon-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.2.2",
+    "webpack": "^2.4.1"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.8.3"
+  }
+}

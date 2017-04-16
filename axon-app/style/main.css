@@ -1,0 +1,23 @@
+/* Main stylesheet for Axon. */
+/* Eventually we should break this out into multiple projects, maybe using components, etc. */
+
+body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    color: white;
+}
+
+/* Container type should have a nice background, be offset from the editor. */
+.container {
+    background: #336;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#editor {
+    width: 80%;
+    height: 400px;
+}
