@@ -1,0 +1,23 @@
+plugins {
+    id 'org.inferred.processors' version '1.2.10'
+    id 'java'
+    id 'idea'
+    id 'application'
+}
+
+mainClassName = 'edu.stanford.axon.AxonApplication'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'io.dropwizard:dropwizard-core:1.1.0'
+    compile 'javax.ws.rs:javax.ws.rs-api:2.1-m06'
+    processor 'org.immutables:value:2.4.4'
+}
+
+run {
+    main = 'edu.stanford.axon.AxonApplication'
+    args 'server', 'axon.yml'
+}
