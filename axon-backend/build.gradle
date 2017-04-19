@@ -14,6 +14,7 @@ repositories {
 dependencies {
     compile 'io.dropwizard:dropwizard-core:1.1.0'
     compile 'javax.ws.rs:javax.ws.rs-api:2.1-m06'
+    compile 'redis.clients:jedis:2.9.0'
     processor 'org.immutables:value:2.4.4'
 }
 

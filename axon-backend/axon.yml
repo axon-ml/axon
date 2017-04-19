@@ -1,5 +1,7 @@
-
 server:
   applicationConnectors:
     - type: http
       port: 8080
+
+# Axon specific config
+name: Andrew
