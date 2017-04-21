@@ -1,6 +1,6 @@
 package edu.stanford.axon;
 
-import edu.stanford.axon.resources.BackendResource;
+import edu.stanford.axon.resources.KVStoreResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 
@@ -22,6 +22,6 @@ public class AxonApplication extends Application<AxonConfigurationWrapper> {
         JedisWrapper redis = new JedisWrapper(redisConfiguration.hostname(), redisConfiguration.port());
 
         // Create the storage system.
-        environment.jersey().register(new BackendResource(redis)); /* Register backend service resource */
+        environment.jersey().register(new KVStoreResource(redis)); /* Register backend service resource */
     }
 }
