@@ -18,5 +18,5 @@ public class AxonConfigurationWrapper extends Configuration {
 @JsonDeserialize(as = ImmutableAxonConfig.class)
 interface AxonConfig {
     String name();
-    Optional<StorageConfiguration> storage();
+    Optional<RedisConfiguration> redis();
 }

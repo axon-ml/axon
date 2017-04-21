@@ -5,3 +5,7 @@ server:
 
 # Axon specific config
 name: Andrew
+
+#redis:
+#  hostname: localhost
+#  port: 6379

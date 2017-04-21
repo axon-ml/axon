@@ -3,7 +3,6 @@ package edu.stanford.axon;
 import edu.stanford.axon.resources.BackendResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
-import redis.clients.jedis.Jedis;
 
 public class AxonApplication extends Application<AxonConfigurationWrapper> {
 
@@ -13,17 +12,16 @@ public class AxonApplication extends Application<AxonConfigurationWrapper> {
 
     @Override
     public void run(AxonConfigurationWrapper configuration, Environment environment) throws Exception {
-        System.out.println("Running " + configuration.config.name());
+        // Setup Redis connection
+        RedisConfiguration DEFAULT_REDIS_CONFIG = ImmutableRedisConfiguration.builder()
+                .hostname("localhost")
+                .port(6379)
+                .build();
 
-        // Backend resource
-
-        // Inject some things, like the storage system.
-        configuration.config.storage().ifPresent(config -> {
-            Jedis jedis = new Jedis(config.hostname(), config.port());
-        });
+        RedisConfiguration redisConfiguration = configuration.config.redis().orElse(DEFAULT_REDIS_CONFIG);
+        JedisWrapper redis = new JedisWrapper(redisConfiguration.hostname(), redisConfiguration.port());
 
         // Create the storage system.
-
-        environment.jersey().register(new BackendResource()); /* Register backend service resource */
+        environment.jersey().register(new BackendResource(redis)); /* Register backend service resource */
     }
 }
