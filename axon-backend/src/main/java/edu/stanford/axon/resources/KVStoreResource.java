@@ -4,13 +4,15 @@ import edu.stanford.axon.JedisWrapper;
 import edu.stanford.axon.types.GetRequest;
 import edu.stanford.axon.types.GetResponse;
 import edu.stanford.axon.types.SetRequest;
-import org.immutables.value.Value;
+import edu.stanford.axon.types.SetResponse;
+import redis.clients.jedis.Jedis;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.function.Function;
 
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,16 +25,21 @@ public class KVStoreResource {
         this.redis = redis;
     }
 
-    @Path("/version/set")
+    @Path("/kv/set")
     @POST
-    public String setVersion(SetRequest request) {
-        return redis.withReconnect(r -> r.set(request.key(), request.value()));
+    public SetResponse setVersion(SetRequest request) {
+        return redis.executeWithRetries(r -> {
+            String status = r.set(request.key(), request.value());
+            return SetResponse.builder()
+                    .status(status)
+                    .build();
+        });
     }
 
-    @Path("/version/get")
+    @Path("/kv/get")
     @POST
     public GetResponse getVersion(GetRequest request) {
-        String response = redis.withReconnect(r -> r.get(request.key()));
+        String response = redis.executeWithRetries(r -> r.get(request.key()));
         if (response == null) {
             return GetResponse.builder()
                     .key(request.key())

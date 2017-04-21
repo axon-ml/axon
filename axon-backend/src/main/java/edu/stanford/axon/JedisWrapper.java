@@ -29,18 +29,25 @@ public final class JedisWrapper {
         this.redis = new AtomicReference<>(new Jedis(host, port));
     }
 
-   public <T> T withReconnect(Function<Jedis, T> f) {
+    /**
+     * Perform the given function using the wrapped Jedis instance, performing retries in the case
+     * of a connection failure.
+     */
+    public <T> T executeWithRetries(Function<Jedis, T> f) {
         for (int tries = 1; tries <= MAX_RETRIES; tries++) {
             try {
                 return f.apply(redis.get());
             } catch (JedisConnectionException ex) {
                 LOGGER.info("Lost connection to redis, attempt {} of {}...", tries, MAX_RETRIES);
                 synchronized (this) {
-                    // Only allow one client to use this at a time.
+                    // Only allow one thread to overwrite at a time.
+                    // Note that when we are using Dropwizard, requests are handled concurrently by multiple threads,
+                    // so we need to consider concurrency in our data structures, like this one.
                     redis.set(new Jedis(hostname, port));
                 }
             }
         }
+
         throw new RuntimeException("Could not reconnect to Jedis!");
     }
 
