@@ -1,7 +1,5 @@
-package edu.stanford.axon;
+package axon;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
@@ -9,14 +7,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 /**
- * JedisWrapper wraps a Jedis instance, and retries computations in the face of connection errors.
+ * axon.JedisWrapper wraps a Jedis instance, and retries computations in the face of connection errors.
  *
  * NOTE: try and make your operations idempotent, since you can't safely reason about whether or not
  * they completed before the connection was lost.
  */
 public final class JedisWrapper {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JedisWrapper.class);
-
     private AtomicReference<Jedis> redis;
     private String hostname;
     private int port;
@@ -38,7 +34,6 @@ public final class JedisWrapper {
             try {
                 return f.apply(redis.get());
             } catch (JedisConnectionException ex) {
-                LOGGER.info("Lost connection to redis, attempt {} of {}...", tries, MAX_RETRIES);
                 synchronized (this) {
                     // Only allow one thread to overwrite at a time.
                     // Note that when we are using Dropwizard, requests are handled concurrently by multiple threads,
@@ -50,5 +45,4 @@ public final class JedisWrapper {
 
         throw new RuntimeException("Could not reconnect to Jedis!");
     }
-
 }

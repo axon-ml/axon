@@ -1,24 +1,18 @@
-plugins {
-    id 'org.inferred.processors' version '1.2.10'
-    id 'java'
-    id 'idea'
-    id 'application'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
 }
 
-mainClassName = 'edu.stanford.axon.AxonApplication'
+subprojects {
+    repositories {
+        mavenCentral()
+    }
 
-repositories {
-    mavenCentral()
-}
+    dependencies {
+        compile 'org.immutables:value:2.4.4'
+    }
 
-dependencies {
-    compile 'io.dropwizard:dropwizard-core:1.1.0'
-    compile 'javax.ws.rs:javax.ws.rs-api:2.1-m06'
-    compile 'redis.clients:jedis:2.9.0'
-    processor 'org.immutables:value:2.4.4'
-}
-
-run {
-    main = 'edu.stanford.axon.AxonApplication'
-    args 'server', 'axon.yml'
+    // Configure source folders
+    project.idea.module.generatedSourceDirs += project.file("generated_src")
+    project.idea.module.sourceDirs += project.file("generated_src")
 }
