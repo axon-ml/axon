@@ -1,5 +1,0 @@
-dependencies {
-    compile project(':axon-shared')
-
-    compile 'javax.ws.rs:javax.ws.rs-api:2.1-m06'
-}

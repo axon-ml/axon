@@ -1,5 +1,0 @@
-rootProject.name = 'axon-backend'
-
-include 'axon-shared'
-include 'axon-data-api'
-include 'axon-data'

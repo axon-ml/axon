@@ -1,8 +1,0 @@
-server:
-  applicationConnectors:
-    - type: http
-      port: 8080
-
-redis:
-  hostname: localhost
-  port: 6379
