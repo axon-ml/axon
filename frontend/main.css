@@ -1,0 +1,17 @@
+.leftToolbar {
+	padding-right: 3px;
+	position: relative;
+	left: 15px;
+}
+
+.rightToolbar {
+	position: absolute;
+	right: 15px;
+}
+
+.mainView {
+	height: 100%;
+}
+/*.rightButton {
+	margin-left: 15px; 
+}*/
