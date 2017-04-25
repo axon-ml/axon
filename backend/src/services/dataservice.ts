@@ -1,6 +1,6 @@
-import { Application, Router } from "express";
-import { contentType } from "../middleware";
-import { IService } from "./service";
+import {Router} from "express";
+import {contentType} from "../middleware";
+import {IService} from "./service";
 
 /**
  * DataService is a facade in front of the database. We'll want to add routes for things like

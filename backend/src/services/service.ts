@@ -1,5 +1,4 @@
-
-import { Application, Router } from "express";
+import {Router} from "express";
 
 /**
  * A service is any class type that exposes an interface for routes

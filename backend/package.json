@@ -20,7 +20,7 @@
   "scripts": {
     "start": "tsc && node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "tslint -c tslint.json -e node_modules/ ./**/*.ts"
+    "lint": "tslint 'src/**/*.ts'"
   },
   "author": "",
   "license": "ISC"

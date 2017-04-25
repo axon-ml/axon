@@ -3,7 +3,9 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "outDir": "dist",
-        "noImplicitAny": true
+        "noImplicitAny": true,
+        "alwaysStrict": true,
+        "strictNullChecks": true
     },
     "include": [
         "src/**/*.ts"

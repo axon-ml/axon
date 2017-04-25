@@ -1,8 +1,8 @@
-import { json as jsonBody } from "body-parser";
+import {json as jsonBody} from "body-parser";
 import * as express from "express";
 import * as session from "express-session";
-import { logger } from "./logger";
-import { DataService } from "./services/dataservice";
+import {logger} from "./logger";
+import {DataService} from "./services";
 
 const app = express();
 

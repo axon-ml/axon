@@ -1,6 +1,5 @@
-import { RequestHandler } from "express";
-import { HttpCodes } from "./httpcodes";
-import { logger } from "./logger";
+import {RequestHandler} from "express";
+import {HttpCodes} from "./httpcodes";
 
 /**
  * Content-Type filtering middleware.
