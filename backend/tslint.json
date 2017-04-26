@@ -1,5 +1,6 @@
 {
     "rules": {
+        "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
         "eofline": true,
         "class-name": true,
         "comment-format": [true,
