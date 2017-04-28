@@ -5,10 +5,11 @@
         "outDir": "dist",
         "noImplicitAny": true,
         "alwaysStrict": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "allowJs": true
     },
     "include": [
-        "src/**/*.ts"
+        "src/"
     ],
     "exclude": [
         "node_modules"
