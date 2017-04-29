@@ -1,24 +1,24 @@
-<div class="stylesheets"> 
+<div class="stylesheets">
 	<link rel="stylesheet" type="text/css" href="components/login-register/style.css" />
-</div>     
+</div>
 
 
 <div class="login" ng-if="loginRegister.displayLogin">
-</div> 
+</div>
 
 <div class="register" ng-if="!loginRegister.displayLogin">
 	<div class="statusMessages">
 		<p ng-if="loginRegister.newUser.password !== loginRegister.passwordVerify">The two passwords do not match. Please ensure the passwords match to be able to register. </p>
 		<p>{{loginRegister.statusMessage}}</p>
-	<h3> Register as a New User</h3> 
-	<form class="registerForm" layout="column"> 
-		<label class="lineLabel"> User Name 
-			<input type="text" ng-model="loginRegister.newUser.login_name" required> </input> 
-		</label> 
+	<h3> Register as a New User</h3>
+	<form class="registerForm" layout="column">
+		<label class="lineLabel"> User Name
+			<input type="text" ng-model="loginRegister.newUser.login_name" required> </input>
+		</label>
 		<label> Password
 			<input type="password" ng-model="loginRegister.newUser.password"></input>
-		</label> 
-		<input type="submit" ng-click="loginRegister.register(loginRegister.newUser)" ng-disabled="loginRegister.newUser.password !== loginRegister.passwordVerify" value="Register Me"></input> 
+		</label>
+		<input type="submit" ng-click="loginRegister.register(loginRegister.newUser)" ng-disabled="loginRegister.newUser.password !== loginRegister.passwordVerify" value="Register Me"></input>
 	</form>
-	<input type="button" ng-click="loginRegister.displayLogin = true" value="Go Back to Login Page"></input>  
-</div> 
+	<input type="button" ng-click="loginRegister.displayLogin = true" value="Go Back to Login Page"></input>
+</div>
