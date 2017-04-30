@@ -1,9 +1,10 @@
 <!doctype html>
-<html ng-app="app" ng-controller="MainController">
+<html ng-app="axonApp" ng-controller="AxonController">
     <head>
         <title>Axon</title>
-        <link href="node_modules/angular-material/angular-material.css" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="main.css" />
+        <link rel="stylesheet" type="text/css" href="/node_modules/angular-material/angular-material.css" />
+        <link rel="stylesheet" type="text/css" href="/styles/main.css" />
+        <base href="/"></base>
     </head>
 
     <body layout="column">
@@ -13,17 +14,19 @@
                     <span flex="15">Axon</span>
                     <span flex="75"></span>
 
-                    <span flex><md-button ng-if="main.loggedIn" href="/{{main.username}}">Profile</md-button></span>
-                    <span flex><md-button href="/logout">Logout</md-button></span>
+                    <!-- Options visible to logged in users -->
+                    <span ng-if="main.loggedIn" layout="row">
+                        <span flex><md-button href="/{{main.username}}">Profile</md-button></span>
+                        <span flex><md-button href="/logout">Logout</md-button></span>
+                    </div>
                     </div>
                 </div>
             </md-toolbar>
         </div>
 
         <div class="container" flex layout="row">
-
             <md-content flex id="content">
-                <div class="mainView" ng-view></div>
+                <div ng-view></div>
             </md-content>
         </div>
 
@@ -36,7 +39,9 @@
         <script src="node_modules/angular-resource/angular-resource.js"></script>
 
         <!-- Angular Controllers -->
-        <script src="MainController.js"></script>
-        <script src="components/login-register/controller.js"></script>
+        <script src="src/app.js"></script>
+        <script src="src/components/login-register/controller.js"></script>
+        <script src="src/components/profile/controller.js"></script>
+        <script src="src/components/model-detail/controller.js"></script>
     </body>
 </html>
