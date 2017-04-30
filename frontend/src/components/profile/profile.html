@@ -1,6 +1,10 @@
 <h1>{{profile.displayName}}</h1>
 
-Hi there, {{profile.displayName}}.
+<p>Hi there, {{profile.displayName}}.</p>
 
-In the actual version of this page, information will be pulled by the controller based
-on the username of the person we're navigating to.
+<p>In the actual version of this page, information will be pulled by the controller from a database based on the username of the person we're navigating to.</p>
+
+<h2>Models</h2>
+<ul>
+    <li ng-repeat="model in main.models"><a href="/{{profile.displayName}}/{{model}}">{{model}}</a></li>
+</ul>

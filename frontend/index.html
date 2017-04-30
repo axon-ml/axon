@@ -17,7 +17,7 @@
                     <!-- Options visible to logged in users -->
                     <span ng-if="main.loggedIn" layout="row">
                         <span flex><md-button href="/{{main.username}}">Profile</md-button></span>
-                        <span flex><md-button href="/logout">Logout</md-button></span>
+                        <span flex><md-button ng-click="main.logout()">Logout</md-button></span>
                     </div>
                     </div>
                 </div>

@@ -10,9 +10,6 @@ app.config(['$routeProvider', '$locationProvider',
         $routeProvider.when('/login-register', {
             templateUrl: '/src/components/login-register/login.html',
             controller: 'LoginRegisterController'
-        }).when('/logout', {
-            // Implement this
-            controller: 'LogoutController'
         }).when('/:username', {
             templateUrl: '/src/components/profile/profile.html',
             controller: 'ProfileController'
@@ -30,7 +27,8 @@ app.controller("AxonController", ["$scope", "$rootScope", "$location", "$resourc
         $scope.main = {
             title: "Users",
             loggedIn: true,
-            username: "admin",
+            username: "elonmusk",
+            models: ["googlenet", "resnet"] /* List of models */
         };
 
         // $scope.$on('SuccessfulLogin', function () {
@@ -38,7 +36,6 @@ app.controller("AxonController", ["$scope", "$rootScope", "$location", "$resourc
         // });
 
         $scope.main.logout = function () {
-            $resource("/admin/logout").save({});
             $scope.main.loggedIn = false;
             $location.path("/login-register");
         };
