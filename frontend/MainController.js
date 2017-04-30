@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('app', ['ngRoute', 'ngResource', 'ngMaterial']);
+let app = angular.module('app', ['ngRoute', 'ngResource', 'ngMaterial']);
 
 app.config(['$routeProvider',
     function ($routeProvider) {
@@ -14,13 +14,12 @@ app.config(['$routeProvider',
             });
     }]);
 
-app.controller("MainController", ["$scope", "$rootScope",
-     "$location", "$resource", "$http",
-
+app.controller("MainController", ["$scope", "$rootScope", "$location", "$resource", "$http",
     function ($scope, $rootScope, $location, $resource, $http) {
         $scope.main = {};
         $scope.main.title = 'Users';
-        $scope.main.isLoggedin = false;
+        $scope.main.loggedIn = true;
+        $scope.main.username = "admin";
 
         $scope.$on('SuccessfulLogin', function() {
             $scope.main.isLoggedin = true;
