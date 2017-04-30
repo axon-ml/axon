@@ -31,5 +31,5 @@ const server = http.createServer((req, res) => {
     }
 });
 
-console.log("Server started on port 3001");
+console.log("Navigate to http://localhost:3001");
 server.listen(3001);
