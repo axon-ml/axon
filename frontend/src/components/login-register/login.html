@@ -3,7 +3,7 @@
 </div>
 
 
-<div class="login" ng-if="loginRegister.displayLogin">
+<div class="login" ng-if="vm.displayLogin">
 </div>
 
 <div class="register" ng-if="!loginRegister.displayLogin">
@@ -22,7 +22,7 @@
 					<input type="password" ng-model="loginRegister.newUser.password"></input>
 				</md-input-container>
 			</label>
-			<md-button ng-click="loginRegister.register(loginRegister.newUser)">Register</md-button>
+			<md-button ng-click="vm.login('a','v')">Register</md-button>
 		</form>
 	</div>
 </div>

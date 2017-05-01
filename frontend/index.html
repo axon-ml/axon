@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="axonApp" ng-controller="AxonController">
+<html ng-app="axonApp">
     <head>
         <title>Axon</title>
         <link rel="stylesheet" type="text/css" href="/node_modules/angular-material/angular-material.css" />
@@ -7,7 +7,7 @@
         <base href="/"></base>
     </head>
 
-    <body layout="column">
+    <body layout="column" ng-controller="AxonController">
         <div class="main-toolbar">
             <md-toolbar layout="row" class="md-hue-2">
                 <div class="md-toolbar-tools">
@@ -40,8 +40,10 @@
 
         <!-- Angular Controllers -->
         <script src="src/app.js"></script>
-        <script src="src/components/login-register/controller.js"></script>
-        <script src="src/components/profile/controller.js"></script>
-        <script src="src/components/model-detail/controller.js"></script>
+        <script src="src/app.controller.js"></script>
+        <script src="src/app.config.js"></script>
+        <script src="src/components/login-register/login.controller.js"></script>
+        <script src="src/components/profile/profile.controller.js"></script>
+        <script src="src/components/model-detail/model.controller.js"></script>
     </body>
 </html>
