@@ -10,6 +10,7 @@
     "@types/node": "^7.0.13",
     "@types/sequelize": "^4.0.51",
     "@types/winston": "^2.3.1",
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
