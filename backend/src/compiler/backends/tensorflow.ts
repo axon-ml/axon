@@ -2,8 +2,8 @@
  * Code generation backend for Tensorflow code.
  */
 
-import {CodegenBackend} from "../codegen";
+import {ICodegenBackend} from "../codegen";
 
-export class TensorflowBackend implements CodegenBackend {
+export class TensorflowBackend implements ICodegenBackend {
     // TODO(a10y): Fill this in.
 }
