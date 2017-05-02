@@ -35,6 +35,14 @@ export interface Pool2DParams {
     strides: number;
 }
 
+export interface DropoutParams {
+    probability: number;
+}
+
+export interface SoftmaxParams {
+    classes: number;
+}
+
 /**
  * Node in a raw graph that needs to be compiled.
  */
