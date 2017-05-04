@@ -3,3 +3,4 @@
  */
 
 export {DataService} from "./dataservice";
+export {AuthService} from "./authservice";
