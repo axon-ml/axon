@@ -44,14 +44,14 @@ export class AuthService implements IService {
      */
     private handleLogin(req: Request, res: Response) {
         // Check that we have our form parameters.
-        const { username, password } = req.body;
+        const {username, password} = req.body;
         this.db.query("SELECT * FROM users WHERE handle = $1", [username]).then((result) => {
             LOGGER.info("rowCount=" + result.rowCount);
             if (result.rowCount === 0) {
                 // Send an error response, redirect to the start page.
                 res.redirect("/login?err");
             } else {
-                const { pass_bcrypt } = result.rows[0];
+                const {pass_bcrypt} = result.rows[0];
                 bcrypt.compare(password, pass_bcrypt).then(passMatch => {
                     LOGGER.info("passMatch=" + passMatch);
                     if (passMatch) {
