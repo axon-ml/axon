@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('axonApp', ['ngRoute', 'ngResource', 'ngMaterial']);
+    angular.module('axonApp', ['ngRoute', 'ngResource', 'ngMaterial', 'ui.ace', 'btford.markdown']);
 
 })();
 
