@@ -29,7 +29,8 @@ export class AuthService implements IService {
         // Add the route for login.
         // Note: because we're using JWT's, credentials are stored purely on the client, which means
         // we don't even need a logout handler, the user will simply start to do things.
-        this.serviceRouter.post("/login", (req, res) => this.handleLogin(req, res));
+        this.serviceRouter
+            .post("/login", (req, res) => this.handleLogin(req, res));
     }
 
     /**

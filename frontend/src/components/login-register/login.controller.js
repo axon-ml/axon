@@ -24,7 +24,7 @@
             };
             $authService.login(params, callback);
 
-            function callback(jwt, err) {
+            function callback(err, jwt) {
                 if (err) {
                     $location.url("/login?err");
                 } else {

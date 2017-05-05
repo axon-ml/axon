@@ -9,7 +9,7 @@
 
     axonConfig.$inject = ['$routeProvider', '$locationProvider'];
     function axonConfig($routeProvider, $locationProvider) {
-        // Use HTML5 URLs, so we can get history API, frontend routing, etc.
+        // Use HTML5 URLs, so we can get pretty URLs.
         $locationProvider.html5Mode(true);
 
         $routeProvider.when('/login', {

@@ -23,7 +23,7 @@ const DB = new pg.Pool({
 });
 
 // Initialize + Mount services
-const dataService = new DataService();
+const dataService = new DataService(DB);
 const authService = new AuthService(DB);
 
 app.use("/data", dataService.router());

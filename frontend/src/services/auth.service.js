@@ -28,11 +28,11 @@
         this.$http.post(URL, loginParams).then(successCb, errorCb);
 
         function successCb(response) {
-            cb(response);
+            cb(null, response);
         }
 
         function errorCb(response) {
-            cb(null, response);
+            cb(response, null);
         }
     }
 })();
