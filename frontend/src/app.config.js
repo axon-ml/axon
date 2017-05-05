@@ -33,14 +33,14 @@
      * On first run of the module after a refresh, restore the user state for logged in user.
      * For logged-out user, redirect to login page.
      */
-    axonRun.$inject = ['$cookies', '$rootScope', '$location', '$http'];
-    function axonRun($cookies, $rootScope, $location, $http) {
+    axonRun.$inject = ['$credentialsService', '$rootScope', '$location', '$http'];
+    function axonRun($credentialsService, $rootScope, $location, $http) {
         // Set loggedIn on the rootscope.
         $rootScope.root = {};
-        if ($cookies.get('jwt')) {
+        if ($credentialsService.getJwt()) {
             $rootScope.root.loggedIn = true;
-            $rootScope.root.username = $cookies.get('username');
-            $http.defaults.headers.common['Authorization'] = 'Bearer ' + $cookies.get('jwt');
+            $rootScope.root.username = $credentialsService.getUsername();
+            $http.defaults.headers.common['Authorization'] = 'Bearer ' + $credentialsService.getJwt();
         }
 
         console.log("Logged In:", $rootScope.root.loggedIn);
@@ -49,6 +49,9 @@
                 $location.path('/login');
             }
         });
-    }
 
+        if ($location.path() == '/' && $rootScope.root.loggedIn) {
+            $location.path('/' + $rootScope.root.username);
+        }
+    }
 })();

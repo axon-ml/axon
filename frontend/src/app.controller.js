@@ -5,8 +5,8 @@
         .module('axonApp')
         .controller('AxonController', AxonController);
 
-    AxonController.$inject = ['$cookies', '$rootScope', '$location', '$resource', '$http'];
-    function AxonController($cookies, $rootScope, $location, $resource, $http) {
+    AxonController.$inject = ['$credentialsService', '$rootScope', '$location', '$resource', '$http'];
+    function AxonController($credentialsService, $rootScope, $location, $resource, $http) {
         if ($rootScope.root === undefined) {
             $rootScope.root = {
                 loggedIn: false,
@@ -16,9 +16,9 @@
         $rootScope.root.logout = logout;
 
         function logout() {
+            $http.defaults.headers.common.Authorization = '';
             $rootScope.root = {};
-            $cookies.remove('jwt');
-            $cookies.remove('username');
+            $credentialsService.clear();
             $location.path("/login");
         };
     }
