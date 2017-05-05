@@ -3,22 +3,23 @@
 
     angular
         .module('axonApp')
-        .controller('AxonController', ['$scope', '$rootScope', '$location', '$resource', '$http',
-            axonController]);
+        .controller('AxonController', AxonController);
 
-    function axonController($scope, $rootScope, $location, $resource, $http) {
-        console.log('Starting AxonController');
-        $scope.main = {
-            title: 'Users',
-            loggedIn: true,
-            username: 'elonmusk',
-            models: ['googlenet', 'resnet'] /* List of models */
-        };
+    AxonController.$inject = ['$cookies', '$rootScope', '$location', '$resource', '$http'];
+    function AxonController($cookies, $rootScope, $location, $resource, $http) {
+        if ($rootScope.root === undefined) {
+            $rootScope.root = {
+                loggedIn: false,
+                username: '',
+            };
+        }
+        $rootScope.root.logout = logout;
 
-        $scope.main.logout = function () {
-            $scope.main.loggedIn = false;
-            $location.path('/login-register');
+        function logout() {
+            $rootScope.root = {};
+            $cookies.remove('jwt');
+            $cookies.remove('username');
+            $location.path("/login");
         };
     }
-
 })();

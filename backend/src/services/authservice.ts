@@ -1,9 +1,12 @@
-import { IService } from "./service";
-import { Request, Response, Router } from "express";
-import { HttpCodes } from "../httpcodes";
+import {IService} from "./service";
+import {Request, Response, Router} from "express";
+import {HttpCodes} from "../httpcodes";
 import * as pg from "pg";
 import * as bcrypt from "bcrypt";
 import {createLogger} from "../logger";
+import {FRONTEND_BASE_URL, JWT_SECRET, JWT_SIGN_OPTIONS} from "../constants";
+// import * as expressJwt from "express-jwt";
+import * as jwt from "jsonwebtoken";
 
 const LOGGER = createLogger("AuthService");
 
@@ -23,8 +26,10 @@ export class AuthService implements IService {
     }
 
     private setupRoutes() {
+        // Add the route for login.
+        // Note: because we're using JWT's, credentials are stored purely on the client, which means
+        // we don't even need a logout handler, the user will simply start to do things.
         this.serviceRouter.post("/login", (req, res) => this.handleLogin(req, res));
-        this.serviceRouter.post("/logout", (req, res) => this.handleLogout(req, res));
     }
 
     /**
@@ -40,48 +45,54 @@ export class AuthService implements IService {
     }
 
     /**
-     * Handle a login request.
+     * Handle a login request. Sends back a signed JWT token if login is successful, otherwise
+     * replies with an error message.
      */
     private handleLogin(req: Request, res: Response) {
         // Check that we have our form parameters.
         const {username, password} = req.body;
+        LOGGER.info(`Login request user=${username}`);
         this.db.query("SELECT * FROM users WHERE handle = $1", [username]).then((result) => {
-            LOGGER.info("rowCount=" + result.rowCount);
+            LOGGER.info(`rowCount=${result.rowCount}`);
             if (result.rowCount === 0) {
-                // Send an error response, redirect to the start page.
-                res.redirect("/login?err");
+                // TODO: Unknown username, send back error response.
+                res.sendStatus(HttpCodes.BAD_REQUEST)
+                return;
             } else {
-                const {pass_bcrypt} = result.rows[0];
-                bcrypt.compare(password, pass_bcrypt).then(passMatch => {
-                    LOGGER.info("passMatch=" + passMatch);
+                const {id, pass_bcrypt} = result.rows[0];
+                bcrypt.compare(password, pass_bcrypt)
+                    .catch(err => res.status(500).end(`bcrypt error: ${err}`))
+                    .then(passMatch => {
+                    LOGGER.info(`passMatch=${passMatch}`);
                     if (passMatch) {
-                        if (req.session === undefined) {
-                            res.sendStatus(500);
-                            res.end("Must enable req.session");
-                        } else {
-                            // Set the loggedIn flag for the session.
-                            req.session.loggedIn = true;
-                            res.redirect("/" + username);
-                        }
+                        /* Reply with a claim of the user's identity, signed with the secret key.
+                           In the future, we receive this signed claim from the user, decrypt it
+                           and use it like a passport: we trust the token and allow the holder to
+                           execute actions on behalf of the referenced user. */
+                        const claim = {
+                            userId: id,
+                        };
+                        LOGGER.info(`claim: ${JSON.stringify(claim)}`);
+                        jwt.sign(claim, JWT_SECRET, JWT_SIGN_OPTIONS, (err, encoded) => {
+                            if (err) {
+                                // Send an error response back.
+                                LOGGER.error(`JWT failed: ${err}`);
+                                res
+                                    .status(HttpCodes.INTERNAL_SERVER_ERROR)
+                                    .end(`JWT failed: ${err}`);
+                                return;
+                            } else {
+                                res
+                                    .status(200)
+                                    .end(encoded);
+                            }
+                        });
                     } else {
-                        // Password match failed, send back to login page with error message.
-                        res.redirect("/login?err");
+                        res.sendStatus(HttpCodes.BAD_REQUEST);
+                        return;
                     }
                 });
             }
         });
-    }
-
-    /**
-     * Handle logout.
-     */
-    private handleLogout(req: Request, res: Response) {
-        // Clear the cookie from the user, redirect them to the homepage.
-        if (req.session !== undefined) {
-            // Destroy the session, redirect back to the login page.
-            req.session.destroy(() => {
-                res.redirect("/login");
-            });
-        }
     }
 }

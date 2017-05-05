@@ -1,20 +1,41 @@
 (function () {
-  'use strict';
+    'use strict';
 
-  angular
-    .module('axonApp')
-    .controller('LoginRegisterController', [loginRegisterController]);
+    angular
+        .module('axonApp')
+        .controller('LoginRegisterController', LoginRegisterController);
 
-  function loginRegisterController() {
-    var vm = this;
-    vm.login = login;
-    vm.register = register;
+    LoginRegisterController.$inject = ['$authService', '$cookies', '$http', '$location', '$rootScope'];
 
-    function login (username, password) {
-      console.log(username, password);
+    /**
+     * Controller for login/registration component.
+     */
+    function LoginRegisterController($authService, $cookies, $http, $location, $rootScope) {
+        var vm = this;
+        vm.handle = '';
+        vm.password = '';
+        vm.login = login;
+
+        function login() {
+            // Send the username and password up to server.
+            var params = {
+                username: vm.handle,
+                password: vm.password,
+            };
+            $authService.login(params, callback);
+
+            function callback(jwt, err) {
+                if (err) {
+                    $location.url("/login?err");
+                } else {
+                    $cookies.put('username', vm.handle);
+                    $cookies.put('jwt', jwt);
+
+                    $rootScope.root.loggedIn = true;
+                    $http.defaults.headers.common['Authorization'] = 'Bearer ' + jwt;
+                    $location.url("/" + vm.handle);
+                }
+            }
+        }
     }
-
-    function register (newUser) { }
-  }
-
 })();

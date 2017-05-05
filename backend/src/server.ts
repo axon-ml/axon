@@ -1,17 +1,19 @@
 import {json as jsonBody} from "body-parser";
 import * as express from "express";
-import * as session from "express-session";
 import {createLogger} from "./logger";
 import {AuthService, DataService} from "./services";
 import * as winston from "winston";
 import * as pg from "pg";
+import * as cors from "cors";
 
 const LOGGER: winston.LoggerInstance = createLogger("server");
 
 // Middleware setup.
 const app = express();
-app.use(session({secret: "secretKey", resave: false, saveUninitialized: false}));
 app.use(jsonBody());
+app.use(cors());
+
+app.options('*', cors()); // Enable CORS for all routes with pre-flight requests
 
 // Setup database connection
 const DB = new pg.Pool({
