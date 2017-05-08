@@ -4,9 +4,8 @@ import {HttpCodes} from "../httpcodes";
 import * as pg from "pg";
 import * as bcrypt from "bcrypt";
 import {createLogger} from "../logger";
-import {FRONTEND_BASE_URL, JWT_SECRET, JWT_SIGN_OPTIONS} from "../constants";
-// import * as expressJwt from "express-jwt";
-import * as jwt from "jsonwebtoken";
+import {FRONTEND_BASE_URL, TOKEN_SECRET} from "../constants";
+import {Claim, Token, createToken} from "../tokens";
 
 const LOGGER = createLogger("AuthService");
 
@@ -64,34 +63,21 @@ export class AuthService implements IService {
                 bcrypt.compare(password, pass_bcrypt)
                     .catch(err => res.status(500).end(`bcrypt error: ${err}`))
                     .then(passMatch => {
-                    LOGGER.info(`passMatch=${passMatch}`);
-                    if (passMatch) {
-                        /* Reply with a claim of the user's identity, signed with the secret key.
-                           In the future, we receive this signed claim from the user, decrypt it
-                           and use it like a passport: we trust the token and allow the holder to
-                           execute actions on behalf of the referenced user. */
-                        const claim = {
-                            userId: id,
-                        };
-                        LOGGER.info(`claim: ${JSON.stringify(claim)}`);
-                        jwt.sign(claim, JWT_SECRET, JWT_SIGN_OPTIONS, (err, encoded) => {
-                            if (err) {
-                                // Send an error response back.
-                                LOGGER.error(`JWT failed: ${err}`);
-                                res
-                                    .status(HttpCodes.INTERNAL_SERVER_ERROR)
-                                    .end(`JWT failed: ${err}`);
-                                return;
-                            } else {
-                                res
-                                    .status(200)
-                                    .end(encoded);
-                            }
-                        });
-                    } else {
-                        res.sendStatus(HttpCodes.BAD_REQUEST);
-                        return;
-                    }
+                        LOGGER.info(`passMatch=${passMatch}`);
+                        if (passMatch) {
+                            /* Reply with a claim of the user's identity, signed with the secret key. */
+                            const claim: Claim = {
+                                userId: id as string,
+                                iss: new Date(),
+                            };
+                            const token = JSON.stringify(createToken(claim));
+                            res
+                                .status(200)
+                                .end(token);
+                        } else {
+                            res.sendStatus(HttpCodes.BAD_REQUEST);
+                            return;
+                        }
                 });
             }
         });

@@ -37,10 +37,11 @@
     function axonRun($credentialsService, $rootScope, $location, $http) {
         // Set loggedIn on the rootscope.
         $rootScope.root = {};
-        if ($credentialsService.getJwt()) {
+        if ($credentialsService.getToken()) {
             $rootScope.root.loggedIn = true;
             $rootScope.root.username = $credentialsService.getUsername();
-            $http.defaults.headers.common['Authorization'] = 'Bearer ' + $credentialsService.getJwt();
+            $http.defaults.headers.common['Authorization'] = $credentialsService.getBearer();
+            console.log("Set bearer to:", $credentialsService.getBearer());
         }
 
         console.log("Logged In:", $rootScope.root.loggedIn);

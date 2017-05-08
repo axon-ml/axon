@@ -3,7 +3,7 @@
 
     /* Constants */
     var USERNAME_KEY = 'username';
-    var JWT_KEY = 'jwt';
+    var TOKEN_KEY = 'token';
 
     angular
         .module('axonApp')
@@ -20,23 +20,28 @@
         this.$http = $http;
     }
 
-    CredentialsService.prototype.store = function(username, jwt) {
+    CredentialsService.prototype.store = function(username, token) {
         this.$cookies.put(USERNAME_KEY, username);
-        this.$cookies.put(JWT_KEY, jwt);
+        this.$cookies.putObject(TOKEN_KEY, token);
 
-        this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + jwt;
+        this.$http.defaults.headers.common['Authorization'] = this.getBearer();
     }
 
     CredentialsService.prototype.getUsername = function() {
         return this.$cookies.get(USERNAME_KEY);
     }
 
-    CredentialsService.prototype.getJwt = function() {
-        return this.$cookies.get(JWT_KEY);
+    CredentialsService.prototype.getToken = function() {
+        return this.$cookies.getObject(TOKEN_KEY);
+    }
+
+    CredentialsService.prototype.getBearer = function() {
+        var token = this.$cookies.getObject(TOKEN_KEY);
+        return 'Bearer ' + btoa(JSON.stringify(token));
     }
 
     CredentialsService.prototype.clear = function() {
             this.$cookies.remove(USERNAME_KEY);
-            this.$cookies.remove(JWT_KEY);
+            this.$cookies.remove(TOKEN_KEY);
     }
 })();

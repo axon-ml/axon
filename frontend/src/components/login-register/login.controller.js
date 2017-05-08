@@ -24,11 +24,11 @@
             };
             $authService.login(params, callback);
 
-            function callback(err, jwt) {
+            function callback(err, token) {
                 if (err) {
                     $location.url("/login?err");
                 } else {
-                    $credentialsService.store(vm.handle, jwt);
+                    $credentialsService.store(vm.handle, token.data);
                     $rootScope.root.loggedIn = true;
                     $location.url("/" + vm.handle);
                 }
