@@ -33,5 +33,21 @@ app.use("/auth", authService.router());
 const server = app.listen(3000,  () => {
     const host = server.address().address;
     const port = server.address().port;
+
+    // Enable raw string processing
+    const raw = (String as any).raw;
+    const BANNER = raw`
+                                        _
+                                       (_)
+  __ ___  _____  _ __        __ _ _ __  _
+ / _\ \ \/ / _ \| '_ \      / _\ | '_ \| |
+| (_| |>  < (_) | | | |    | (_| | |_) | |
+ \__,_/_/\_\___/|_| |_|     \__,_| .__/|_|
+                                 | |
+                                 |_|
+
+    (version 0.0.1)
+`;
+    console.log(BANNER);
     LOGGER.info("Listening at %s:%d", host, port);
 });
