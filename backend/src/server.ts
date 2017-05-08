@@ -13,7 +13,7 @@ const app = express();
 app.use(jsonBody());
 app.use(cors());
 
-app.options('*', cors()); // Enable CORS for all routes with pre-flight requests
+app.options("*", cors()); // Enable CORS for all routes with pre-flight requests
 
 // Setup database connection
 const DB = new pg.Pool({

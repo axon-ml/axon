@@ -44,13 +44,13 @@ export class DataService implements IService {
             if (err) {
                 res.status(500).send(err);
             } else {
-                let models = [];
-                for (let row of result.rows) {
+                const models = [];
+                for (const row of result.rows) {
                     const {name, handle} = row;
                     models.push({name: name, handle: handle});
                 }
                 LOGGER.info(`Models for ${username}: ${JSON.stringify(models)}`);
-                res.json({models: models}).end()
+                res.json({models: models}).end();
             }
         });
     }

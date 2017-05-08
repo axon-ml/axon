@@ -57,7 +57,7 @@ export class AuthService implements IService {
             LOGGER.info(`rowCount=${result.rowCount}`);
             if (result.rowCount === 0) {
                 // TODO: Unknown username, send back error response.
-                res.sendStatus(HttpCodes.BAD_REQUEST)
+                res.sendStatus(HttpCodes.BAD_REQUEST);
                 return;
             } else {
                 const {id, pass_bcrypt} = result.rows[0];
