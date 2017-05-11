@@ -4,6 +4,16 @@
   "description": "Axon backend",
   "main": "server.js",
   "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.1",
+    "cors": "^2.8.3",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "mocha": "^3.3.0",
+    "pg": "^6.1.5",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
     "@types/bcrypt": "^1.0.0",
     "@types/body-parser": "^1.16.3",
     "@types/cors": "^2.8.1",
@@ -12,17 +22,9 @@
     "@types/node": "^7.0.13",
     "@types/pg": "^6.1.39",
     "@types/winston": "^2.3.1",
-    "bcrypt": "^1.0.2",
-    "body-parser": "^1.17.1",
-    "cors": "^2.8.3",
-    "express": "^4.15.2",
-    "express-session": "^1.15.2",
-    "pg": "^6.1.5",
     "tslint": "^5.1.0",
-    "typescript": "^2.4.0-dev.20170428",
-    "winston": "^2.3.1"
+    "typescript": "^2.4.0-dev.20170428"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "tsc && node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",

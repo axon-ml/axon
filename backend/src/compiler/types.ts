@@ -6,9 +6,9 @@
 
 
 /**
- * Top-level schema description for a node.
+ * Top-level schema description for a model.
  */
-export interface ModelSchema {
+export interface IModel {
     layers: ILayer[];
     connections: IConnection[];
 }

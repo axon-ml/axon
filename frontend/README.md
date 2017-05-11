@@ -14,13 +14,7 @@ npm install -g gulp
 
 # Running
 
-Watch files in src/ to rebuild build/axon.js and build/axon.min.js.
-
-```
-gulp
-```
-
-Simultaneously run the server:
+Simultaneously run the server and the gulp watch:
 
 ```
 npm start
