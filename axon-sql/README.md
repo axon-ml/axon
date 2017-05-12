@@ -8,7 +8,7 @@ brew install postgres
 rm -rf /usr/local/var/postgres    # if you have old postgres data, put it somewhere else
 initdb /usr/local/var/postgres -E utf8
 brew services start postgresql
-createdb
+createdb axon
 ```
 
 ## DB scripts
@@ -16,12 +16,12 @@ createdb
 When you want to reset the database to "factory defaults":
 
 ```
-psql < reset.sql
+psql -d axon < reset.sql
 ```
 
 Seeding it with some example data:
 
 ```
-psql < seed.sql
+psql -d axon < seed.sql
 ```
 

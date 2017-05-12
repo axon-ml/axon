@@ -6,5 +6,5 @@
 
 <h2>Models</h2>
 <ul>
-    <li ng-repeat="model in main.models"><a href="/{{vm.displayName}}/{{model}}">{{model}}</a></li>
+    <li ng-repeat="model in vm.models"><a href="/{{vm.displayName}}/{{model.name}}">{{model.name}}</a></li>
 </ul>

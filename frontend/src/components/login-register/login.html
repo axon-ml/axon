@@ -2,27 +2,24 @@
 	<link rel="stylesheet" type="text/css" href="/src/components/login-register/login.css" />
 </div>
 
-
-<div class="login" ng-if="vm.displayLogin">
-</div>
-
-<div class="register" ng-if="!loginRegister.displayLogin">
+<!-- Registration form -->
+<div class="login" ng-if="!loginRegister.displayLogin">
 	<div class="statusMessages">
-		<h3> Register as a New User</h3>
+		<h3>Login</h3>
 		<form layout="column">
 			<md-label>
 				User Name
 				<md-input-container>
-					<input type="text" ng-model="loginRegister.newUser.login_name" required></input>
+					<input type="text" ng-model="vm.handle" required></input>
 				</md-input-container>
 			</md-label>
 			<label>
 				Password
 				<md-input-container>
-					<input type="password" ng-model="loginRegister.newUser.password"></input>
+					<input type="password" ng-model="vm.password"></input>
 				</md-input-container>
 			</label>
-			<md-button ng-click="vm.login('a','v')">Register</md-button>
+			<md-button ng-click="vm.login()">login</md-button>
 		</form>
 	</div>
 </div>

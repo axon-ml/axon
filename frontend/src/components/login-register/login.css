@@ -1,11 +1,11 @@
-.register {
+.login {
 	position: relative;
 	display: flex;
-	align-items: center; 
+	align-items: center;
 	text-align: center;
 	flex-direction: column;
 	/*flex-wrap: nowrap; */
-	justify-content: center; 
+	justify-content: center;
 	/*align-content: center; */
 	height: 100%;
 	bottom: 20%;

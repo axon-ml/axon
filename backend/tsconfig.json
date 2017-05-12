@@ -6,7 +6,8 @@
         "noImplicitAny": true,
         "alwaysStrict": true,
         "strictNullChecks": true,
-        "allowJs": true
+        "allowJs": true,
+        "target": "es2015"
     },
     "include": [
         "src/"

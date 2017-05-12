@@ -16,4 +16,10 @@ export enum HttpCodes {
     FORBIDDEN = 403,
     NOT_FOUND = 404,
     UNSUPPORTED_MEDIA = 415,
+
+    // 5xx
+    INTERNAL_SERVER_ERROR = 500,
+    NOT_IMPLEMENTED = 501,
+    BAD_GATEWAY = 502,
+    SERVICE_UNAVAILABLE = 503,
 }

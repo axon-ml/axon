@@ -6,7 +6,7 @@ const fs = require('fs');
 const server = http.createServer((req, res) => {
     let url = req.url;
     console.log(req.method.toUpperCase() + '\t' + url);
-    if (url.startsWith('/node_modules') || url.startsWith('/static') || url.startsWith('/src') || url.startsWith('/styles') || url.startsWith('/build')) {
+    if (url.startsWith('/node_modules') || url.startsWith('/static') || url.startsWith('/src') || url.startsWith('/styles') || url.startsWith('/build') || url.startsWith('/vendor')) {
         // Serve from disk.
         fs.readFile(url.substr(1), (err, data) => {
             if (err) {
