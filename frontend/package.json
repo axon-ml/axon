@@ -14,6 +14,7 @@
     "angular": "^1.6.4",
     "angular-animate": "^1.6.4",
     "angular-aria": "^1.6.4",
+    "angular-drag-and-drop-lists": "^2.1.0",
     "angular-material": "^1.1.4",
     "angular-resource": "^1.6.4",
     "angular-route": "^1.6.4",
