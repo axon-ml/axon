@@ -69,21 +69,17 @@ export class TypeAssertions {
                                             && (typeof params.probability === "number");
     }
 
-    static isSoftmaxParams(params: any): boolean {
-        return (typeof params === "object") && params.hasOwnProperty("classes")
-                                            && (typeof params.classes === "number");
-    }
 }
 
 /**
  * Built-in layer types. All layers are a composition of thse 6 built-in types.
  */
-export type LayerKind  = "Input" | "FullyConnected" | "Conv2D" | "Pool2D" | "Dropout" | "Softmax";
+export type LayerKind  = "Input" | "FullyConnected" | "Conv2D" | "Pool2D" | "Dropout";
 
 /**
  * Possible types of activation functions.
  */
-export type Activation = "sigmoid" | "tanh" | "relu";
+export type Activation = "sigmoid" | "tanh" | "relu" | "softmax";
 
 /**
  * Possible types of padding for Conv2D layers.
@@ -113,8 +109,4 @@ export interface IPool2DParams {
 
 export interface IDropoutParams {
     probability: number;
-}
-
-export interface ISoftmaxParams {
-    classes: number;
 }
