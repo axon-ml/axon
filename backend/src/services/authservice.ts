@@ -1,10 +1,10 @@
-import {IService} from "./service";
+import {Service} from "./service";
 import {Request, Response, Router} from "express";
 import {HttpCodes} from "../httpcodes";
 import * as pg from "pg";
 import * as bcrypt from "bcrypt";
 import {createLogger} from "../logger";
-import {FRONTEND_BASE_URL, TOKEN_SECRET} from "../constants";
+import {TOKEN_SECRET} from "../constants";
 import {Claim, Token, createToken} from "../tokens";
 
 const LOGGER = createLogger("AuthService");
@@ -13,35 +13,20 @@ const LOGGER = createLogger("AuthService");
  * AuthService is a service which Handles authentication for browser clients. Checks passed credentials
  * against bcrypt password hashes stored in the database. Sets a browser cookie with auth token on success.
  */
-export class AuthService implements IService {
-    private serviceRouter: Router;
-    private configured: boolean;
+export class AuthService extends Service {
     private db: pg.Pool;
 
     constructor(db: pg.Pool) {
-        this.serviceRouter = Router();
-        this.configured = false;
+        super();
         this.db = db;
     }
 
-    private setupRoutes() {
+    protected setupRoutes(): Router {
         // Add the route for login.
         // Note: because we're using JWT's, credentials are stored purely on the client, which means
         // we don't even need a logout handler, the user will simply start to do things.
-        this.serviceRouter
+        return Router()
             .post("/login", (req, res) => this.handleLogin(req, res));
-    }
-
-    /**
-     * router method returns the service router to be mounted by the application.
-     * Must be implemented as part of the IService contract.
-     */
-    router(): Router {
-        if (!this.configured) {
-            this.setupRoutes();
-            this.configured = true;
-        }
-        return this.serviceRouter;
     }
 
     /**

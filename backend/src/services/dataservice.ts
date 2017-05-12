@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {contentType} from "../middleware";
-import {IService} from "./service";
+import {Service} from "./service";
 import * as pg from "pg";
 import {createLogger} from "../logger";
 
@@ -10,27 +10,16 @@ const LOGGER = createLogger("DataService");
  * DataService is a facade in front of the database. We'll want to add routes for things like
  * accessing the number of stars for a particular user, etc.
  */
-export class DataService implements IService {
-    private serviceRouter: Router;
-    private configured: boolean;
+export class DataService extends Service {
     private db: pg.Pool;
 
     constructor(db: pg.Pool) {
-        this.serviceRouter = Router();
+        super();
         this.db = db;
-        this.configured = false;
     }
 
-    public router(): Router {
-        if (!this.configured) {
-            this.setupRoutes();
-            this.configured = true;
-        }
-        return this.serviceRouter;
-    }
-
-    private setupRoutes() {
-        this.serviceRouter
+    protected setupRoutes(): Router {
+        return Router()
             .get("/models/:username", (req, res) => this.handleModels(req, res));
     }
 
