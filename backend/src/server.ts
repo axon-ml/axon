@@ -1,7 +1,9 @@
+import {AuthService, CompileService, DataService} from "./services";
+import {ICodegenBackend, KerasBackend} from "./compiler/codegen";
+
 import {json as jsonBody} from "body-parser";
 import * as express from "express";
 import {createLogger} from "./logger";
-import {AuthService, DataService} from "./services";
 import * as winston from "winston";
 import * as pg from "pg";
 import * as cors from "cors";
@@ -22,12 +24,17 @@ const DB = new pg.Pool({
     port: 5432,
 });
 
+// Create compiler backend.
+const CODEGEN: ICodegenBackend = new KerasBackend();
+
 // Initialize + Mount services
 const dataService = new DataService(DB);
 const authService = new AuthService(DB);
+const compileService = new CompileService(CODEGEN, DB);
 
 app.use("/data", dataService.router());
 app.use("/auth", authService.router());
+app.use("/compile", compileService.router());
 
 // Start the application.
 const server = app.listen(3000,  () => {
