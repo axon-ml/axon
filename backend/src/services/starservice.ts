@@ -21,6 +21,7 @@ export class StarSevice extends Service {
     protected setupRoutes(): Router {
         return Router()
             .post("/:id", (req, res) => this.handleStar(req, res))
+            .get("/count/:modelId", (req, res) => this.handleCount(req, res))
             .get("/:userId/:modelId", (req, res) => this.handleQuery(req, res));
     }
 
@@ -67,17 +68,39 @@ export class StarSevice extends Service {
 
     private handleQuery(req: Request, res: Response) {
         const query = `
-        SELECT COUNT(*) as count
+        SELECT COUNT(*) AS count
         FROM stars
         WHERE userid = $1 AND modelid = $2
         `;
-        this.db.query(query, [req.params.userId, req.params.modelId], (err, result) => {
+        this.db.query(query, [parseInt(req.params.userId), parseInt(req.params.modelId)], (err, result) => {
             if (err) {
                 LOGGER.error(`${req.path} Postgres error: ${err}`);
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
             }
             LOGGER.info(`${req.path} Count=${result.rows[0].count}`);
             return res.json({starred: (result.rows[0].count > 0)});
+        });
+    }
+
+    private handleCount(req: Request, res: Response) {
+        LOGGER.info("modelId=" + req.params.modelId);
+
+        const query = `
+        SELECT count(*) AS count
+        FROM stars
+        WHERE modelid = $1
+        GROUP BY modelid
+        `;
+        this.db.query(query, [parseInt(req.params.modelId)], (err, result) => {
+            if (err) {
+                LOGGER.error(`${req.path} Postgres error: ${err}`);
+                return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+            }
+            if (result.rowCount === 0) {
+                return res.json({count: 0});
+            }
+            LOGGER.info(`${req.path} Count=${result.rows[0].count}`);
+            return res.json({count: result.rows[0].count});
         });
     }
 }

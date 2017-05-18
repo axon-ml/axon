@@ -7,7 +7,7 @@
 
     angular
         .module('axonApp')
-        .service('$credentialsService', CredentialsService);
+        .service('credentialsService', CredentialsService);
 
     CredentialsService.$inject = ['$apiBaseUrl', '$cookies', '$http'];
 
