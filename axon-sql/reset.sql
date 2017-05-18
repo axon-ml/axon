@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS models (
   parent INT REFERENCES models(id),
 
   -- Serialized representation of the model
-  repr VARCHAR NOT NULL,
+  repr VARCHAR,
 
   -- Version number for the model, so we can have model revisions
   version INT NOT NULL,
@@ -36,5 +36,7 @@ CREATE TABLE IF NOT EXISTS models (
 -- Table of stars
 CREATE TABLE IF NOT EXISTS stars (
     userid INT REFERENCES users(id),
-    modelid INT REFERENCES models(id)
+    modelid INT REFERENCES models(id),
+
+    UNIQUE (userid, modelid)
 );

@@ -5,3 +5,4 @@
 export {AuthService} from "./authservice";
 export {CompileService} from "./compileservice";
 export {DataService} from "./dataservice";
+export {StarSevice} from "./starservice";

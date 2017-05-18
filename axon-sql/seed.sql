@@ -13,6 +13,3 @@ INSERT INTO models VALUES (2, 'root-net', 1, 0, '', 1); -- Fork of root/root-net
 
 -- Star the models
 INSERT INTO stars (userid, modelid) VALUES (0, 0);
-INSERT INTO stars (userid, modelid) VALUES (0, 1);
-INSERT INTO stars (userid, modelid) VALUES (1, 1);
-INSERT INTO stars (userid, modelid) VALUES (1, 2);
