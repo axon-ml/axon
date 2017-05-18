@@ -20,7 +20,8 @@ export class StarSevice extends Service {
 
     protected setupRoutes(): Router {
         return Router()
-            .post("/:id", (req, res) => this.handleStar(req, res));
+            .post("/:id", (req, res) => this.handleStar(req, res))
+            .get("/:userId/:modelId", (req, res) => this.handleQuery(req, res));
     }
 
     // Add a star for the given model from the logged-In user.
@@ -51,17 +52,32 @@ export class StarSevice extends Service {
             `;
             this.db.query(query, [token.claim.userId, parseInt(req.params.id)], (err, result) => {
                 if (err) {
-                    LOGGER.error(`Error from postgres: ${err}`);
+                    LOGGER.error(`${req.path} Error from postgres: ${err}`);
                     return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
                 }
 
                 // Send the all-clear in the good case.
-                res.sendStatus(HttpCodes.OK);
+                return res.sendStatus(HttpCodes.OK);
             });
         } catch (err) {
-            LOGGER.error(`Received error: ${err}`);
+            LOGGER.error(`${req.path} Received error: ${err}`);
             return res.status(HttpCodes.BAD_REQUEST).send(err);
         }
+    }
 
+    private handleQuery(req: Request, res: Response) {
+        const query = `
+        SELECT COUNT(*) as count
+        FROM stars
+        WHERE userid = $1 AND modelid = $2
+        `;
+        this.db.query(query, [req.params.userId, req.params.modelId], (err, result) => {
+            if (err) {
+                LOGGER.error(`${req.path} Postgres error: ${err}`);
+                return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+            }
+            LOGGER.info(`${req.path} Count=${result.rows[0].count}`);
+            return res.json({starred: (result.rows[0].count > 0)});
+        });
     }
 }

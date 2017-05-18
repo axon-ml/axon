@@ -26,17 +26,17 @@ export class DataService extends Service {
     private handleModels(req: Request, res: Response) {
         const {username} = req.params;
         const query = `
-        SELECT * FROM users, models
+        SELECT models.name as name, handle, models.id as id FROM users, models
         WHERE users.handle = $1
-            AND users.id = models.owner`;
+          AND users.id = models.owner`;
         this.db.query(query, [username], (err, result) => {
             if (err) {
+                LOGGER.error(`Postgres error: ${err}`);
                 res.status(500).send(err);
             } else {
                 const models = [];
                 for (const row of result.rows) {
-                    const {name, handle} = row;
-                    models.push({name: name, handle: handle});
+                    models.push(row);
                 }
                 LOGGER.info(`Models for ${username}: ${JSON.stringify(models)}`);
                 res.json({models: models}).end();
