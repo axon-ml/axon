@@ -1,7 +1,45 @@
-.nn-layer {
+/*.layers {
 	background-color: lightblue
 }
-
-.sidebar {
+*/
+/*.sidebar {
 	background-color: yellow;
+}*/
+
+.material-icons.rightcorner {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+.optionsList {
+	align-items: center;
+}
+
+
+li {
+	list-style-type: none;
+  	padding: 0px;
+  	margin: 0px;
+
+}
+
+label.layerOptions {
+	left: 0px;
+}
+
+.md-primary.md-raised.md-button.md-ink-ripple.sidebar {
+	width: 100px;
+	height: 100px;
+	white-space: normal;
+}
+
+
+.selectedNewLayer {
+	color: goldenrod;
+}
+
+.md-primary.md-raised.md-button.md-ink-ripple.layers {
+	width: 500px;
+	min-height: 70px;
 }

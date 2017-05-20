@@ -17,7 +17,7 @@ export interface Token {
 export function verify(token: Token): boolean {
     const hmac = crypto.createHmac(HMAC_ALGO, TOKEN_SECRET);
     const claim = JSON.stringify(token.claim);
-    const trueDigest = hmac.update(JSON.stringify(claim)).digest("hex");
+    const trueDigest = hmac.update(claim).digest("hex");
     return trueDigest === token.sig;
 }
 

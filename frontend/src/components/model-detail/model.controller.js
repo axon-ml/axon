@@ -3,18 +3,41 @@
 
     angular
         .module('axonApp')
-        .controller('ModelDetailController', ['$routeParams', '$location', '$scope', modelController]);
+        .controller('ModelDetailController', ModelController);
 
-    function modelController($routeParams, $location, $scope) {
-        $scope.vm = {}
-        $scope.vm.username = $routeParams.username;
-        $scope.vm.model = $routeParams.model;
+    ModelController.$inject = ['$routeParams', '$location', 'dataService', 'starService'];
 
-        $scope.vm.renderMarkdown = false; 
+    function ModelController($routeParams, $location, dataService, starService) {
+        var vm = this;
+        vm.username = $routeParams.username;
+        vm.model = $routeParams.model;
 
-        // TODO write function that saves markdown to database 
+        vm.renderMarkdown = false;
+        vm.star = star;
+        vm.starCount = undefined;
+        console.log("vm", vm);
 
+        // Get the initial star count.
+        dataService.id(vm.username, vm.model, function(err, res) {
+            if (err) {
+                console.error("Error!", err);
+                return;
+            }
+            console.log("res", res);
+            starService.count(res.id, function(err, res) {
+                console.log("Setting count to", res.count);
+                vm.starCount = res.count;
+            });
+        });
 
+        function star() {
+            // Grab the ID of the currently active model, send a star request.
+            dataService.id(vm.username, vm.model, function(err, res) {
+                // Star that model.
+                starService.star(res.id, function(newStars) {
+                    vm.starCount++;
+                });
+            });
+        }
     }
-
 })();

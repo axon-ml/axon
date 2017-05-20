@@ -5,12 +5,12 @@
         .module('axonApp')
         .controller('LoginRegisterController', LoginRegisterController);
 
-    LoginRegisterController.$inject = ['$authService', '$credentialsService', '$http', '$location', '$rootScope'];
+    LoginRegisterController.$inject = ['authService', 'credentialsService', '$http', '$location', '$rootScope'];
 
     /**
      * Controller for login/registration component.
      */
-    function LoginRegisterController($authService, $credentialsService, $http, $location, $rootScope) {
+    function LoginRegisterController(authService, credentialsService, $http, $location, $rootScope) {
         var vm = this;
         vm.handle = '';
         vm.password = '';
@@ -22,13 +22,13 @@
                 username: vm.handle,
                 password: vm.password,
             };
-            $authService.login(params, callback);
+            authService.login(params, callback);
 
             function callback(err, token) {
                 if (err) {
                     $location.url("/login?err");
                 } else {
-                    $credentialsService.store(vm.handle, token.data);
+                    credentialsService.store(vm.handle, token.data);
                     $rootScope.root.loggedIn = true;
                     $location.url("/" + vm.handle);
                 }

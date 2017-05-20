@@ -37,15 +37,15 @@
      * On first run of the module after a refresh, restore the user state for logged in user.
      * For logged-out user, redirect to login page.
      */
-    axonRun.$inject = ['$credentialsService', '$rootScope', '$location', '$http'];
-    function axonRun($credentialsService, $rootScope, $location, $http) {
+    axonRun.$inject = ['credentialsService', '$rootScope', '$location', '$http'];
+    function axonRun(credentialsService, $rootScope, $location, $http) {
         // Set loggedIn on the rootscope.
         $rootScope.root = {};
-        if ($credentialsService.getToken()) {
+        if (credentialsService.getToken()) {
             $rootScope.root.loggedIn = true;
-            $rootScope.root.username = $credentialsService.getUsername();
-            $http.defaults.headers.common['Authorization'] = $credentialsService.getBearer();
-            console.log("Set bearer to:", $credentialsService.getBearer());
+            $rootScope.root.username = credentialsService.getUsername();
+            $http.defaults.headers.common['Authorization'] = credentialsService.getBearer();
+            console.log("Set bearer to:", credentialsService.getBearer());
         }
 
         console.log("Logged In:", $rootScope.root.loggedIn);

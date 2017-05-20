@@ -6,21 +6,28 @@
         .controller('GraphEditorController', ['$routeParams', '$location', '$scope', modelController]);
 
     function modelController($routeParams, $location, $scope) {
+        var layerTypes = {"Input" : ["dimensions"], "Fully Connected" : ["activation", "output_units"],
+                 "Conv2D" : ["activation", "filters", "kernel_size", "padding"], "Pool2D" : ["pool_size", "stride"],
+                  "Dropout" : ["probability"]}; 
         $scope.graph = {}; 
       	$scope.graph.itemSelected = null;
-        $scope.graph.containers =  [{"items" : [], "class" : "sidebar"}, {"items" : [], "class" : "nn-layer"}];
+        $scope.graph.containers =  [ {"items" : [{"name" : "Input"}], "class" : "layers"}, 
+                {"items" : [], "class" : "sidebar"}];
 
-        console.log("hi2");
-        console.log($scope.graph.containers.length);
+        $scope.graph.compile = function() {
+            // Note: all of params necessary to generate code are contained within object 
+            console.log($scope.graph.containers[0].items);
+        };
 
 	    // Generate initial model
-	    for(var j = 0; j < $scope.graph.containers.length; j++) {
-		    for (var i = 1; i <= 3; ++i) {
-		    	console.log(j);
-		        $scope.graph.containers[j].items.push({label: "Item A" + i});
-		        $scope.graph.containers[j].items.push({label: "Item B" + i});
-		    }
-		}
+        for(var key in layerTypes) {
+            if(layerTypes.hasOwnProperty(key)) {
+                $scope.graph.containers[1].items.push({"name" : key, "opts" : layerTypes[key], "input" : {}}); 
+            }
+        }
+
+
+            
     }
 
 })();

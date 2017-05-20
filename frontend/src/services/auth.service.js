@@ -3,7 +3,7 @@
 
     angular
         .module('axonApp')
-        .service('$authService', AuthService);
+        .service('authService', AuthService);
 
     AuthService.$inject = ['$apiBaseUrl', '$http'];
 
@@ -24,15 +24,15 @@
      * cb is a callback of the form cb(jwt, error), where error is falsey if successful.
      */
     AuthService.prototype.login = function(loginParams, cb) {
-        const URL = this.$apiBaseUrl + '/auth/login';
+        var URL = this.$apiBaseUrl + '/auth/login';
         this.$http.post(URL, loginParams).then(successCb, errorCb);
 
         function successCb(response) {
             cb(null, response);
         }
 
-        function errorCb(response) {
-            cb(response, null);
+        function errorCb(err) {
+            cb(err, null);
         }
     }
 })();

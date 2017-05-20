@@ -5,18 +5,19 @@
         .module('axonApp')
         .controller('ProfileController', ProfileController);
 
-    ProfileController.$inject = ['$routeParams', '$userService'];
-    function ProfileController($routeParams, $userService) {
+    ProfileController.$inject = ['$routeParams', 'dataService'];
+    function ProfileController($routeParams, dataService) {
         var vm = this;
         vm.displayName = $routeParams.username;
 
         // Set the models statically.
-        $userService.getModels(vm.displayName, function(err, response) {
+        dataService.getModels(vm.displayName, function(err, response) {
             if (err) {
-                console.error("Error executing $userService.getModels:", err);
+                console.error("Error executing dataService.getModels:", err);
                 vm.models = [];
             } else {
-                vm.models = response.data.models;
+                vm.models = response.models;
+                // Store the currently accessed model at the top-level.
             }
         });
     }
