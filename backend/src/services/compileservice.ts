@@ -9,6 +9,10 @@ import {IModel} from "../compiler/types";
 
 const LOGGER = createLogger("CompileService");
 
+interface CodegenReply {
+    generated: string;
+}
+
 export class CompileService extends Service {
     private db: pg.Pool;
     private codegen: ICodegenBackend;
@@ -21,10 +25,11 @@ export class CompileService extends Service {
 
     protected setupRoutes(): Router {
         return Router()
-            .post("/generate/:modelId", (req, res) => this.handleGenerate(req, res));
+            .get("/gen/:modelId", (req, res) => this.handleGenerateModel(req, res))
+            .post("/gen", (req, res) => this.handleGenerateRaw(req, res));
     }
 
-    private handleGenerate(req: Request, res: Response) {
+    private handleGenerateModel(req: Request, res: Response) {
         let {modelId} = req.params; // Grab the path params.
         modelId = parseInt(modelId);
 
@@ -51,13 +56,24 @@ export class CompileService extends Service {
                 const model = JSON.parse(repr) as IModel;
                 // Return compiled output.
                 return res.json({
-                    id: id,
-                    version: version,
                     generated: this.codegen.generate(model),
-                });
+                } as CodegenReply);
             } catch (err) {
                 return res.status(HttpCodes.NOT_FOUND).send(err);
             }
         });
+    }
+
+    private handleGenerateRaw(req: Request, res: Response) {
+        const ast = req.body as IModel; // Assume it's a model.
+        try {
+            // TODO: Perform some verification of the model before passing to the Codegen backend.
+            return res.json({
+                generated: this.codegen.generate(ast),
+            } as CodegenReply);
+        } catch (err) {
+            // Catch any errors, send it back to the requester.
+            return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+        }
     }
 }

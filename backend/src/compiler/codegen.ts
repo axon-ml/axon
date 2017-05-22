@@ -97,18 +97,30 @@ from keras.models import *
     }
 
     // Generate the model given the definition of the layers.
-    private genModel(): string {
-        // TODO: Piece together the model based on the IModel.connections list of connections.
-        return "";
+    private genModel(layers: ILayer[]): string {
+        // TODO: find a way for user to specify optimizer and loss function
+        const loss_func = "mean_squared_error";
+        const optimizer = "adam";
+
+        let code = `model = Sequential()`;
+        layers.forEach(l => {
+            code += `
+model.add(${l.name})`;
+        });
+
+        // Add optimizer
+        code += `
+# Train model with ${loss_func} loss, ${optimizer} optimizer.
+model.compile(loss='${loss_func}', optimizer='${optimizer}')`;
+
+        return code;
     }
 
     // Normalize all the names into something Python-friendly.
     private normalizeNames(model: IModel): IModel {
-        const names = model.layers.map(l => l.name);
-        const fixed = names.map(n => n.toLowerCase().split(" ").join("_"));
-
-        // Map to the model.
-
+        model.layers.forEach(l => {
+            l.name = l.name.toLowerCase().split(" ").join("_");
+        });
         return model;
     }
 
@@ -119,7 +131,7 @@ from keras.models import *
 
         const header = this.genHeader();
         const layers = this.genLayers(normalized).join("\n");
-        const model = this.genModel();
+        const model = this.genModel(normalized.layers);
         return `
 # Imports
 ${header}
@@ -130,7 +142,7 @@ ${layers}
 # Model creation.
 ${model}
 
-# Insert some code for training here
+# Insert YOUR code for training here
 `;
     }
 
