@@ -43,7 +43,7 @@ const server = app.listen(3000,  () => {
     const port = server.address().port;
 
     // Enable raw string processing
-    const raw = (String as any).raw;
+    const raw = String.raw;
     const BANNER = raw`
                                         _
                                        (_)
