@@ -1,0 +1,135 @@
+{
+	"input": [224, 224, 3],
+
+	"layers": [
+		{
+			"name": "conv1",
+			"kind": "Conv2D",
+			"params": {
+				"activation": "relu",
+				"filters": 64,
+				"kernel_size": 3,
+				"stride": 3
+			}
+		},
+		
+		{
+			"name": "zeropad1",
+			"kind": "ZeroPad",
+			"params": {
+				"top": 1,
+				"bottom": 1,
+				"left": 1,
+				"right": 1
+			}
+		},
+		
+		{
+			"name": "conv2",
+			"kind": "Conv2D",
+			"params": {
+				"activation": "relu",
+				"filters": 64,
+				"kernel_size": 3,
+				"stride": 3
+			}
+		},
+		
+		{
+			"name": "maxpool1",
+			"kind": "Pool2D",
+			"params": {
+				"pool_size": [2, 2],
+				"stride": [2, 2]
+			}
+		},
+		
+		{
+			"name": "zeropad2",
+			"kind": "ZeroPad",
+			"params": {
+				"top": 1,
+				"bottom": 1,
+				"left": 1,
+				"right": 1
+			}
+		},
+		
+		{
+			"name": "conv3",
+			"kind": "Conv2D",
+			"params": {
+				"activation": "relu",
+				"filters": 128,
+				"kernel_size": 3,
+				"stride": 3
+			}
+		},
+		
+		{
+			"name": "zeropad3",
+			"kind": "ZeroPad",
+			"params": {
+				"top": 1,
+				"bottom": 1,
+				"left": 1,
+				"right": 1
+			}
+		},
+		
+		{
+			"name": "conv4",
+			"kind": "Conv2D",
+			"params": {
+				"activation": "relu",
+				"filters": 128,
+				"kernel_size": 3,
+				"stride": 3
+			}
+		},
+
+		{
+			"name": "maxpool2",
+			"kind": "Pool2D",
+			"params": {
+				"pool_size": [2, 2],
+				"stride": [2, 2]
+			}
+		},
+		
+		{
+			"name": "flatten1",
+			"kind": "Flatten"
+		},
+		
+		{
+			"name": "fc1",
+			"kind": "FullyConnected",
+			"params": {
+				"output_units": 512,
+				"activation": "relu"
+			}
+		},
+
+		{
+			"name": "fc2",
+			"kind": "FullyConnected",
+			"params": {
+				"output_units": 512,
+				"activation": "relu"
+			}
+		},
+		
+		{
+			"name": "fc3",
+			"kind": "FullyConnected",
+			"params": {
+				"output_units": 2,
+				"activation": "softmax"
+			}
+		}
+
+	],
+
+	"loss": "xent"
+}
