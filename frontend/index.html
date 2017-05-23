@@ -7,11 +7,15 @@
         <base href="/"></base>
     </head>
 
-    <body layout="column" ng-controller="AxonController">
+    <body id="index-body" layout="column" ng-controller="AxonController">
         <div class="main-toolbar">
-            <md-toolbar layout="row" class="md-hue-2">
+            <md-toolbar id="index-toolbar" layout="row" class="md-hue-2">
                 <div class="md-toolbar-tools">
-                    <span flex="15">Axon</span>
+                    <span id="index-title" flex="15">
+                        <a href="/{{root.username}}">
+                            <img src="http://i.imgur.com/dqzMgNt.png" height="50">
+                        </a>
+                    </span>
                     <span flex="75"></span>
 
                     <!-- Options visible to logged in users -->
@@ -24,7 +28,7 @@
             </md-toolbar>
         </div>
 
-        <div class="container" flex layout="row">
+        <div id="index-container" class="container" flex layout="row">
             <md-content flex id="content">
                 <div ng-view></div>
             </md-content>
