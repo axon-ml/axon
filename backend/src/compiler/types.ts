@@ -11,6 +11,8 @@
 export interface IModel {
     layers: ILayer[];
     connections: IConnection[];
+    input: [number];
+    loss?: Loss;
 }
 
 /**
@@ -47,21 +49,21 @@ export class TypeAssertions {
     }
 
     static isConv2DParams(params: any): boolean {
-        return (typeof params === "object") && params.hasOwnProperty("activation")
-                                            && (typeof params.activation === "string")
-                                            && params.hasOwnProperty("filters")
+        return (typeof params === "object") && params.hasOwnProperty("filters")
                                             && (typeof params.filters === "number")
                                             && params.hasOwnProperty("kernel_size")
-                                            && (typeof params.kernel_size === "object")
-                                            && params.hasOwnProperty("padding")
-                                            && (typeof params.padding === "string");
+                                            && ((typeof params.kernel_size === "object") || (typeof params.kernel_size === "number"))
+                                            && (!params.hasOwnProperty("activation") || (typeof params.activation === "string"))
+                                            && (!params.hasOwnProperty("padding") || (typeof params.padding === "string"))
+                                            && (!params.hasOwnProperty("stride") || ((typeof params.stride === "object")
+                                                                                    || (typeof params.stride === "number")));
     }
 
     static isPool2DParams(params: any): boolean {
         return (typeof params === "object") && params.hasOwnProperty("pool_size")
                                             && (typeof params.pool_size === "object")
                                             && params.hasOwnProperty("stride")
-                                            && (typeof params.stride === "number");
+                                            && ((typeof params.stride === "number") || (typeof params.stride === "object"));
     }
 
     static isDropoutParams(params: any): boolean {
@@ -69,17 +71,32 @@ export class TypeAssertions {
                                             && (typeof params.probability === "number");
     }
 
+    static isZeroPadParams(params: any): boolean {
+        return (typeof params === "object") && (!params.hasOwnProperty("top") || (typeof params.top === "number"))
+                                            && (!params.hasOwnProperty("bottom") || (typeof params.bottom === "number"))
+                                            && (!params.hasOwnProperty("left") || (typeof params.left === "number"))
+                                            && (!params.hasOwnProperty("right") || (typeof params.right === "number"));
+    }
+
 }
 
 /**
  * Built-in layer types. All layers are a composition of thse 6 built-in types.
  */
-export type LayerKind  = "Input" | "FullyConnected" | "Conv2D" | "Pool2D" | "Dropout";
+export type LayerKind  = "Input"
+                       | "FullyConnected"
+                       | "Conv2D"
+                       | "Pool2D"
+                       | "Dropout"
+                       | "ZeroPad"
+                       | "Flatten";
 
 /**
  * Possible types of activation functions.
  */
 export type Activation = "sigmoid" | "tanh" | "relu" | "softmax";
+
+export type Loss = "xent" | "mse";
 
 /**
  * Possible types of padding for Conv2D layers.
@@ -96,15 +113,23 @@ export interface IFullyConnectedParams {
 }
 
 export interface IConv2DParams {
-    activation: Activation;
     filters: number;
-    kernel_size: [number];
-    padding: Padding;
+    kernel_size: number | [number];
+    activation?: Activation;
+    padding?: Padding;
+    stride?: number | [number];
 }
 
 export interface IPool2DParams {
     pool_size: [number];
-    stride: number;
+    stride?: number | [number];
+}
+
+export interface IZeroPadParams {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
 }
 
 export interface IDropoutParams {

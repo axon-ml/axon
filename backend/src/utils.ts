@@ -19,3 +19,11 @@ export function foldLeft<A, B>(arr: A[], zero: B, f: (b: B, a: A) => B): B {
     }
     return result;
 }
+
+export function mapWithIndex<A, B>(arr: A[], f: (i: number, e: A) => B): B[] {
+    const out = [];
+    for (let i = 0; i < arr.length; i++) {
+        out.push(f(i, arr[i]));
+    }
+    return out;
+}

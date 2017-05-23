@@ -5,6 +5,8 @@ import {IModel} from "../compiler/types";
 import {ICodegenBackend, KerasBackend} from "../compiler/codegen";
 
 const TEST_GRAPH: IModel = {
+    input: [3, 2, 1],
+
     connections: [{
         head: "Input1",
         tail: "Conv",

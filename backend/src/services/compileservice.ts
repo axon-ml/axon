@@ -68,9 +68,10 @@ export class CompileService extends Service {
         const ast = req.body as IModel; // Assume it's a model.
         try {
             // TODO: Perform some verification of the model before passing to the Codegen backend.
-            return res.json({
-                generated: this.codegen.generate(ast),
-            } as CodegenReply);
+            // return res.json({
+            //     generated: this.codegen.generate(ast),
+            // } as CodegenReply);
+            return res.send(this.codegen.generate(ast));
         } catch (err) {
             // Catch any errors, send it back to the requester.
             return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
