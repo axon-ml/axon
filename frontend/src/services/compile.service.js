@@ -30,11 +30,11 @@
         }
 
         function success(response) {
-            cb(null, response);
+            cb(null, response.data);
         }
 
         function error(err) {
-            cb(err, null);
+            cb(err.data, null);
         }
     };
 
