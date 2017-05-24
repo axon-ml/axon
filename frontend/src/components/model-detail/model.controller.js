@@ -15,17 +15,13 @@
         vm.renderMarkdown = false;
         vm.star = star;
         vm.starCount = undefined;
-        console.log("vm", vm);
 
         // Get the initial star count.
         dataService.id(vm.username, vm.model, function(err, res) {
             if (err) {
-                console.error("Error!", err);
-                return;
+                throw err;
             }
-            console.log("res", res);
             starService.count(res.id, function(err, res) {
-                console.log("Setting count to", res.count);
                 vm.starCount = res.count;
             });
         });
