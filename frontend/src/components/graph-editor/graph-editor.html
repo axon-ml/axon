@@ -6,9 +6,9 @@
         <li ng-repeat="container in graph.containers"
         dnd-type="'container'">
         <div ng-class="container.class" ng-if="container.class === 'sidebar'">
-                <h3>Choose New Layers</h3> 
+                <h3>Choose New Layers</h3>
                 <ul class="optionsList" class="buckets layout-wrap layout-align-center-center layout-row"  dnd-list="container.items"
-                dnd-allowed-types="['sidebar-item']"
+                dnd-allowed-types="[]"
                 dnd-effect-allowed="move">
                    <!--  <li  ng-repeat="item in container.items"
                         dnd-draggable="item"
@@ -18,16 +18,16 @@
                         ng-repeat="item in container.items"
                         dnd-draggable="item"
                         dnd-type="'sidebar-item'"
-                        dnd-effect-allowed="copyMove">
-                            <p>{{item.name}}</p> 
+                        dnd-effect-allowed="linkMove">
+                            <p>{{item.name}}</p>
                         </li>
                     <!-- </li> -->
                 </ul>
-        </div> 
-        <div ng-class="container.class" ng-if="container.class !== 'sidebar'"> 
+        </div>
+        <div ng-class="container.class" ng-if="container.class !== 'sidebar'">
                 <h3> Build Your Network</h3>
 
-                <ul 
+                <ul
                 class="buckets layout-wrap layout-align-center-center layout-column"
                 ng-if="container.class !== 'sidebar'" dnd-list="container.items"
                 dnd-allowed-types="['nn-item', 'sidebar-item']"
@@ -40,22 +40,22 @@
                             dnd-effect-allowed="move">
                             <i ng-click="container.items.splice($index, 1)" class="material-icons rightcorner">close</i>
                             <label>{{item.name}} Layer</label>
-                            <div class="layerOptions" ng-repeat="opt in item.opts">  
-                                <label>{{opt}}</label> 
+                            <div class="layerOptions" ng-repeat="opt in item.opts">
+                                <label>{{opt}}</label>
                                 <input ng-model="item.input[opt]" type="text"></input>
-                            </div> 
+                            </div>
                         </li>
                         </br>
                         <li ng-class="draggedElem === true ? 'selectedNewLayer' : 'newLayer'"
                             ondragenter="draggedElem = true">
                             <i class="material-icons">add_circle_outline</i>
-                        </li>  
+                        </li>
                         </br>
-                        <button ng-click="graph.compile()">Compile</button> 
+                        <button ng-click="graph.compile()">Compile</button>
                 </ul>
             </div>
         </li>
     </ul>
 
 
-</div> 
+</div>
