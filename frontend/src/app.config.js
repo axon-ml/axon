@@ -50,9 +50,9 @@
 
         console.log("Logged In:", $rootScope.root.loggedIn);
         $rootScope.$on('$locationChangeStart', function (ev, next, curr) {
-            if (!$location.url().startsWith('/login') && !$rootScope.root.loggedIn) {
-                $location.path('/login');
-            }
+            // if (!$location.url().startsWith('/login') && !$rootScope.root.loggedIn) {
+            //     $location.path('/login');
+            // }
         });
 
         if ($location.path() == '/' && $rootScope.root.loggedIn) {
