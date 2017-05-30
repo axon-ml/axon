@@ -8,6 +8,8 @@
     CompileService.$inject = ['$apiBaseUrl', '$http'];
 
     function CompileService($apiBaseUrl, $http) {
+        this.$http = $http;
+        this.$apiBaseUrl = $apiBaseUrl;
         this.genUrl = $apiBaseUrl + '/compile/gen';
     }
 
@@ -22,11 +24,11 @@
 
         if (typeof modelOrId === "object") {
             // Send a POST request with the object as the body.
-            $http.post(this.genUrl, modelOrId).then(success, error);
+            this.$http.post(this.genUrl, modelOrId).then(success, error);
         } else if (typeof modelOrId === "string") {
             // Send a GET request to compile the model with the given string ID.
             var url = this.genUrl + '/' + modelOrId;
-            $http.get(url).then(success, error);
+            this.$http.get(url).then(success, error);
         }
 
         function success(response) {

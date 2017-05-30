@@ -1,9 +1,9 @@
 <link rel="stylesheet" type="text/css" href="/src/components/graph-editor/graph-editor.css" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="graph-editor">
-     <ul dnd-list="graph.containers"
+     <ul dnd-list="vm.graph.containers"
       dnd-allowed-types="['container']">
-        <li ng-repeat="container in graph.containers"
+        <li ng-repeat="container in vm.graph.containers"
         dnd-type="'container'">
         <div ng-class="container.class" ng-if="container.class === 'sidebar'">
                 <h3>Choose New Layers</h3>
@@ -51,7 +51,7 @@
                             <i class="material-icons">add_circle_outline</i>
                         </li>
                         </br>
-                        <button ng-click="graph.compile()">Compile</button>
+                        <button ng-click="vm.graph.compile()">Compile</button>
                 </ul>
             </div>
         </li>
