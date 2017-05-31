@@ -60,7 +60,10 @@
             console.log('compiling');
             console.log(vm.graph.containers[0].items);
             console.log(angular.toJson(formatLayers(vm.graph.containers[0].items)));
-            compileService.gen(angular.toJson(formatLayers(vm.graph.containers[0].items)), function(err, res) {
+            var compiled = JSON.parse(angular.toJson(formatLayers(vm.graph.containers[0].items)));
+            console.log(compiled);
+            console.log(typeof compiled);
+            compileService.gen(compiled, function(err, res) {
                 console.log(err, res);
             });
         };
