@@ -24,8 +24,15 @@ li {
 
 }
 
-label.layerOptions {
-	left: 0px;
+div.layerOptionsWrapper {
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+	word-wrap: word-break;
+}
+
+div.layerOptions {
+	text-align: right;
 }
 
 .md-primary.md-raised.md-button.md-ink-ripple.sidebar {
@@ -42,4 +49,9 @@ label.layerOptions {
 .md-primary.md-raised.md-button.md-ink-ripple.layers {
 	width: 500px;
 	min-height: 70px;
+}
+
+#compiledCode {
+	width: 500px;
+	white-space: pre;
 }
