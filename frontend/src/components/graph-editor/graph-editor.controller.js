@@ -64,7 +64,11 @@
             console.log(compiled);
             console.log(typeof compiled);
             compileService.gen(compiled, function(err, res) {
-                console.log(err, res);
+                if(err) { 
+                    console.log('error occurred'); 
+                } else {
+                    console.log(res); 
+                }
             });
         };
 
