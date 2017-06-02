@@ -16,10 +16,6 @@
             templateUrl: '/src/components/login-register/login.html',
             controller: 'LoginRegisterController',
             controllerAs: 'vm',
-        }).when('/graph-editor', {
-            templateUrl: '/src/components/graph-editor/graph-editor.html',
-            controller: 'GraphEditorController',
-            controllerAs: 'vm',
         }).when('/:username', {
             templateUrl: '/src/components/profile/profile.html',
             controller: 'ProfileController',

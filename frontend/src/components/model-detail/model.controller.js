@@ -1,13 +1,14 @@
 (function () {
+
     'use strict';
 
     angular
         .module('axonApp')
         .controller('ModelDetailController', ModelController);
 
-    ModelController.$inject = ['$routeParams', '$location', 'dataService', 'starService'];
+    ModelController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService'];
 
-    function ModelController($routeParams, $location, dataService, starService) {
+    function ModelController(compileService, $http, $routeParams, $location, dataService, starService) {
 
         var vm = this;
         vm.username = $routeParams.username;
@@ -37,14 +38,37 @@
             });
         }
 
-         var layerTypes = {
-            "Input" : ["dimensions"],
-            "FullyConnected" : ["activation", "output_units"],
-            "Conv2D" : ["activation", "filters", "kernel_size", "padding"],
-            "Pool2D" : ["pool_size", "stride"],
-            "Dropout" : ["probability"],
-            "ZeroPad" : ["top", "bottom", "left", "right"],
-            "Flatten" : []
+        // begin old graph-editor.controller.js
+
+        var layerTypes = {
+            "Input" : {
+                params: ["dimensions"],
+                color: "#96ceb4",
+            },
+            "FullyConnected" : {
+                params: ["activation", "output_units"],
+                color: "#e92a28",
+            },
+            "Conv2D" : {
+                params: ["activation", "filters", "kernel_size", "padding"],
+                color: "#ff6f69",
+            },
+            "Pool2D" : {
+                params: ["pool_size", "stride"],
+                color: "#6f5d7e",
+            },
+            "Dropout" : {
+                params: ["probability"],
+                color: "#88d8b0",
+            },
+            "ZeroPad" : {
+                params: ["top", "bottom", "left", "right"],
+                color: "#345978",
+            },
+            "Flatten" : {
+                params: [],
+                color: "#c36882",
+            }
         };
 
         var listParams = new Set(["dimensions", "pool_size"]);       // Params that must be in list format
@@ -52,13 +76,14 @@
         var stringParams = new Set(["activation", "padding"]);       // Params supposed to be in string format
 
         vm.graph = {};
-        vm.graph.itemSelected = null;
+      	vm.graph.itemSelected = null;
         vm.graph.containers =  [
             {                                                        // Init graph editing pane (to input layer)
                 "items" : [{
                         "name" : "Input",
                         "opts" : ["dimensions"],
-                        "input" : {}
+                        "input" : {},
+                        "color" : layerTypes["Input"].color,
                     }],
                 "class" : "layers"
             }, {                                                     // Init layer library (to empty list)
@@ -143,10 +168,15 @@
             });
         };
 
-        // Generate initial model
+	    // Generate initial model
         for(var key in layerTypes) {
             if (layerTypes.hasOwnProperty(key)) {
-                vm.graph.containers[1].items.push({"name" : key, "opts" : layerTypes[key], "input" : {}});
+                vm.graph.containers[1].items.push({
+                    "name" : key,
+                    "opts" : layerTypes[key].params,
+                    "input" : {},
+                    "color": layerTypes[key].color,
+                });
             }
         }
 

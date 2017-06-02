@@ -16,6 +16,7 @@
                         dnd-effect-allowed="copyMove"> -->
                         <li class="md-primary md-raised md-button md-ink-ripple sidebar"
                         ng-repeat="item in container.items"
+                        ng-style="{'background-color': item.color}"
                         dnd-draggable="item"
                         dnd-type="'sidebar-item'"
                         dnd-effect-allowed="linkMove">
@@ -34,6 +35,7 @@
                 dnd-effect-allowed="move">
                         <li class="md-primary md-raised md-button md-ink-ripple layers"
                             ng-repeat="item in container.items"
+                            ng-style="{'background-color': item.color}"
                             dnd-draggable="item"
                             dnd-type="'nn-item'"
                             dnd-moved="container.items.splice($index, 1)"
