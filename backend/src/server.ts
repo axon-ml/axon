@@ -1,4 +1,4 @@
-import {AuthService, CompileService, DataService, StarSevice} from "./services";
+import {AuthService, CompileService, DataService, StarSevice, TrainService} from "./services";
 import {ICodegenBackend, KerasBackend} from "./compiler/codegen";
 
 import {json as jsonBody} from "body-parser";
@@ -31,11 +31,13 @@ const dataService = new DataService(DB);
 const authService = new AuthService(DB);
 const compileService = new CompileService(CODEGEN, DB);
 const starService = new StarSevice(DB);
+const trainService = new TrainService();
 
 app.use("/auth", authService.router());
 app.use("/data", dataService.router());
 app.use("/compile", compileService.router());
 app.use("/star", starService.router());
+app.use("/train", trainService.router());
 
 // Start the application.
 const server = app.listen(3000,  () => {

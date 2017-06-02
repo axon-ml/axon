@@ -40,9 +40,11 @@
                             dnd-effect-allowed="move">
                             <i ng-click="container.items.splice($index, 1)" class="material-icons rightcorner">close</i>
                             <label>{{item.name}} Layer</label>
-                            <div class="layerOptions" ng-repeat="opt in item.opts">
-                                <label>{{opt}}</label>
-                                <input ng-model="item.input[opt]" type="text"></input>
+                            <div class="layerOptionsWrapper">
+                                <div class="layerOptions" ng-repeat="opt in item.opts">
+                                    <label>{{opt}}</label>
+                                    <input ng-model="item.input[opt]" type="text"></input>
+                                </div>
                             </div>
                         </li>
                         </br>
@@ -52,6 +54,7 @@
                         </li>
                         </br>
                         <button ng-click="vm.graph.compile()">Compile</button>
+                        <p id="compiledCode">{{vm.graph.compiledCode}}</p>
                 </ul>
             </div>
         </li>
