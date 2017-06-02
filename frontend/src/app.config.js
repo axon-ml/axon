@@ -16,6 +16,10 @@
             templateUrl: '/src/components/login-register/login.html',
             controller: 'LoginRegisterController',
             controllerAs: 'vm',
+        }).when('/create-model', {
+            templateUrl: '/src/components/model-create/model-create.html',
+            controller: 'CreateModelController',
+            controllerAs: 'vm',
         }).when('/:username', {
             templateUrl: '/src/components/profile/profile.html',
             controller: 'ProfileController',

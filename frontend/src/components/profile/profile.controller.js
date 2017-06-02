@@ -5,10 +5,14 @@
         .module('axonApp')
         .controller('ProfileController', ProfileController);
 
-    ProfileController.$inject = ['$routeParams', 'dataService'];
-    function ProfileController($routeParams, dataService) {
+    ProfileController.$inject = ['$location', '$routeParams', 'dataService'];
+    function ProfileController($location, $routeParams, dataService) {
         var vm = this;
         vm.displayName = $routeParams.username;
+
+        vm.createModel = function() {
+            $location.path('/create-model');
+        }
 
         // Set the models statically.
         dataService.getModels(vm.displayName, function(err, response) {
