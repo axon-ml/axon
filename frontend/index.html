@@ -17,13 +17,17 @@
                             <img src="http://i.imgur.com/dqzMgNt.png" height="50">
                         </a>
                     </span>
-                    <span flex="75"></span>
+                    <span flex="5"></span>
+                    <span>
+                        <input type="text" />
+                    </span>
+                    <span flex="60"></span>
 
                     <!-- Options visible to logged in users -->
                     <span ng-if="root.loggedIn" layout="row">
-                        <span flex><md-button ng-click="root.createModel()"><i class="fa fa-plus"></i></md-button> </span>
-                        <span flex><md-button href="/{{root.username}}">Profile</md-button></span>
-                        <span flex><md-button ng-click="root.logout()">Logout</md-button></span>
+                        <span flex><md-button ng-click="vm.createModel()"><i class="fa fa-plus"></i></md-button> </span>
+                        <span flex><md-button href="/{{root.username}}"><i class="fa fa-user"></i></md-button></span>
+                        <span flex><md-button ng-click="root.logout()"><i class="fa fa-sign-out"></i></md-button></span>
                     </div>
                     </div>
                 </div>
