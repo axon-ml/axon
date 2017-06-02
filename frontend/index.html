@@ -21,7 +21,7 @@
 
                     <!-- Options visible to logged in users -->
                     <span ng-if="root.loggedIn" layout="row">
-                        <span flex><md-button ng-click="vm.createModel()"><i class="material-icons">add</i></md-button> </span>
+                        <span flex><md-button ng-click="root.createModel()"><i class="fa fa-plus"></i></md-button> </span>
                         <span flex><md-button href="/{{root.username}}">Profile</md-button></span>
                         <span flex><md-button ng-click="root.logout()">Logout</md-button></span>
                     </div>
