@@ -29,9 +29,9 @@ export class DataService extends Service {
     }
 
     private saveModel(req: Request, res: Response) {
-        const {username, modelName, modelJson} = req.body; 
+        const {username, modelName, modelJson} = req.body;
         const query = `
-            insert into models (name, owner, parent, repr) 
+            insert into models (name, owner, parent, repr)
             values ($1, $2, NULL, $3)`;
         this.db.query(query, [modelName, username, modelJson], (err, result) => {
             if (err) {
@@ -40,7 +40,7 @@ export class DataService extends Service {
             } else {
                 return res.status(HttpCodes.OK).send();
             }
-        }); 
+        });
     }
 
     private handleModels(req: Request, res: Response) {
