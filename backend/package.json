@@ -4,13 +4,17 @@
   "description": "Axon backend",
   "main": "server.js",
   "dependencies": {
+    "@types/dockerode": "^2.4.1",
+    "@types/ws": "0.0.41",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "cors": "^2.8.3",
+    "dockerode": "^2.4.3",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
     "pg": "^6.1.5",
-    "winston": "^2.3.1"
+    "winston": "^2.3.1",
+    "ws": "^3.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^1.0.0",
