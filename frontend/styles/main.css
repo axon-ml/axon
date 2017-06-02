@@ -36,7 +36,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff6700', end
 }
 
 #index-container {
-	width: 80vw;
+	/*width: 80vw;*/
 	margin-left: auto;
 	margin-right: auto;
 	padding: 30px;
