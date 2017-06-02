@@ -1,0 +1,64 @@
+<link rel="stylesheet" type="text/css" href="/src/components/model-detail/graph-editor.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="graph-editor">
+     <ul dnd-list="vm.graph.containers"
+      dnd-allowed-types="['container']">
+        <li ng-repeat="container in vm.graph.containers"
+        dnd-type="'container'">
+        <div ng-class="container.class" ng-if="container.class === 'sidebar'">
+                <h3>Choose New Layers</h3>
+                <ul class="optionsList" class="buckets layout-wrap layout-align-center-center layout-row"  dnd-list="container.items"
+                dnd-allowed-types="[]"
+                dnd-effect-allowed="move">
+                   <!--  <li  ng-repeat="item in container.items"
+                        dnd-draggable="item"
+                        dnd-type="'sidebar-item'"
+                        dnd-effect-allowed="copyMove"> -->
+                        <li class="md-primary md-raised md-button md-ink-ripple sidebar"
+                        ng-repeat="item in container.items"
+                        dnd-draggable="item"
+                        dnd-type="'sidebar-item'"
+                        dnd-effect-allowed="linkMove">
+                            <p>{{item.name}}</p>
+                        </li>
+                    <!-- </li> -->
+                </ul>
+        </div>
+        <div ng-class="container.class" ng-if="container.class !== 'sidebar'">
+                <h3> Build Your Network</h3>
+
+                <ul
+                class="buckets layout-wrap layout-align-center-center layout-column"
+                ng-if="container.class !== 'sidebar'" dnd-list="container.items"
+                dnd-allowed-types="['nn-item', 'sidebar-item']"
+                dnd-effect-allowed="move">
+                        <li class="md-primary md-raised md-button md-ink-ripple layers"
+                            ng-repeat="item in container.items"
+                            dnd-draggable="item"
+                            dnd-type="'nn-item'"
+                            dnd-moved="container.items.splice($index, 1)"
+                            dnd-effect-allowed="move">
+                            <i ng-click="container.items.splice($index, 1)" class="material-icons rightcorner">close</i>
+                            <label>{{item.name}} Layer</label>
+                            <div class="layerOptionsWrapper">
+                                <div class="layerOptions" ng-repeat="opt in item.opts">
+                                    <label>{{opt}}</label>
+                                    <input ng-model="item.input[opt]" type="text"></input>
+                                </div>
+                            </div>
+                        </li>
+                        </br>
+                        <li ng-class="draggedElem === true ? 'selectedNewLayer' : 'newLayer'"
+                            ondragenter="draggedElem = true">
+                            <i class="material-icons">add_circle_outline</i>
+                        </li>
+                        </br>
+                        <button ng-click="vm.graph.compile()">Compile</button>
+                        <p id="compiledCode">{{vm.graph.compiledCode}}</p>
+                </ul>
+            </div>
+        </li>
+    </ul>
+
+
+</div>
