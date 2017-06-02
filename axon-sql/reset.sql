@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS models (
   repr VARCHAR,
 
   -- Version number for the model, so we can have model revisions
-  version INT NOT NULL,
+  version INT NOT NULL default 1,
 
   -- A user can only have one repository with a given name at a specific version
   UNIQUE (owner, name, version)

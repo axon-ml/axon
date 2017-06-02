@@ -7,6 +7,9 @@
 
     AxonController.$inject = ['credentialsService', '$rootScope', '$location', '$resource', '$http'];
     function AxonController(credentialsService, $rootScope, $location, $resource, $http) {
+
+        var root = this; 
+
         if ($rootScope.root === undefined) {
             $rootScope.root = {
                 loggedIn: false,
@@ -14,6 +17,10 @@
             };
         }
         $rootScope.root.logout = logout;
+
+        root.createModel = function() {
+            $location.path('/create-model');
+        }
 
         function logout() {
             $http.defaults.headers.common.Authorization = '';
