@@ -10,10 +10,6 @@
         var vm = this;
         vm.displayName = $routeParams.username;
 
-        vm.createModel = function() {
-            $location.path('/create-model');
-        }
-
         // Set the models statically.
         dataService.getModels(vm.displayName, function(err, response) {
             if (err) {
