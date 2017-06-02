@@ -24,8 +24,24 @@ export class TrainService extends Service {
         this.wsServer = new ws.Server({
             port: 3002,
         });
+
         this.wsServer.on("connection", (client) => {
-            // The client should send a single chunk of data with the version they want.
+            // The first message from a new client will contain the ID of the container they want to attach onto.
+            let firstMsg = true;
+            LOGGER.info("WS connection");
+
+            client.on("message", msg => {
+                // The client should only be sending a single message.
+                // Ignore all subsequent messages they send us.
+                if (!firstMsg) {
+                    return;
+                }
+                firstMsg = false;
+
+                /* Send chunks of output from the container over to the client. */
+                LOGGER.info(`Client attaching to container ${msg}`);
+                watchContainer(msg, err => client.close(500, err), chunk => client.send(chunk));
+            });
         });
     }
 
@@ -45,19 +61,7 @@ export class TrainService extends Service {
         // Kick off training if all is good.
         // Sends back the started Container ID in the response.
         startTraining(startRequest.code, startRequest.dataset)
-            .then(containerId => {
-                // Setup a websockets server for this container
-                const wsServer = new ws.Server({
-                    port: 3002,
-                    path: `/${containerId}`,
-                });
-                wsServer.on("connection", client => {
-                    LOGGER.info(`WS connection to /${containerId}`);
-                    watchContainer(containerId, error => console.log(error), chunk => client.send(chunk));
-                });
-                LOGGER.info(`Setup websocket server @ /${containerId}`);
-                res.send(containerId);
-            })
+            .then(containerId => res.send(containerId))
             .catch(err => res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err));
     }
 }
