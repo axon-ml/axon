@@ -3,7 +3,7 @@
 
     angular
         .module('axonApp')
-        .controller('GraphEditorController', ['compileService', '$http', '$routeParams', '$location', ModelController]);
+        .controller('GraphEditorController', ModelController);
 
     ModelController.$inject = ['compileService', '$http', '$routeParams', '$location'];
 
