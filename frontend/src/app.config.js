@@ -4,7 +4,16 @@
     angular
         .module('axonApp')
         .config(axonConfig)
-        .constant('$apiBaseUrl', 'http://localhost:3000')
+        .constant('axonUrls', (function() {
+            var domain = 'localhost';
+            var apiPort = 3000;
+            var wsPort = 3002;
+
+            return {
+                apiBaseUrl: 'http://' + domain + ':' + apiPort,
+                wsUrl: 'ws://' + domain + ':' + wsPort,
+            };
+        })())
         .run(axonRun);
 
     axonConfig.$inject = ['$routeProvider', '$locationProvider'];

@@ -9,13 +9,12 @@
         .module('axonApp')
         .service('credentialsService', CredentialsService);
 
-    CredentialsService.$inject = ['$apiBaseUrl', '$cookies', '$http'];
+    CredentialsService.$inject = ['$cookies', '$http'];
 
     /**
      * CredentialsService serves to store and clear the credentials for the currently logged in user.
      */
-    function CredentialsService($apiBaseUrl, $cookies, $http) {
-        this.$apiBaseUrl = $apiBaseUrl;
+    function CredentialsService($cookies, $http) {
         this.$cookies = $cookies;
         this.$http = $http;
     }

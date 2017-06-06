@@ -5,10 +5,10 @@
         .module('axonApp')
         .service('dataService', DataService);
 
-    DataService.$inject = ['$apiBaseUrl', '$http'];
+    DataService.$inject = ['axonUrls', '$http'];
 
-    function DataService($apiBaseUrl, $http) {
-        this.baseUrl = $apiBaseUrl + '/data';
+    function DataService(axonUrls, $http) {
+        this.baseUrl = axonUrls.apiBaseUrl + '/data';
         this.$http = $http;
     }
 

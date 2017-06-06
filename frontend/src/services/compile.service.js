@@ -5,12 +5,11 @@
         .module('axonApp')
         .service('compileService', CompileService);
 
-    CompileService.$inject = ['$apiBaseUrl', '$http'];
+    CompileService.$inject = ['axonUrls', '$http'];
 
-    function CompileService($apiBaseUrl, $http) {
+    function CompileService(axonUrls, $http) {
         this.$http = $http;
-        this.$apiBaseUrl = $apiBaseUrl;
-        this.genUrl = $apiBaseUrl + '/compile/gen';
+        this.genUrl = axonUrls.apiBaseUrl + '/compile/gen';
     }
 
     /**

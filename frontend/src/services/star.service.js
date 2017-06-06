@@ -5,10 +5,10 @@
         .module('axonApp')
         .service('starService', StarService);
 
-    StarService.$inject = ['$apiBaseUrl', '$http'];
+    StarService.$inject = ['axonUrls', '$http'];
 
-    function StarService($apiBaseUrl, $http) {
-        this.$apiBaseUrl = $apiBaseUrl;
+    function StarService(axonUrls, $http) {
+        this.apiBaseUrl = axonUrls.apiBaseUrl;
         this.$http = $http;
     }
 
@@ -17,7 +17,7 @@
      */
     StarService.prototype.star = function(modelId, cb) {
         // Send a request to star the model with the given name.
-        var URL = this.$apiBaseUrl + '/star/' + modelId;
+        var URL = this.apiBaseUrl + '/star/' + modelId;
         this.$http.post(URL).then(successCb, errorCb);
 
         function successCb(response) {
@@ -41,7 +41,7 @@
     }
 
     StarService.prototype.count = function(modelId, cb) {
-        var URL = this.$apiBaseUrl + '/star/count/' + modelId;
+        var URL = this.apiBaseUrl + '/star/count/' + modelId;
         this.$http.get(URL).then(success, error);
 
         function success(response) {
