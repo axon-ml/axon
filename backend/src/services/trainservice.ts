@@ -42,7 +42,7 @@ export class TrainService extends Service {
                 LOGGER.info(`Client attaching to container ${msg}`);
                 watchContainer(msg, err => client.close(1011, err),
                     chunk => client.send(chunk, {binary: false},
-                                            err => LOGGER.error("Getting very angry, because:" + err)));
+                                            err => { if (err) LOGGER.error("Getting very angry, because:" + err); }));
                 });
             });
     }
