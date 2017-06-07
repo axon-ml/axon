@@ -19,7 +19,7 @@ const IMAGE = "andreweduffy/keras";
 export function startTraining(code: string, dataset: string): Promise<ContainerID> {
     return new Promise<string>((resolve, reject) => {
 		// Write the temp file out.
-        fs.mkdtemp("/tmp/axon-", (err, folder) => {
+        fs.mkdtemp("/Users/andrew/tmp/axon-", (err, folder) => {
             if (err) {
                 return reject(err);
             }
@@ -55,6 +55,7 @@ export function watchContainer(containerId: ContainerID, onfail: (reason: any) =
     container.logs({
         stdout: true,
         stderr: true,
+        follow: true,
     })
     .then(res => res.on("data", ondata))
     .catch(err => onfail(err));

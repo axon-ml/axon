@@ -1,0 +1,13 @@
+
+.train-out {
+    color: red;
+    font-family: monospace;
+    font-size: 18px;
+    overflow: scroll;
+    width: 100%;
+    min-width: 800px;
+}
+
+.train-out p {
+    padding: 0px;
+}

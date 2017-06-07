@@ -40,7 +40,19 @@ export class TrainService extends Service {
 
                 /* Send chunks of output from the container over to the client. */
                 LOGGER.info(`Client attaching to container ${msg}`);
-                watchContainer(msg, err => client.close(500, err), chunk => client.send(chunk));
+                watchContainer(msg, err => client.close(1011, err), chunk => {
+                    LOGGER.info("sending " + chunk);
+                    if (client.readyState !== client.OPEN) {
+                        LOGGER.info("What??");
+                    }
+                    client.send(chunk, {
+                        binary: false,
+                    }, err => {
+                        if (err) {
+                            LOGGER.error("Getting very angry, because:" + err);
+                        }
+                    });
+                });
             });
         });
     }
