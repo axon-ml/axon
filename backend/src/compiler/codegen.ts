@@ -190,7 +190,7 @@ model.add(${l.name})`;
         // Add optimizer
         code += `
 # Train model with ${loss_func} loss, ${optimizer} optimizer.
-model.compile(loss=${loss_func}, optimizer="${optimizer}")`;
+model.compile(loss=${loss_func}, optimizer="${optimizer}", metrics=['accuracy'])`;
 
         return code;
     }
