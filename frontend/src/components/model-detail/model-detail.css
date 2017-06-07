@@ -16,3 +16,21 @@
 	overflow: auto;
 }
 
+.rightButtons {
+	float: right;
+	padding-right: 70px;
+}
+
+.topNav {
+	float: right;
+}
+
+div.leftpane {
+	min-width: 600px;
+}
+
+md-content.md-padding {
+	min-width: 40vw;
+	min-height: 80vh;
+}
+

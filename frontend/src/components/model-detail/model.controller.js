@@ -40,11 +40,18 @@
 
         // begin old graph-editor.controller.js
 
+        // vm.inputLayer = {
+        //         params: ["dimensions", "loss", "optimizer"],
+        //         color: "#96ceb4",
+        // }}; 
+        vm.inputParams = ["dimensions", "loss", "optimizer"]
+        vm.input = {}; 
+
         var layerTypes = {
-            "Input" : {
-                params: ["dimensions"],
-                color: "#96ceb4",
-            },
+            // "Input" : {
+            //     params: ["dimensions"],
+            //     color: "#96ceb4",
+            // },
             "FullyConnected" : {
                 params: ["activation", "output_units"],
                 color: "#e92a28",
@@ -79,24 +86,28 @@
             "activation": ["sigmoid", "tanh", "relu", "softmax"],
             "loss": ["xent", "mse"],
             "padding": ["same", "valid"],
+            "loss" : ["xent", "mse"],
+            "optimizer" : ["adam", "sgd", "adadelta", "adagrad"],
         };
 
         vm.graph = {};
       	vm.graph.itemSelected = null;
         vm.graph.containers =  [
             {                                                        // Init graph editing pane (to input layer)
-                "items" : [{
-                        "name" : "Input",
-                        "opts" : ["dimensions"],
-                        "input" : {},
-                        "color" : layerTypes["Input"].color,
-                    }],
+                "items" : [],
                 "class" : "layers"
             }, {                                                     // Init layer library (to empty list)
                 "items" : [],
                 "class" : "sidebar"
             }
         ];
+
+        // {
+        //                 "name" : "Input",
+        //                 "opts" : ["dimensions"],
+        //                 "input" : {},
+        //                 "color" : "blue",
+        //             }
 
         /**
          * Parse a string as a list of floats
@@ -122,7 +133,7 @@
          * compile service
          */
         function formatModel(layerList) {
-            console.log(layerList);
+            //console.log(layerList);
             var model = {};
 
             model.layers = [];
@@ -151,7 +162,9 @@
                 }
                 model.layers.push(formattedLayer);
             }
-            model.input = [3, 2, 1]; // TODO: use real values
+            model.input = parseNumberList(vm.input.dimensions); // TODO: use real values
+            model.loss = vm.input.loss;
+            model.optimizer = vm.input.optimizer; 
             model.connections = [{
                 head: 'layer0',
                 tail: 'layer' + (layerList.length - 1),
@@ -161,18 +174,29 @@
 
         vm.graph.compile = function() {
             // Note: all of params necessary to generate code are contained within object
-            console.log('formatted', formatModel(vm.graph.containers[0].items));
+            //console.log('formatted', formatModel(vm.graph.containers[0].items));
             var compiled = JSON.parse(angular.toJson(formatModel(vm.graph.containers[0].items)));
+            console.log(angular.toJson(compiled));
             compileService.gen(compiled, function(err, res) {
                 if (err) {
                     console.log('error');
-                    vm.graph.compiledCode = 'Compilation error!';
+                    console.log(err);
+                    vm.graph.errorMessage = 'Compilation error!';
                 } else {
+                    console.log('success!!');
                     console.log(res);
+                    // console.log(err);
                     vm.graph.compiledCode = res; // update view model with compiled code
+                    vm.rightUrl = '/src/components/model-detail/code.html'
                 }
             });
         };
+
+        vm.rightUrl = '/src/components/model-detail/graph-editor.html'; 
+
+        vm.graph.save = function() {
+
+        }; 
 
 	    // Generate initial model
         for(var key in layerTypes) {

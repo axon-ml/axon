@@ -1,0 +1,100 @@
+ {
+	"input": [28, 28, 1],
+
+	"layers": [
+		{
+			"name": "conv1",
+			"kind": "Conv2D",
+			"params": {
+				"activation": "relu",
+				"filters": 32,
+				"kernel_size": [3, 3],
+				"padding": "same"
+			}
+		},
+		{
+			"name": "conv2",
+			"kind": "Conv2D",
+			"params": {
+				"activation": "relu",
+				"filters": 32,
+				"kernel_size": [3, 3]
+			}
+		},
+		{
+			"name": "maxpool1",
+			"kind": "Pool2D",
+			"params": {
+				"pool_size": [2, 2]			}
+		},
+		{
+			"name": "dropout1",
+			"kind": "Dropout",
+			"params": {
+				"probability": 0.25
+			}
+		},
+		{
+			"name": "conv3",
+			"kind": "Conv2D",
+			"params": {
+				"activation": "relu",
+				"filters": 64,
+				"kernel_size": [3, 3],
+				"padding": "same"
+			}
+		},
+		{
+			"name": "conv4",
+			"kind": "Conv2D",
+			"params": {
+				"activation": "relu",
+				"filters": 64,
+				"kernel_size": [3, 3]
+			}
+		},
+		{
+			"name": "maxpool2",
+			"kind": "Pool2D",
+			"params": {
+				"pool_size": [2, 2]
+			}
+		},
+		{
+			"name": "dropout2",
+			"kind": "Dropout",
+			"params": {
+				"probability": 0.25
+			}
+		},
+		{
+			"name": "flatten1",
+			"kind": "Flatten"
+		},
+		{
+			"name": "fc1",
+			"kind": "FullyConnected",
+			"params": {
+				"output_units": 512,
+				"activation": "relu"
+			}
+		},
+		{
+			"name": "dropout3",
+			"kind": "Dropout",
+			"params": {
+				"probability": 0.5
+			}
+		},
+		{
+			"name": "fc2",
+			"kind": "FullyConnected",
+			"params": {
+				"output_units": 10,
+				"activation": "softmax"
+			}
+		}
+	],
+
+	"loss": "xent"
+}

@@ -28,11 +28,27 @@
         <div ng-class="container.class" ng-if="container.class !== 'sidebar'">
                 <h3> Build Your Network</h3>
 
+
                 <ul
                 class="buckets layout-wrap layout-align-center-center layout-column"
                 ng-if="container.class !== 'sidebar'" dnd-list="container.items"
                 dnd-allowed-types="['nn-item', 'sidebar-item']"
                 dnd-effect-allowed="move">
+                         <div class="md-primary md-raised md-button md-ink-ripple layers">
+                            <label>Input Layer</label>
+                            <div class="layerOptionsWrapper">
+                                <div class="layerOptions" ng-repeat="opt in vm.inputParams">
+                                    <label>{{opt}}</label>
+                                    <input ng-model="vm.input[opt]" type="text" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
+                                    <select ng-model="vm.input[opt]" type="text" ng-if="vm.stringMapParams.hasOwnProperty(opt)">
+                                        <option ng-repeat="val in vm.stringMapParams[opt]">{{val}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="downArrow" style="text-align:center;width:100%;"> <!-- TODO: put this in a css file -->
+                                <i class="fa fa-long-arrow-down fa-3x"></i>
+                        </div>
                         <li ng-repeat="item in container.items">
                             <div class="md-primary md-raised md-button md-ink-ripple layers"
                                 ng-style="{'background-color': item.color}"
@@ -62,8 +78,7 @@
                             <i class="material-icons">add_circle_outline</i>
                         </li>
                         </br>
-                        <button ng-click="vm.graph.compile()">Compile</button>
-                        <p id="compiledCode">{{vm.graph.compiledCode}}</p>
+                        <!-- <button ng-click="vm.graph.compile()">Compile</button> -->
                 </ul>
             </div>
         </li>
