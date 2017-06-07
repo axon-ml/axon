@@ -1,5 +1,7 @@
 import * as Docker from "dockerode";
-import * as fs from "fs";
+import * as fs from "fs-extra";
+import * as os from "os";
+import * as path from "path";
 
 const docker = new Docker();
 
@@ -28,13 +30,9 @@ interface Dataset {
 const DATASETS: DatasetMap = {
     mnist: {
         preamble: `
-'''Trains a simple convnet on the MNIST dataset.
-
-Gets to 99.25% test accuracy after 12 epochs
-(there is still a lot of margin for parameter tuning).
-16 seconds per epoch on a GRID K520 GPU.
 '''
-
+Stolen shamelessly from https://github.com/fchollet/keras/blob/master/examples/mnist_cnn.py
+'''
 from __future__ import print_function
 import keras
 from keras.datasets import mnist
@@ -95,10 +93,22 @@ print('Test accuracy:', score[1])
     },
 };
 
+export function ensureImage(image: string): Promise<{}> {
+    return new Promise<{}>((resolve, reject) => {
+        docker.pull(image, {})
+            .then(_ => resolve())
+            .catch(error => reject(error));
+    });
+}
+
 export function startTraining(code: string, dataset: string): Promise<ContainerID> {
     return new Promise<string>((resolve, reject) => {
-		// Write the temp file out.
-        fs.mkdtemp("/Users/andrew/tmp/axon-", (err, folder) => {
+		// Write the temp file out inside of the user's home directory, make sure that this thing exists.
+        const tmpDir = path.join(os.homedir(), "tmp");
+        fs.mkdirpSync(tmpDir); // Ensure the directory exists.
+
+        const prefix = path.join(tmpDir, "axon-");
+        fs.mkdtemp(prefix, (err, folder) => {
             if (err) {
                 return reject(err);
             }
@@ -108,25 +118,38 @@ export function startTraining(code: string, dataset: string): Promise<ContainerI
             const preamble = DATASETS[dataset].preamble || "MISSING!";
             const epilogue = DATASETS[dataset].epilogue || "MISSING!";
 
-            fs.writeFile(train_name, preamble + code + epilogue, {flag: "0600"}, (err) => {
+            fs.writeFile(train_name, preamble + code + epilogue, (err) => {
                 if (err) {
                     return reject(err);
                 }
 
                 // Start up training, return the container ID
                 // Note: name of the dataset is expected as an argument to the training script
+                const volumes: any = {};
+                volumes[folder] = {};
+
+                const hostConfig = {
+                    Binds: [`${folder}:/axon`],
+                };
+
                 docker.createContainer({
                     Image: IMAGE,
-                    Cmd: ["python", "/train.py", dataset],
-                    Volumes: {
-                        train_name: {},
-                    },
-                    HostConfig: {
-                        Binds: [`${train_name}:/train.py`],
-                    },
-                })
-                .then(res => resolve(res.id))
-                .catch(err => reject(err));
+                    Cmd: ["python", "/axon/train.py", dataset],
+                    Volumes: volumes,
+                    HostConfig: hostConfig,
+                }, function(err, container) {
+                    if (err || !container) {
+                        reject(err);
+                    } else {
+                        container.start({}, function(err, data) {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(container.id);
+                            }
+                        });
+                    }
+                });
             });
         });
     });
