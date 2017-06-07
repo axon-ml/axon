@@ -11,10 +11,10 @@
 		      md-selected-nav-item="currentNavItem"
 		      nav-bar-aria-label="navigation links">
 		      <md-nav-item md-nav-click="vm.renderMarkdown = false" name="page1">
-		        Editor 
+		        Editor
 		      </md-nav-item>
 		      <md-nav-item md-nav-click="vm.renderMarkdown = true" name="page2">
-		       	Preview 
+		       	Preview
 		    </md-nav-bar>
 		    <div ng-if="!vm.renderMarkdown" class="ace_editor"  ng-model="vm.markdown" ui-ace></div>
 			<div ng-if="vm.renderMarkdown" btf-markdown="vm.markdown"></div>
@@ -34,8 +34,11 @@
 			        Model
 			      </md-nav-item>
 			      <md-nav-item md-nav-click="vm.graph.compile()" name="page4">
-			       	Code 
+			       	Code
 			      </md-nav-item>
+						<md-nav-item md-nav-click="vm.graph.train()" name="page5">
+							Train
+						</md-nav-item>
 			      <!-- these require actual routing with ui-router or ng-route, so they
 			      won't work in the demo
 			      <md-nav-item md-nav-href="#page4" name="page5">Page Four</md-nav-item>
@@ -51,6 +54,6 @@
 
 
 
-		</div> 
+		</div>
 	</div>
 </div>

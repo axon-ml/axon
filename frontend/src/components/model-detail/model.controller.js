@@ -6,9 +6,9 @@
         .module('axonApp')
         .controller('ModelDetailController', ModelController);
 
-    ModelController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService'];
+    ModelController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService'];
 
-    function ModelController(compileService, $http, $routeParams, $location, dataService, starService) {
+    function ModelController(compileService, $http, $routeParams, $location, dataService, starService, trainService) {
 
         var vm = this;
         vm.username = $routeParams.username;
@@ -43,9 +43,9 @@
         // vm.inputLayer = {
         //         params: ["dimensions", "loss", "optimizer"],
         //         color: "#96ceb4",
-        // }}; 
+        // }};
         vm.inputParams = ["dimensions", "loss", "optimizer"]
-        vm.input = {}; 
+        vm.input = {};
 
         var layerTypes = {
             // "Input" : {
@@ -164,7 +164,7 @@
             }
             model.input = parseNumberList(vm.input.dimensions); // TODO: use real values
             model.loss = vm.input.loss;
-            model.optimizer = vm.input.optimizer; 
+            model.optimizer = vm.input.optimizer;
             model.connections = [{
                 head: 'layer0',
                 tail: 'layer' + (layerList.length - 1),
@@ -192,11 +192,25 @@
             });
         };
 
-        vm.rightUrl = '/src/components/model-detail/graph-editor.html'; 
+        vm.rightUrl = '/src/components/model-detail/graph-editor.html';
 
         vm.graph.save = function() {
+            // TODO: Implement saving of models so we can restore them later from the JSON.
+        };
 
-        }; 
+        vm.graph.train = function() {
+            // Train this
+            if (vm.graph.compiledCode) {
+                trainService.start(vm.graph.compiledCode, "mnist", function(err, containerId) {
+                    if (err) {
+                        console.error("Error when training:", err);
+                    } else {
+                        // Redirect to the training output.
+                        $location.path('/train/' + containerId);
+                    }
+                });
+            }
+        }
 
 	    // Generate initial model
         for(var key in layerTypes) {
@@ -209,7 +223,5 @@
                 });
             }
         }
-
-
     }
 })();
