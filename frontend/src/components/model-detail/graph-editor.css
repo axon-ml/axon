@@ -55,3 +55,13 @@ div.layerOptions {
 	width: 500px;
 	white-space: pre;
 }
+
+.layerOptions > .input {
+	width: 150px;
+	padding-right: 0;
+	margin-right: 0;
+}
+
+.layerOptions > select.input {
+	margin-left: 5px;
+}

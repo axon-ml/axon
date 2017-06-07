@@ -61,11 +61,9 @@
                                 <div class="layerOptionsWrapper">
                                     <div class="layerOptions" ng-repeat="opt in item.opts">
                                         <label>{{opt}}</label>
-                                        <input ng-model="item.input[opt]" type="text" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
-                                        <select ng-model="item.input[opt]" type="text" ng-if="vm.stringMapParams.hasOwnProperty(opt)">
-                                            <option ng-repeat="val in vm.stringMapParams[opt]">
-                                                {{val}}
-                                            </option>
+                                        <input ng-model="item.input[opt]" type="text" class="input" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
+                                        <select ng-model="item.input[opt]" type="text" class="input" ng-if="vm.stringMapParams.hasOwnProperty(opt)">
+                                            <option ng-value="val" ng-repeat="val in vm.stringMapParams[opt]">{{val}}</option>
                                         </select>
                                     </div>
                                 </div>
