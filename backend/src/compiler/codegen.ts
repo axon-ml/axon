@@ -179,7 +179,7 @@ from keras.models import *
         } else {
             loss_func = "None";
         }
-        const optimizer = "adam";
+        const optimizer = model.optimizer || "adam";
 
         let code = `model = Sequential()`;
         layers.forEach(l => {
@@ -220,8 +220,6 @@ ${layers}
 
 # Model creation.
 ${model}
-
-# Insert YOUR code for training here
 `;
     }
 

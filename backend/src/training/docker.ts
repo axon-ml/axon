@@ -17,7 +17,17 @@ const IMAGE = "andreweduffy/keras";
  * Returns a Promise fulfilled with the ID of the spawned container
  */
 
-const preamble = `
+interface DatasetMap {
+    [key: string]: Dataset;
+}
+interface Dataset {
+    preamble: string;
+    epilogue: string;
+}
+
+const DATASETS: DatasetMap = {
+    mnist: {
+        preamble: `
 '''Trains a simple convnet on the MNIST dataset.
 
 Gets to 99.25% test accuracy after 12 epochs
@@ -63,9 +73,8 @@ print(x_test.shape[0], 'test samples')
 # convert class vectors to binary class matrices
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
-`;
-
-const epilogue = `
+`,
+        epilogue: `
 model.fit(x_train, y_train,
           batch_size=batch_size,
           epochs=epochs,
@@ -74,7 +83,17 @@ model.fit(x_train, y_train,
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
-`;
+`,
+    },
+
+    // CIFAR-10 information.
+    cifar10: {
+        preamble: `
+`,
+        epilogue: `
+`,
+    },
+};
 
 export function startTraining(code: string, dataset: string): Promise<ContainerID> {
     return new Promise<string>((resolve, reject) => {
@@ -86,6 +105,9 @@ export function startTraining(code: string, dataset: string): Promise<ContainerI
 
             // Write the file out to disk.
             const train_name = folder + "/train.py";
+            const preamble = DATASETS[dataset].preamble || "MISSING!";
+            const epilogue = DATASETS[dataset].epilogue || "MISSING!";
+
             fs.writeFile(train_name, preamble + code + epilogue, {flag: "0600"}, (err) => {
                 if (err) {
                     return reject(err);

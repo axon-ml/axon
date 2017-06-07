@@ -13,6 +13,7 @@ export interface IModel {
     connections: IConnection[];
     input: [number];
     loss?: Loss;
+    optimizer?: Optimizer;
 }
 
 /**
@@ -97,6 +98,8 @@ export type LayerKind  = "Input"
 export type Activation = "sigmoid" | "tanh" | "relu" | "softmax";
 
 export type Loss = "xent" | "mse";
+
+export type Optimizer = "sgd" | "adam" | "adagrad" | "adadelta";
 
 /**
  * Possible types of padding for Conv2D layers.
