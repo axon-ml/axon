@@ -1,10 +1,27 @@
-<h1>{{vm.displayName}}</h1>
+<!-- <h1>{{vm.displayName}}</h1>
 
 <p>Hi there, {{vm.displayName}}.</p>
 
 <p>In the actual version of this page, information will be pulled by the controller from a database based on the username of the person we're navigating to.</p>
 
 <h2>Models</h2>
-<ul>
+ -->
+<!-- <ul>
     <li ng-repeat="model in vm.models"><a href="/{{vm.displayName}}/{{model.name}}">{{model.name}}</a></li>
-</ul>
+</ul> -->
+<link rel="stylesheet" type="text/css" href="/src/components/profile/profile.css" />
+<div class="gridListdemoDynamicTiles" ng-controller="ProfileController">
+	<md-grid-list md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6"
+    md-row-height-gt-md="1:1" md-row-height="4:3"
+    md-gutter="8px" md-gutter-gt-sm="4px">
+    	<h2> Recent Models </h2>
+		    <md-grid-tile ng-repeat="tile in vm.tiles"
+		                  md-rowspan="{{tile.span.row}}"
+		                  md-colspan="{{tile.span.col}}"
+		                  ng-class="tile.background" >
+		      	<md-grid-tile-header>
+		      		<h3>{{tile.title}}</h3>
+		      	</md-grid-tile-header>
+		    </md-grid-tile>
+  </md-grid-list>
+</div> 

@@ -43,6 +43,18 @@ export class DataService extends Service {
         });
     }
 
+    private getAllModels(req: Request, res: Response) {
+        const query = `
+        select id, name, owner from models`; 
+        this.db.query(query, [], (err, result) => {
+            if(err) {
+                return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+            } else {
+                 return res.status(HttpCodes.OK).send(result);
+            }
+        }); 
+    }
+
     private handleModels(req: Request, res: Response) {
         const {username} = req.params;
         const query = `
