@@ -19,9 +19,19 @@
                         </a>
                     </span>
                     <span flex="5"></span>
-                    <span>
-                        <input type="text" />
-                    </span>
+                    <md-autocomplete
+                        md-selected-item="selectedItem"
+                        md-search-text="searchText"
+                        md-items="item in root.getMatches(searchText)"
+                        md-item-text="item.handle + '/' + item.model"
+                        class="searchBox">
+                    <md-item-template>
+                        <span md-highlight-text="searchText">{{item.handle + '/' + item.model}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No matches found.
+                    </md-not-found>
+                    </md-autocomplete>
                     <span flex="60"></span>
 
                     <!-- Options visible to logged in users -->

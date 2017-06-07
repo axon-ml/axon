@@ -21,6 +21,8 @@ app.options("*", cors()); // Enable CORS for all routes with pre-flight requests
 const DB = new pg.Pool({
     database: "axon",
     host: "localhost",
+    user: "axon",
+    password: "axon",
 });
 
 // Create compiler backend.

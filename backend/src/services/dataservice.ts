@@ -25,7 +25,8 @@ export class DataService extends Service {
             .put("/models/save", (req, res) => this.saveModel(req, res))
             .get("/models/:username", (req, res) => this.handleModels(req, res))
             .get("/id/:username", (req, res) => this.handleReverseLookupUserId(req, res))
-            .get("/id/:username/:modelname", (req, res) => this.handleReverseLookupModelId(req, res));
+            .get("/id/:username/:modelname", (req, res) => this.handleReverseLookupModelId(req, res))
+            .get("/search/model/:query", (req, res) => this.handleModelSearch(req, res));
     }
 
     private saveModel(req: Request, res: Response) {
@@ -106,6 +107,27 @@ export class DataService extends Service {
             }
 
             return res.json({id: results.rows[0].id});
+        });
+    }
+
+    private handleModelSearch(req: Request, res: Response) {
+        // Fuzzy search for the model based on the username and modelname combo
+        const query = `
+        SELECT users.handle as handle, models.name as name
+        FROM models, users
+        WHERE users.handle LIKE $1 OR models.name LIKE $1 AND models.owner = users.id
+        `;
+        this.db.query(query, [req.params.searchText + '%'], (err, results) => {
+            if (err) {
+                LOGGER.error(`Postgres error: ${err}`);
+                return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+            }
+
+            if (results.rowCount === 0) {
+                return res.json([]).end();
+            }
+
+            return res.json(results.rows.map(row=>({handle: row.handle, model: row.name}))).end();
         });
     }
 }

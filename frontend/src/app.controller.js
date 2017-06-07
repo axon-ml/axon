@@ -5,8 +5,10 @@
         .module('axonApp')
         .controller('AxonController', AxonController);
 
-    AxonController.$inject = ['credentialsService', '$rootScope', '$location', '$resource', '$http'];
-    function AxonController(credentialsService, $rootScope, $location, $resource, $http) {
+    AxonController.$inject = ['credentialsService', 'searchService', '$rootScope', '$location', '$resource', '$http'];
+    function AxonController(credentialsService, searchService, $rootScope, $location, $resource, $http) {
+        var vm = this;
+        $rootScope.root.getMatches = getMatches;
 
         if ($rootScope.root === undefined) {
             $rootScope.root = {
@@ -27,5 +29,13 @@
             credentialsService.clear();
             $location.path("/login");
         };
+
+        /**
+         * For search box
+         */
+        function getMatches(searchQuery) {
+            return searchService.getModelsPromise(searchQuery);
+        }
     }
+
 })();
