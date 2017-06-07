@@ -133,7 +133,7 @@
          * compile service
          */
         function formatModel(layerList) {
-            console.log(layerList);
+            //console.log(layerList);
             var model = {};
 
             model.layers = [];
@@ -174,18 +174,29 @@
 
         vm.graph.compile = function() {
             // Note: all of params necessary to generate code are contained within object
-            console.log('formatted', formatModel(vm.graph.containers[0].items));
+            //console.log('formatted', formatModel(vm.graph.containers[0].items));
             var compiled = JSON.parse(angular.toJson(formatModel(vm.graph.containers[0].items)));
+            console.log(angular.toJson(compiled));
             compileService.gen(compiled, function(err, res) {
                 if (err) {
                     console.log('error');
-                    vm.graph.compiledCode = 'Compilation error!';
+                    console.log(err);
+                    vm.graph.errorMessage = 'Compilation error!';
                 } else {
+                    console.log('success!!');
                     console.log(res);
+                    // console.log(err);
                     vm.graph.compiledCode = res; // update view model with compiled code
+                    vm.rightUrl = '/src/components/model-detail/code.html'
                 }
             });
         };
+
+        vm.rightUrl = '/src/components/model-detail/graph-editor.html'; 
+
+        vm.graph.save = function() {
+
+        }; 
 
 	    // Generate initial model
         for(var key in layerTypes) {
