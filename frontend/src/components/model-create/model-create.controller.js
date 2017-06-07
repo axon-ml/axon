@@ -42,6 +42,7 @@
             });
 
             // Navigate to the model editor page
+            // TODO: CHANGE THIS URL TO BE /:userid/:graphid
             $location.path('/graph-editor/'.concat(modelName));
         }
     }
