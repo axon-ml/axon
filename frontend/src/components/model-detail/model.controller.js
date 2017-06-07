@@ -75,6 +75,12 @@
         var possibleListParams = new Set(["kernel_size", "stride"]); // Params that may be either a number or list
         var stringParams = new Set(["activation", "padding"]);       // Params supposed to be in string format
 
+        vm.stringMapParams = {                                       // Dropdown values for string params
+            "activation": ["sigmoid", "tanh", "relu", "softmax"],
+            "loss": ["xent", "mse"],
+            "padding": ["same", "valid"],
+        };
+
         vm.graph = {};
       	vm.graph.itemSelected = null;
         vm.graph.containers =  [

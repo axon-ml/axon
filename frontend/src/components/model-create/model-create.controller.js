@@ -3,11 +3,11 @@
 
     angular
         .module('axonApp')
-        .controller('CreateModelController', LoginRegisterController);
+        .controller('CreateModelController', CreateModelController);
 
-    LoginRegisterController.$inject = ['$rootScope', '$http', '$location'];
+    CreateModelController.$inject = ['$rootScope', '$http', '$location'];
 
-    function LoginRegisterController($rootScope, $http, $location) {
+    function CreateModelController($rootScope, $http, $location) {
         var vm = this;
 
         vm.registerModel = function(modelName) {
@@ -39,12 +39,10 @@
                 }).then(function(response) {
             }, function(err) {
                 console.log(err);
-            }); 
+            });
 
-            // Navigate to the model editor page 
+            // Navigate to the model editor page
             $location.path('/graph-editor/'.concat(modelName));
         }
-      
-
     }
 })();
