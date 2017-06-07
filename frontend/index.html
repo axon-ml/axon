@@ -24,6 +24,7 @@
                         md-search-text="searchText"
                         md-items="item in root.getMatches(searchText)"
                         md-item-text="item.handle + '/' + item.model"
+                        md-selected-item-change="root.redirect(selectedItem); searchText=''"
                         class="searchBox">
                     <md-item-template>
                         <span md-highlight-text="searchText">{{item.handle + '/' + item.model}}</span>

@@ -46,14 +46,14 @@ export class DataService extends Service {
 
     private getAllModels(req: Request, res: Response) {
         const query = `
-        select id, name, owner from models`; 
+        select id, name, owner from models`;
         this.db.query(query, [], (err, result) => {
             if(err) {
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
             } else {
                  return res.status(HttpCodes.OK).send(result);
             }
-        }); 
+        });
     }
 
     private handleModels(req: Request, res: Response) {
@@ -129,7 +129,7 @@ export class DataService extends Service {
         FROM models, users
         WHERE users.handle LIKE $1 OR models.name LIKE $1 AND models.owner = users.id
         `;
-        this.db.query(query, [req.params.searchText + '%'], (err, results) => {
+        this.db.query(query, [`%${req.params.query}%`], (err, results) => {
             if (err) {
                 LOGGER.error(`Postgres error: ${err}`);
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
@@ -139,7 +139,7 @@ export class DataService extends Service {
                 return res.json([]).end();
             }
 
-            return res.json(results.rows.map(row=>({handle: row.handle, model: row.name}))).end();
+            return res.json(results.rows.map(row => ({handle: row.handle, model: row.name}))).end();
         });
     }
 }

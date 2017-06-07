@@ -9,6 +9,7 @@
     function AxonController(credentialsService, searchService, $rootScope, $location, $resource, $http) {
         var vm = this;
         $rootScope.root.getMatches = getMatches;
+        $rootScope.root.redirect = redirect;
 
         if ($rootScope.root === undefined) {
             $rootScope.root = {
@@ -35,6 +36,12 @@
          */
         function getMatches(searchQuery) {
             return searchService.getModelsPromise(searchQuery);
+        }
+
+        function redirect(item) {
+            if (item) {
+                $location.path(item.handle + '/' + item.model);
+            }
         }
     }
 
