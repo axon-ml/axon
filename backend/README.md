@@ -10,6 +10,14 @@ npm i
 npm start
 ```
 
+Also, you need to have Docker installed.
+
+Once it's installed, run:
+
+```
+docker pull andreweduffy/keras
+```
+
 ## Preliminaries
 
 Using [tslint](https://github.com/palantir/tslint) for code quality checks, [TypeScript](https://www.typescriptlang.org/index.html) for nice compiler checks and smart editor completion.
