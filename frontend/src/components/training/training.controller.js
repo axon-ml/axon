@@ -5,17 +5,22 @@
         .module('axonApp')
         .controller('TrainingController', TrainingController)
 
-    TrainingController.$inject = ['axonUrls', '$websocket', '$routeParams'];
+    TrainingController.$inject = ['axonUrls', '$websocket', '$routeParams', '$rootScope'];
     function TrainingController(axonUrls, $websocket, $routeParams) {
         var vm = this;
         vm.rawText = "";
+
+        console.log('in training controller');
 
         var trainId = $routeParams.id;
         var client = $websocket(axonUrls.wsUrl);
 
         // Signal the log we wish to subscribe to.
         client.onOpen(function() {
-            client.send(trainId);
+            console.log($rootScope.root.trainId);
+            client.send($rootScope.root.trainId);
+            // console.log(trainId);
+            // client.send(trainId);
         });
 
         client.onMessage(function(msg) {

@@ -6,9 +6,9 @@
         .module('axonApp')
         .controller('ModelDetailController', ModelController);
 
-    ModelController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService'];
+    ModelController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService', '$rootScope'];
 
-    function ModelController(compileService, $http, $routeParams, $location, dataService, starService, trainService) {
+    function ModelController(compileService, $http, $routeParams, $location, dataService, starService, trainService, $rootScope) {
 
         var vm = this;
         vm.username = $routeParams.username;
@@ -206,7 +206,10 @@
                         console.error("Error when training:", err);
                     } else {
                         // Redirect to the training output.
-                        $location.path('/train/' + containerId);
+                        console.log('containerid = ' + containerId);
+                        $rootScope.root.trainId = containerId;
+                        //$location.path('/train/' + containerId); 
+                        vm.rightUrl = '/src/components/training/training.html'; 
                     }
                 });
             }
