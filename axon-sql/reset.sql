@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS models (
   id INT PRIMARY KEY,
   name VARCHAR NOT NULL,
   owner INT NOT NULL REFERENCES users(id),
+  markdown VARCHAR default 'Write markdown to describe your model here.', 
 
   -- model_id for parent model that this model is forked from.
   -- Can be NULL if it is not a fork.

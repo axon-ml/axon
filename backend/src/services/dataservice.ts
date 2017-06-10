@@ -22,7 +22,7 @@ export class DataService extends Service {
 
     protected setupRoutes(): Router {
         return Router()
-            .put("/models/save", (req, res) => this.saveModel(req, res))
+            .post("/models/save", (req, res) => this.saveModel(req, res))
             .get("/models/:username", (req, res) => this.handleModels(req, res))
             .get("/id/:username", (req, res) => this.handleReverseLookupUserId(req, res))
             .get("/id/:username/:modelname", (req, res) => this.handleReverseLookupModelId(req, res))
@@ -30,16 +30,18 @@ export class DataService extends Service {
     }
 
     private saveModel(req: Request, res: Response) {
-        const {username, modelName, modelJson} = req.body;
+        console.log("in save model");
+        const {username, modelName, modelJson, markdown} = req.body;
         const query = `
-            insert into models (name, owner, parent, repr)
-            values ($1, $2, NULL, $3)`;
-        this.db.query(query, [modelName, username, modelJson], (err, result) => {
+            insert into models (name, owner, parent, repr, markdown)
+            values ($1, $2, NULL, $3, $4)`;
+        console.log(query);
+        this.db.query(query, [modelName, username, modelJson, markdown], (err, result) => {
             if (err) {
                 LOGGER.error(`Postgres error: ${err}`);
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
             } else {
-                return res.status(HttpCodes.OK).send();
+                return res.status(HttpCodes.OK).send(result);
             }
         });
     }

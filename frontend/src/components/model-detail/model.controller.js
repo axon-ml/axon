@@ -6,9 +6,9 @@
         .module('axonApp')
         .controller('ModelDetailController', ModelController);
 
-    ModelController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService', '$rootScope'];
+    ModelController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService', '$rootScope', 'axonUrls'];
 
-    function ModelController(compileService, $http, $routeParams, $location, dataService, starService, trainService, $rootScope) {
+    function ModelController(compileService, $http, $routeParams, $location, dataService, starService, trainService, $rootScope, axonUrls) {
 
         var vm = this;
         vm.username = $routeParams.username;
@@ -172,10 +172,14 @@
             return model;
         }
 
+        var modelReprJson = function() {
+            return JSON.parse(angular.toJson(formatModel(vm.graph.containers[0].items)));
+        }
+
         vm.graph.compile = function() {
             // Note: all of params necessary to generate code are contained within object
             //console.log('formatted', formatModel(vm.graph.containers[0].items));
-            var compiled = JSON.parse(angular.toJson(formatModel(vm.graph.containers[0].items)));
+            var compiled = modelReprJson(); 
             console.log(angular.toJson(compiled));
             compileService.gen(compiled, function(err, res) {
                 if (err) {
@@ -195,8 +199,29 @@
         vm.rightUrl = '/src/components/model-detail/graph-editor.html';
 
         vm.graph.save = function() {
+            if(vm.markdown === undefined) {
+                vm.markdown = ""; 
+            }
+            console.log({ 
+                "username" : vm.username, 
+                "modelName" : vm.model, 
+                "modelJson" : modelReprJson(),
+                "markdown" : vm.markdown,  
+            });
+             $http.post(axonUrls.apiBaseUrl.concat('/data/models/save'), { 
+                "username" : vm.username, 
+                "modelName" : vm.model, 
+                "modelJson" : modelReprJson(),
+                "markdown" : vm.markdown,  
+            }).then(function(response) {
+                console.log('successful save');
+                console.log(response);
+            }, function(err) {
+                console.log('failed save');
+            }); 
             // TODO: Implement saving of models so we can restore them later from the JSON.
         };
+
 
         vm.graph.train = function() {
             // Train this

@@ -39,15 +39,9 @@
 						<md-nav-item md-nav-click="vm.graph.train()" name="page5">
 							Train
 						</md-nav-item>
-			      <!-- these require actual routing with ui-router or ng-route, so they
-			      won't work in the demo
-			      <md-nav-item md-nav-href="#page4" name="page5">Page Four</md-nav-item>
-			      <md-nav-item md-nav-sref="app.page5" name="page4">Page Five</md-nav-item>
-			      You can also add options for the <code>ui-sref-opts</code> attribute.
-			      <md-nav-item md-nav-sref="page6" sref-opts="{reload:true, notify:true}">
-			        Page Six
-			      </md-nav-item>
-			      -->
+			    <md-button class="md-flat" aria-label="Save" style="position: absolute; right: 0px">
+          			<i class="fa fa-floppy-o fa-6" style="font-size: 20px" ng-click="vm.graph.save()"></i>
+        		</md-button>
 			    </md-nav-bar>
 			    <div ng-include="vm.rightUrl"></div>
 			 </md-content>
