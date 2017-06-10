@@ -32,11 +32,11 @@ export class DataService extends Service {
     }
 
     private getModel(req: Request, res: Response) {
-        const {username, modelname} = req.params; 
+        const {username, modelname} = req.params;
         const query = `
-            select models.markdown as markdown, models.repr as repr from models, users 
+            select models.markdown as markdown, models.repr as repr from models, users
             where users.handle = $1 and models.name = $2 and models.owner = users.id
-        `; 
+        `;
         this.db.query(query, [username, modelname], (err, result) => {
             if (err) {
                 LOGGER.error(`Postgres error: ${err}`);
@@ -54,21 +54,19 @@ export class DataService extends Service {
         //     insert into models (name, owner, parent, repr, markdown)
         //     values ($1, (select id from users where handle = $2), NULL, $3, $4)`;
         const updateQuery = `
-        update models set markdown = $4, repr = $3 
+        update models set markdown = $4, repr = $3
         where name = $1 and owner = (select id from users where handle = $2)`;
-       const insertQuery = `insert into models (name, owner, parent, repr, markdown) 
-           values ($1, (select id from users where handle = $2), NULL, $3, $4)`; 
+       const insertQuery = `insert into models (name, owner, parent, repr, markdown)
+           values ($1, (select id from users where handle = $2), NULL, $3, $4)`;
         this.db.query(updateQuery, [modelName, username, modelJson, markdown], (err, result) => {
             if (err) {
                 LOGGER.error(`Postgres error: ${err}`);
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
             } else {
-                this.db.query(insertQuery, [modelName, username, modelJson, markdown], (err, result) => { 
-                    // ignore errors 
+                this.db.query(insertQuery, [modelName, username, modelJson, markdown], (err, result) => {
                     return res.status(HttpCodes.OK).send();
-                
             });
-               
+
             }
         });
     }
@@ -77,8 +75,8 @@ export class DataService extends Service {
         const query = `
         select models.name as modelname, users.handle as username from models, users where models.owner = users.id`;
         this.db.query(query, [], (err, result) => {
-            if(err) {
-                LOGGER.error(err); 
+            if (err) {
+                LOGGER.error(err.message);
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
             } else {
                  return res.status(HttpCodes.OK).send(result);

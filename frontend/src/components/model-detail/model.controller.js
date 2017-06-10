@@ -180,7 +180,7 @@
                 for(var i = 0 ; i < repr.layers.length; i++) {
                     var key = layers[i];
                     if (layerTypes.hasOwnProperty(key)) {
-                        layers..push({
+                        layers.push({
                             "name" : key,
                             "opts" : layerTypes[key].params,
                             "input" : {},

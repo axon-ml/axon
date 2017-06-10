@@ -103,7 +103,7 @@ export function ensureImage(image: string): Promise<{}> {
 
 export function startTraining(code: string, dataset: string): Promise<ContainerID> {
     return new Promise<string>((resolve, reject) => {
-		// Write the temp file out inside of the user's home directory, make sure that this thing exists.
+        // Write the temp file out inside of the user's home directory, make sure that this thing exists.
         const tmpDir = path.join(os.homedir(), "tmp");
         fs.mkdirpSync(tmpDir); // Ensure the directory exists.
 
