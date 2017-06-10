@@ -6,7 +6,7 @@
         .controller('TrainingController', TrainingController)
 
     TrainingController.$inject = ['axonUrls', '$websocket', '$routeParams', '$rootScope'];
-    function TrainingController(axonUrls, $websocket, $routeParams) {
+    function TrainingController(axonUrls, $websocket, $routeParams, $rootScope) {
         var vm = this;
         vm.rawText = "";
 

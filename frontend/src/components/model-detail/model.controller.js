@@ -11,7 +11,7 @@
     function ModelController(compileService, $http, $routeParams, $location, dataService, starService, trainService, $rootScope, axonUrls) {
 
         var vm = this;
-        vm.username = $routeParams.username; 
+        vm.username = $routeParams.username;
         vm.model = $routeParams.model;
 
         vm.renderMarkdown = false;
@@ -102,13 +102,6 @@
             }
         ];
 
-        // {
-        //                 "name" : "Input",
-        //                 "opts" : ["dimensions"],
-        //                 "input" : {},
-        //                 "color" : "blue",
-        //             }
-
         /**
          * Parse a string as a list of floats
          */
@@ -172,42 +165,69 @@
             return model;
         }
 
+        // Generate this into a format embeddable in vm.graph.containers[0].items
         function generateModel(repr) {
+            console.log("Building from repr:", repr);
+            repr = JSON.parse(repr);
             if(!repr.layers) {
-                return []; 
+                return [];
             } else {
-                layers = []; 
-                for(var i = 0 ; i < repr.layers.length; i++) {
-                    var key = layers[i];
+                var layers = [];
+                repr.layers.forEach(function(layer) {
+                    var key = layer.kind;
+                    console.log("key", key);
                     if (layerTypes.hasOwnProperty(key)) {
                         layers.push({
                             "name" : key,
                             "opts" : layerTypes[key].params,
-                            "input" : {},
+                            "input" : layer.params,
                             "color": layerTypes[key].color,
                         });
                     }
-                }
-               
+                });
             }
-            console.log(repr); 
+            return layers;
+        }
 
+        function generateInputParams(repr) {
+            repr = JSON.parse(repr);
+
+            var inputDims = "";
+            if (typeof repr.input === "object") {
+                inputDims = repr.input.join(", ");
+            } else if (typeof repr.input === "string") {
+                inputDims = repr.input;
+            } else if (typeof repr.input === "number") {
+                inputDims = "" + repr.input;
+            }
+            return {
+                dimensions: inputDims,
+                loss: repr.loss,
+                optimizer: repr.optimizer,
+            };
         }
 
         console.log('testing');
-        $http.get(axonUrls.apiBaseUrl + '/data/models/' + vm.username + '/' + vm.model, {}).then( 
+        $http.get(axonUrls.apiBaseUrl + '/data/models/' + vm.username + '/' + vm.model, {}).then(
             function(response) {
-                try { 
+                try {
                     console.log('before resp');
                     console.log(response);
+
+                    // Set the layers.
                     vm.graph.containers[0].items = generateModel(response.data.rows[0].repr);
-                    vm.markdown = response.data.rows[0].markdown; 
+
+                    // Also set the input parameters.
+                    vm.input = generateInputParams(response.data.rows[0].repr);
+                    console.log("Inputs:", vm.graph.input);
+
+                    vm.markdown = response.data.rows[0].markdown;
                 } catch(err) {
                     console.log(err);
-                }; 
+                };
         }, function(err) {
              console.log('error retrieving model');
-        }); 
+        });
 
         var modelRepr = function() {
             return JSON.parse(angular.toJson(formatModel(vm.graph.containers[0].items)));
@@ -216,7 +236,7 @@
         vm.graph.compile = function() {
             // Note: all of params necessary to generate code are contained within object
             //console.log('formatted', formatModel(vm.graph.containers[0].items));
-            var compiled = modelRepr(); 
+            var compiled = modelRepr();
             console.log(angular.toJson(compiled));
             compileService.gen(compiled, function(err, res) {
                 if (err) {
@@ -237,19 +257,19 @@
 
         vm.graph.save = function() {
             if(vm.markdown === undefined) {
-                vm.markdown = ""; 
+                vm.markdown = "";
             }
-             $http.post(axonUrls.apiBaseUrl.concat('/data/models/save'), { 
-                "username" : vm.username, 
-                "modelName" : vm.model, 
+             $http.post(axonUrls.apiBaseUrl.concat('/data/models/save'), {
+                "username" : vm.username,
+                "modelName" : vm.model,
                 "modelJson" : angular.toJson(modelRepr()),
-                "markdown" : vm.markdown,  
+                "markdown" : vm.markdown,
             }).then(function(response) {
                 console.log('successful save');
                 console.log(response);
             }, function(err) {
                 console.log('failed save');
-            }); 
+            });
             // TODO: Implement saving of models so we can restore them later from the JSON.
         };
 
@@ -264,15 +284,15 @@
                         // Redirect to the training output.
                         console.log('containerid = ' + containerId);
                         $rootScope.root.trainId = containerId;
-                        //$location.path('/train/' + containerId); 
-                        vm.rightUrl = '/src/components/training/training.html'; 
+                        //$location.path('/train/' + containerId);
+                        vm.rightUrl = '/src/components/training/training.html';
                     }
                 });
             }
         }
 
         // Generate initial options
-         for(var key in layerTypes) {
+         for (var key in layerTypes) {
                     if (layerTypes.hasOwnProperty(key)) {
                         vm.graph.containers[1].items.push({
                             "name" : key,
