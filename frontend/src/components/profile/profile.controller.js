@@ -5,8 +5,8 @@
         .module('axonApp')
         .controller('ProfileController', ProfileController);
 
-    ProfileController.$inject = ['$location', '$routeParams', 'dataService'];
-    function ProfileController($location, $routeParams, dataService) {
+    ProfileController.$inject = ['$location', '$routeParams', 'dataService', '$http', 'axonUrls'];
+    function ProfileController($location, $routeParams, dataService, $http, axonUrls) {
         var vm = this;
         vm.displayName = $routeParams.username;
 
@@ -21,51 +21,70 @@
         //     }
         // });
 
-        // Start: code derived from angularJS dynamic tiles template code
-        vm.tiles = (function(){
-            var it, results = [ ];
+        function rotateTileStyle(j, tile) {
+            // Start: code derived from angularJS dynamic tiles template code
+            switch(j+1) {
+              case 1:
+                tile.background = "red";
+                tile.span.row = tile.span.col = 2;
+                break;
 
-            for (var j=0; j<11; j++) {
+              case 2: tile.background = "green";         break;
+              case 3: tile.background = "darkBlue";      break;
+              case 4:
+                tile.background = "blue";
+                tile.span.col = 2;
+                break;
 
-                it = {
-                        icon : "avatar:svg-",
-                        title: "Svg-",
-                        background: ""
-                };
-                it.icon  = it.icon + (j+1);
-                it.title = it.title + (j+1);
-                it.span  = { row : 1, col : 1 };
+              case 5:
+                tile.background = "yellow";
+                tile.span.row = tile.span.col = 2;
+                break;
 
-                switch(j+1) {
-                  case 1:
-                    it.background = "red";
-                    it.span.row = it.span.col = 2;
-                    break;
-
-                  case 2: it.background = "green";         break;
-                  case 3: it.background = "darkBlue";      break;
-                  case 4:
-                    it.background = "blue";
-                    it.span.col = 2;
-                    break;
-
-                  case 5:
-                    it.background = "yellow";
-                    it.span.row = it.span.col = 2;
-                    break;
-
-                  case 6: it.background = "pink";          break;
-                  case 7: it.background = "darkBlue";      break;
-                  case 8: it.background = "purple";        break;
-                  case 9: it.background = "deepBlue";      break;
-                  case 10: it.background = "lightPurple";  break;
-                  case 11: it.background = "yellow";       break;
-                }
-                results.push(it);
+              case 6: tile.background = "pink";          break;
+              case 7: tile.background = "darkBlue";      break;
+              case 8: tile.background = "purple";        break;
+              case 9: tile.background = "deepBlue";      break;
+              case 10: tile.background = "lightPurple";  break;
+              case 11: tile.background = "yellow";       break;
             }
+            // End 
+            return tile; 
+        }
+
+        vm.viewModel = function(username, modelname) {
+            $location.path('/' + username + '/' + modelname); 
+        }; 
+
+        
+        vm.tiles = (function(){
+            var tile, results = [ ];
+
+            $http.get(axonUrls.apiBaseUrl.concat('/data/models/all')).then(
+                function(response) {
+                    //resp = JSON.parse(JSON.stringify(response));
+                    console.log(response);
+                    try {
+                        for (var j=0; j<response.data.rowCount; j++) {
+
+                            // Start: inspired by angularjs dynamic tiles 
+                            tile = {}; 
+                            console.log('here');
+                            console.log(response.data.rows[j].username);
+                            tile.modelname = response.data.rows[j].modelname; 
+                            tile.username = response.data.rows[j].username; 
+                            console.log('here 2');
+                            tile.span  = { row : 1, col : 1 };
+                            // End 
+
+                            tile = rotateTileStyle(j, tile); 
+                            
+                            results.push(tile);
+                        }
+                    } catch(err) { console.log('error parsing models'); } 
+                }, function(err) { console.log(err); }); 
             return results;
         })(); 
-        console.log(vm.tiles); 
-        // End 
+        //console.log(vm.tiles); 
     }
 })();

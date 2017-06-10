@@ -11,7 +11,7 @@
     function ModelController(compileService, $http, $routeParams, $location, dataService, starService, trainService, $rootScope, axonUrls) {
 
         var vm = this;
-        vm.username = $routeParams.username;
+        vm.username = $routeParams.username; 
         vm.model = $routeParams.model;
 
         vm.renderMarkdown = false;
@@ -172,14 +172,33 @@
             return model;
         }
 
-        var modelReprJson = function() {
+        function generateModel(repr) {
+            console.log(repr); 
+        }
+
+        console.log('testing');
+        $http.get(axonUrls.apiBaseUrl + '/data/models/' + vm.username + '/' + vm.model, {}).then( 
+            function(response) {
+                try { 
+                    console.log('before resp');
+                    console.log(response);
+                    vm.graph.containers[0].items = generateModel(response.data.rows[0].repr);
+                    vm.markdown = response.data.rows[0].markdown; 
+                } catch(err) {
+                    console.log(err);
+                }; 
+        }, function(err) {
+             console.log('error retrieving model');
+        }); 
+
+        var modelRepr = function() {
             return JSON.parse(angular.toJson(formatModel(vm.graph.containers[0].items)));
         }
 
         vm.graph.compile = function() {
             // Note: all of params necessary to generate code are contained within object
             //console.log('formatted', formatModel(vm.graph.containers[0].items));
-            var compiled = modelReprJson(); 
+            var compiled = modelRepr(); 
             console.log(angular.toJson(compiled));
             compileService.gen(compiled, function(err, res) {
                 if (err) {
@@ -202,16 +221,10 @@
             if(vm.markdown === undefined) {
                 vm.markdown = ""; 
             }
-            console.log({ 
-                "username" : vm.username, 
-                "modelName" : vm.model, 
-                "modelJson" : modelReprJson(),
-                "markdown" : vm.markdown,  
-            });
              $http.post(axonUrls.apiBaseUrl.concat('/data/models/save'), { 
                 "username" : vm.username, 
                 "modelName" : vm.model, 
-                "modelJson" : modelReprJson(),
+                "modelJson" : angular.toJson(modelRepr()),
                 "markdown" : vm.markdown,  
             }).then(function(response) {
                 console.log('successful save');

@@ -22,6 +22,8 @@ export class DataService extends Service {
 
     protected setupRoutes(): Router {
         return Router()
+            .get("/models/:username/:modelname", (req, res) => this.getModel(req, res))
+            .get("/models/all", (req, res) => this.getAllModels(req, res))
             .post("/models/save", (req, res) => this.saveModel(req, res))
             .get("/models/:username", (req, res) => this.handleModels(req, res))
             .get("/id/:username", (req, res) => this.handleReverseLookupUserId(req, res))
@@ -29,13 +31,35 @@ export class DataService extends Service {
             .get("/search/model/:query", (req, res) => this.handleModelSearch(req, res));
     }
 
+    private getModel(req: Request, res: Response) {
+        const {username, modelname} = req.params; 
+        const query = `
+            select models.markdown as markdown, models.repr as repr from models, users 
+            where users.handle = $1 and models.name = $2 and models.owner = users.id
+        `; 
+        this.db.query(query, [username, modelname], (err, result) => {
+            if (err) {
+                LOGGER.error(`Postgres error: ${err}`);
+                return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+            } else {
+                return res.status(HttpCodes.OK).send(result);
+            }
+        });
+    }
+
     private saveModel(req: Request, res: Response) {
         console.log("in save model");
         const {username, modelName, modelJson, markdown} = req.body;
+        // const query = `
+        //     insert into models (name, owner, parent, repr, markdown)
+        //     values ($1, (select id from users where handle = $2), NULL, $3, $4)`;
         const query = `
-            insert into models (name, owner, parent, repr, markdown)
-            values ($1, $2, NULL, $3, $4)`;
-        console.log(query);
+        insert into models (name, owner, parent, repr, markdown) 
+        select $1, id, NULL, $3, $4
+        from users where handle = $2`;
+        LOGGER.error(username); 
+        LOGGER.error(modelName); 
+        //LOGGER.error(repr);
         this.db.query(query, [modelName, username, modelJson, markdown], (err, result) => {
             if (err) {
                 LOGGER.error(`Postgres error: ${err}`);
@@ -48,9 +72,10 @@ export class DataService extends Service {
 
     private getAllModels(req: Request, res: Response) {
         const query = `
-        select id, name, owner from models`;
+        select models.name as modelname, users.handle as username from models, users where models.owner = users.id`;
         this.db.query(query, [], (err, result) => {
             if(err) {
+                LOGGER.error(err); 
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
             } else {
                  return res.status(HttpCodes.OK).send(result);

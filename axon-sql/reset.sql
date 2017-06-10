@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 -- Models table
 CREATE TABLE IF NOT EXISTS models (
-  id INT PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   name VARCHAR NOT NULL,
   owner INT NOT NULL REFERENCES users(id),
   markdown VARCHAR default 'Write markdown to describe your model here.', 

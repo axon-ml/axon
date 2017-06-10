@@ -18,9 +18,10 @@
 		    <md-grid-tile ng-repeat="tile in vm.tiles"
 		                  md-rowspan="{{tile.span.row}}"
 		                  md-colspan="{{tile.span.col}}"
-		                  ng-class="tile.background" >
+		                  ng-class="tile.background"
+		                  ng-click="vm.viewModel(tile.username, tile.modelname)">
 		      	<md-grid-tile-header>
-		      		<h3>{{tile.title}}</h3>
+		      		<h3>{{tile.modelname}}</h3>
 		      	</md-grid-tile-header>
 		      	<img id="nn-icon" src="http://i.imgur.com/S6aEYTk.png"></img>
 		    </md-grid-tile>
