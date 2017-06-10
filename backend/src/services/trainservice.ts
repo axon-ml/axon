@@ -30,6 +30,7 @@ export class TrainService extends Service {
             let firstMsg = true;
             LOGGER.info("WS connection");
 
+
             client.on("message", msg => {
                 // The client should only be sending a single message.
                 // Ignore all subsequent messages they send us.
@@ -50,6 +51,10 @@ export class TrainService extends Service {
                                 LOGGER.error("Getting very angry, because:" + err);
                             }
                         });
+                    },
+                    () => {
+                        // Close the client.
+                        client.close();
                     });
             });
         });

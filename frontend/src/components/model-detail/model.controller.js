@@ -219,7 +219,7 @@
 
                     // Also set the input parameters.
                     vm.input = generateInputParams(response.data.rows[0].repr);
-                    console.log("Inputs:", vm.graph.input);
+                    console.log("Inputs:", vm.input);
 
                     vm.markdown = response.data.rows[0].markdown;
                 } catch(err) {

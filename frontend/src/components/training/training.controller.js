@@ -23,6 +23,10 @@
             // client.send(trainId);
         });
 
+        client.onClose(function() {
+            console.log("Webosocket stream closed.");
+        });
+
         client.onMessage(function(msg) {
             // Convert the data to strip ANSI char codes
             // From: http://www.mudbytes.net/forum/comment/68949/

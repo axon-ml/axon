@@ -156,13 +156,17 @@ export function startTraining(code: string, dataset: string): Promise<ContainerI
 }
 
 // Export an interface for watching the output of container.
-export function watchContainer(containerId: ContainerID, onfail: (reason: any) => void, ondata: (chunk: string) => void): void {
+export function watchContainer(
+        containerId: ContainerID,
+        onfail: (reason: any) => void,
+        ondata: (chunk: string) => void,
+        onclose?: () => void): void {
     const container = docker.getContainer(containerId);
     container.logs({
         stdout: true,
         stderr: true,
         follow: true,
     })
-    .then(res => res.on("data", ondata))
+    .then(res => res.on("data", ondata).on("close", onclose || (() => {})))
     .catch(err => onfail(err));
 }

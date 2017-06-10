@@ -1,11 +1,11 @@
 
 .train-out {
-    color: #00f72b;
+    color: #111;
+    background: #fff;
     font-family: monospace;
     font-size: 14px;
     overflow: scroll;
-    width: 1080px;
+    /*width: 1080px;*/
     height: 900px;
     overflow-x: scroll;
-    background: #111;
 }
