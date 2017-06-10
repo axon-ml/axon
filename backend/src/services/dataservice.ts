@@ -53,19 +53,22 @@ export class DataService extends Service {
         // const query = `
         //     insert into models (name, owner, parent, repr, markdown)
         //     values ($1, (select id from users where handle = $2), NULL, $3, $4)`;
-        const query = `
-        insert into models (name, owner, parent, repr, markdown) 
-        select $1, id, NULL, $3, $4
-        from users where handle = $2`;
-        LOGGER.error(username); 
-        LOGGER.error(modelName); 
-        //LOGGER.error(repr);
-        this.db.query(query, [modelName, username, modelJson, markdown], (err, result) => {
+        const updateQuery = `
+        update models set markdown = $4, repr = $3 
+        where name = $1 and owner = (select id from users where handle = $2)`;
+       const insertQuery = `insert into models (name, owner, parent, repr, markdown) 
+           values ($1, (select id from users where handle = $2), NULL, $3, $4)`; 
+        this.db.query(updateQuery, [modelName, username, modelJson, markdown], (err, result) => {
             if (err) {
                 LOGGER.error(`Postgres error: ${err}`);
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
             } else {
-                return res.status(HttpCodes.OK).send(result);
+                this.db.query(insertQuery, [modelName, username, modelJson, markdown], (err, result) => { 
+                    // ignore errors 
+                    return res.status(HttpCodes.OK).send();
+                
+            });
+               
             }
         });
     }

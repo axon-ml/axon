@@ -173,7 +173,25 @@
         }
 
         function generateModel(repr) {
+            if(!repr.layers) {
+                return []; 
+            } else {
+                layers = []; 
+                for(var i = 0 ; i < repr.layers.length; i++) {
+                    var key = layers[i];
+                    if (layerTypes.hasOwnProperty(key)) {
+                        layers..push({
+                            "name" : key,
+                            "opts" : layerTypes[key].params,
+                            "input" : {},
+                            "color": layerTypes[key].color,
+                        });
+                    }
+                }
+               
+            }
             console.log(repr); 
+
         }
 
         console.log('testing');
@@ -253,16 +271,17 @@
             }
         }
 
-	    // Generate initial model
-        for(var key in layerTypes) {
-            if (layerTypes.hasOwnProperty(key)) {
-                vm.graph.containers[1].items.push({
-                    "name" : key,
-                    "opts" : layerTypes[key].params,
-                    "input" : {},
-                    "color": layerTypes[key].color,
-                });
-            }
-        }
+        // Generate initial options
+         for(var key in layerTypes) {
+                    if (layerTypes.hasOwnProperty(key)) {
+                        vm.graph.containers[1].items.push({
+                            "name" : key,
+                            "opts" : layerTypes[key].params,
+                            "input" : {},
+                            "color": layerTypes[key].color,
+                        });
+                    }
+                }
+
     }
 })();
