@@ -28,7 +28,6 @@
         <div ng-class="container.class" ng-if="container.class !== 'sidebar'">
                 <h3> Build Your Network</h3>
 
-
                 <ul
                 class="buckets layout-wrap layout-align-center-center layout-column"
                 ng-if="container.class !== 'sidebar'" dnd-list="container.items"
@@ -39,8 +38,8 @@
                             <div class="layerOptionsWrapper">
                                 <div class="layerOptions" ng-repeat="opt in vm.inputParams">
                                     <label>{{opt}}</label>
-                                    <input ng-model="vm.input[opt]" type="text" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
-                                    <select ng-model="vm.input[opt]" type="text" ng-if="vm.stringMapParams.hasOwnProperty(opt)">
+                                    <input ng-readonly="!vm.editable" ng-model="vm.input[opt]" type="text" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
+                                    <select ng-disabled="!vm.editable" ng-model="vm.input[opt]" type="text" ng-if="vm.stringMapParams.hasOwnProperty(opt)">
                                         <option ng-repeat="val in vm.stringMapParams[opt]">{{val}}</option>
                                     </select>
                                 </div>
@@ -61,8 +60,8 @@
                                 <div class="layerOptionsWrapper">
                                     <div class="layerOptions" ng-repeat="opt in item.opts">
                                         <label>{{opt}}</label>
-                                        <input ng-model="item.input[opt]" type="text" class="input" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
-                                        <select ng-model="item.input[opt]" type="text" class="input" ng-if="vm.stringMapParams.hasOwnProperty(opt)">
+                                        <input ng-readonly="!vm.editable" ng-model="item.input[opt]" type="text" class="input" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
+                                        <select ng-disabled="!vm.editable" ng-model="item.input[opt]" type="text" class="input" ng-if="vm.stringMapParams.hasOwnProperty(opt)">
                                             <option ng-value="val" ng-repeat="val in vm.stringMapParams[opt]">{{val}}</option>
                                         </select>
                                     </div>

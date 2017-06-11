@@ -17,8 +17,8 @@
         vm.star = star;
         vm.starCount = undefined;
 
-        // Only display editor tab for logged-in user's models.
-        vm.displayEditor = vm.username === $rootScope.root.username;
+        // Only make components editable for logged-in user's models.
+        vm.editable = vm.username === $rootScope.root.username;
 
         if (vm.markdown) {
             vm.leftNav = 'preview';
