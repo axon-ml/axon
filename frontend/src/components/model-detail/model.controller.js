@@ -4,12 +4,11 @@
 
     angular
         .module('axonApp')
-        .controller('ModelDetailController', ModelController);
+        .controller('ModelDetailController', ModelDetailController);
 
     ModelController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService', '$rootScope', 'axonUrls'];
 
-    function ModelController(compileService, $http, $routeParams, $location, dataService, starService, trainService, $rootScope, axonUrls) {
-
+    function ModelDetailController(compileService, $http, $routeParams, $location, dataService, starService, trainService, $rootScope, axonUrls) {
         var vm = this;
         vm.username = $routeParams.username;
         vm.model = $routeParams.model;
@@ -17,6 +16,9 @@
         vm.renderMarkdown = false;
         vm.star = star;
         vm.starCount = undefined;
+
+        vm.leftNav = 'editor';
+        vm.rightNav = 'model';
 
         // Get the initial star count.
         dataService.id(vm.username, vm.model, function(err, res) {

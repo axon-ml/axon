@@ -7,8 +7,11 @@
 
     TrainingController.$inject = ['axonUrls', '$websocket', '$routeParams', '$rootScope'];
     function TrainingController(axonUrls, $websocket, $routeParams, $rootScope) {
-        var vm = this;
-        vm.rawText = "";
+        // True when a training session has already occurred.
+        var started = true;
+
+        var self = this;
+        self.rawText = "";
 
         console.log('in training controller');
 
@@ -31,7 +34,7 @@
             // Convert the data to strip ANSI char codes
             // From: http://www.mudbytes.net/forum/comment/68949/
             // var encoded = JSON.stringify(msg.data)
-            vm.rawText += msg.data;
+            self.rawText += msg.data;
         });
     }
 })();

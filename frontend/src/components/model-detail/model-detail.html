@@ -1,53 +1,38 @@
 <link rel="stylesheet" type="text/css" href="/src/components/model-detail/model-detail.css" />
 <div id="modelDetailContainer" ng-controller="ModelDetailController">
-	<div class="leftPane">
-		 </md-nav-item>
-		        <!--  <div class="topNav">
-					<button ng-click="vm.star()">Star</button>
-					<label>{{vm.starCount}}</label>
-				</div> -->
-		<md-content class="md-padding">
-		    <md-nav-bar
-		      md-selected-nav-item="currentNavItem"
-		      nav-bar-aria-label="navigation links">
-		      <md-nav-item md-nav-click="vm.renderMarkdown = false" name="page1">
-		        Editor
-		      </md-nav-item>
-		      <md-nav-item md-nav-click="vm.renderMarkdown = true" name="page2">
-		       	Preview
-		    </md-nav-bar>
-		    <div ng-if="!vm.renderMarkdown" class="ace_editor"  ng-model="vm.markdown" ui-ace></div>
-			<div ng-if="vm.renderMarkdown" btf-markdown="vm.markdown"></div>
-		 </md-content>
-		</br>
-	</div>
-	<div class="rightPane">
-		<div class="rightButtons">
-			<!-- <md-switch ng-model="vm.modelView" aria-label="" ng-true-value="'Model'" ng-false-value="'Code'">
-   			  {{ vm.modelView}}
-  			</md-switch> -->
-  			<md-content class="md-padding">
-			    <md-nav-bar
-			      md-selected-nav-item="currentNavItem"
-			      nav-bar-aria-label="navigation links">
-			      <md-nav-item md-nav-click="vm.rightUrl = '/src/components/model-detail/graph-editor.html'" name="page3">
-			        Model
-			      </md-nav-item>
-			      <md-nav-item md-nav-click="vm.graph.compile()" name="page4">
-			       	Code
-			      </md-nav-item>
-						<md-nav-item md-nav-click="vm.graph.train()" name="page5">
-							Train
-						</md-nav-item>
-			    <md-button class="md-flat" aria-label="Save" style="position: absolute; right: 0px">
-          			<i class="fa fa-floppy-o fa-6" style="font-size: 20px" ng-click="vm.graph.save()"></i>
-        		</md-button>
-			    </md-nav-bar>
-			    <div ng-include="vm.rightUrl"></div>
-			 </md-content>
-
-
-
-		</div>
-	</div>
+  <div class="leftPane">
+    <md-content class="md-padding">
+      <md-nav-bar md-selected-nav-item="vm.leftNav" nav-bar-aria-label="navigation links">
+        <md-nav-item md-nav-click="vm.renderMarkdown = false" name="editor">
+          Editor
+        </md-nav-item>
+        <md-nav-item md-nav-click="vm.renderMarkdown = true" name="preview">
+          Preview
+      </md-nav-bar>
+      <div ng-if="!vm.renderMarkdown" class="ace_editor" ng-model="vm.markdown" ui-ace></div>
+      <div ng-if="vm.renderMarkdown" btf-markdown="vm.markdown"></div>
+    </md-content>
+    </br>
+  </div>
+  <div class="rightPane">
+    <div class="rightButtons">
+      <md-content class="md-padding">
+        <md-nav-bar md-selected-nav-item="vm.rightNav" nav-bar-aria-label="navigation links">
+          <md-nav-item md-nav-click="vm.rightUrl = '/src/components/model-detail/graph-editor.html'" name="model">
+            Model
+          </md-nav-item>
+          <md-nav-item md-nav-click="vm.graph.compile()" name="code">
+            Code
+          </md-nav-item>
+          <md-nav-item md-nav-click="vm.graph.train()" name="train">
+            Train
+          </md-nav-item>
+          <md-button class="md-flat" aria-label="Save" style="position: absolute; right: 0px">
+            <i class="fa fa-floppy-o fa-6" style="font-size: 20px" ng-click="vm.graph.save()"></i>
+          </md-button>
+        </md-nav-bar>
+        <div ng-include="vm.rightUrl"></div>
+      </md-content>
+    </div>
+  </div>
 </div>
