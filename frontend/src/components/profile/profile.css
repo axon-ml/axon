@@ -1,8 +1,12 @@
 
 /* The CSS below is from AngularJS's template css for tiles */
-.gridListdemoDynamicTiles md-icon {
+/*.gridListdemoDynamicTiles md-icon {
   width: %;
-  height: 30%; }
+  height: 30%; }*/
+
+.gridListdemoDynamicTiles md-grid-tile {
+  cursor: pointer;
+}
 
 .gridListdemoDynamicTiles md-icon svg {
   -webkit-border-radius: 50%;
