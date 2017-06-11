@@ -17,7 +17,13 @@
         vm.star = star;
         vm.starCount = undefined;
 
-        vm.leftNav = 'editor';
+        if (vm.markdown) {
+            vm.leftNav = 'preview';
+            vm.renderMarkdown = true;
+        } else {
+            vm.leftNav = 'editor';
+            vm.renderMarkdown = false;
+        }
         vm.rightNav = 'model';
 
         // Get the initial star count.
@@ -224,6 +230,10 @@
                     console.log("Inputs:", vm.input);
 
                     vm.markdown = response.data.rows[0].markdown;
+                    if (vm.markdown) {
+                        vm.leftNav = 'preview';
+                        vm.renderMarkdown = true;
+                    }
                 } catch(err) {
                     console.log(err);
                 };
