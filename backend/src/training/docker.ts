@@ -43,7 +43,7 @@ from keras import backend as K
 
 batch_size = 128
 num_classes = 10
-epochs = 12
+epochs = 10
 
 # input image dimensions
 img_rows, img_cols = 28, 28
@@ -64,21 +64,40 @@ x_train = x_train.astype('float32')
 x_test = x_test.astype('float32')
 x_train /= 255
 x_test /= 255
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
 
 # convert class vectors to binary class matrices
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 `,
         epilogue: `
+# Callback for printing out stats after epochs
+from keras.callbacks import Callback
+import sys
+
+class LoggingCallback(Callback):
+    def on_train_begin(self, logs={}):
+        print("Begin Training Model")
+        sys.stdout.flush()
+
+    def on_epoch_begin(self, epoch, logs={}):
+        print("Training Epoch {}/{}:   ".format(1+epoch, epochs))
+        sys.stdout.flush()
+
+    def on_epoch_end(self, epoch, logs={}):
+        print("    |--loss={:.4g}".format(logs['loss']))
+        print("    |--accu={:.4g}".format(logs['acc']))
+        sys.stdout.flush()
+
+log_callback = LoggingCallback()
+
 model.fit(x_train, y_train,
           batch_size=batch_size,
           epochs=epochs,
-          verbose=2,  # One line per epoch
-          validation_data=(x_test, y_test))
+          verbose=0,
+          validation_data=(x_test, y_test),
+          callbacks=[log_callback])
 score = model.evaluate(x_test, y_test, verbose=0)
+print("")
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 `,
@@ -164,13 +183,12 @@ export function watchContainer(
     const container = docker.getContainer(containerId);
     container.logs({
         stdout: true,
-        stderr: true,
+        stderr: false,
         follow: true,
     })
     .then(res => {
         res.on("data", ondata);
-        res.on("close", () => {
-            console.log("Closing!");
+        res.on("end", () => {
             if (onclose) {
                 onclose();
             }

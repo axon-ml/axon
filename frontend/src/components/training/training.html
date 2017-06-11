@@ -1,6 +1,11 @@
 <!-- <link rel="stylesheet" type="text/css" href="/src/components/model-detail/graph-editor.css" /> -->
 <div ng-controller="TrainingController as train">
-	<h2>Training Output:<md-progress-circular style="display: inline-block" md-diameter="20" ng-if="train.running" class="indeterminate"></md-progress-circular></h2>
+	<h2>
+		<span ng-if="train.running">TRAINING</span>
+		<span ng-if="!train.running">FINISHED</span>
+		&nbsp;&nbsp;
+		<md-progress-circular ng-if="train.running" style="display: inline-block" md-diameter="20" class="indeterminate"></md-progress-circular>
+	</h2>
 	<pre class="train-out">
 	{{train.rawText}}
 	</pre>
