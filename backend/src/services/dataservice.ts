@@ -1,9 +1,9 @@
-import {HttpCodes} from "../httpcodes";
-import {contentType} from "../middleware";
-import {Service} from "./service";
-import {createLogger} from "../logger";
+import { HttpCodes } from "../httpcodes";
+import { contentType } from "../middleware";
+import { Service } from "./service";
+import { createLogger } from "../logger";
 
-import {Request, Response, Router} from "express";
+import { Request, Response, Router } from "express";
 import * as pg from "pg";
 
 const LOGGER = createLogger("DataService");
@@ -32,7 +32,7 @@ export class DataService extends Service {
     }
 
     private getModel(req: Request, res: Response) {
-        const {username, modelname} = req.params;
+        const { username, modelname } = req.params;
         const query = `
             select models.markdown as markdown, models.repr as repr from models, users
             where users.handle = $1 and models.name = $2 and models.owner = users.id
@@ -49,14 +49,11 @@ export class DataService extends Service {
 
     private saveModel(req: Request, res: Response) {
         console.log("in save model");
-        const {username, modelName, modelJson, markdown} = req.body;
-        // const query = `
-        //     insert into models (name, owner, parent, repr, markdown)
-        //     values ($1, (select id from users where handle = $2), NULL, $3, $4)`;
+        const { username, modelName, modelJson, markdown } = req.body;
         const updateQuery = `
         update models set markdown = $4, repr = $3
         where name = $1 and owner = (select id from users where handle = $2)`;
-       const insertQuery = `insert into models (name, owner, parent, repr, markdown)
+        const insertQuery = `insert into models (name, owner, parent, repr, markdown)
            values ($1, (select id from users where handle = $2), NULL, $3, $4)`;
         this.db.query(updateQuery, [modelName, username, modelJson, markdown], (err, result) => {
             if (err) {
@@ -65,7 +62,7 @@ export class DataService extends Service {
             } else {
                 this.db.query(insertQuery, [modelName, username, modelJson, markdown], (err, result) => {
                     return res.status(HttpCodes.OK).send();
-            });
+                });
 
             }
         });
@@ -79,13 +76,13 @@ export class DataService extends Service {
                 LOGGER.error(err.message);
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
             } else {
-                 return res.status(HttpCodes.OK).send(result);
+                return res.status(HttpCodes.OK).send(result);
             }
         });
     }
 
     private handleModels(req: Request, res: Response) {
-        const {username} = req.params;
+        const { username } = req.params;
         const query = `
         SELECT models.name as name, handle, models.id as id FROM users, models
         WHERE users.handle = $1
@@ -101,7 +98,7 @@ export class DataService extends Service {
                 models.push(row);
             }
             LOGGER.info(`Models for ${username}: ${JSON.stringify(models)}`);
-            return res.json({models: models}).end();
+            return res.json({ models: models }).end();
         });
     }
 
@@ -123,7 +120,7 @@ export class DataService extends Service {
             }
 
             // Return the user id
-            return res.json({id: results.rows[0].id});
+            return res.json({ id: results.rows[0].id });
         });
     }
 
@@ -146,7 +143,7 @@ export class DataService extends Service {
                 return res.status(HttpCodes.NOT_FOUND).send(error);
             }
 
-            return res.json({id: results.rows[0].id});
+            return res.json({ id: results.rows[0].id });
         });
     }
 
@@ -167,7 +164,7 @@ export class DataService extends Service {
                 return res.json([]).end();
             }
 
-            return res.json(results.rows.map(row => ({handle: row.handle, model: row.name}))).end();
+            return res.json(results.rows.map(row => ({ handle: row.handle, model: row.name }))).end();
         });
     }
 }

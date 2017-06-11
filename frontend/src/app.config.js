@@ -29,10 +29,6 @@
             templateUrl: '/src/components/model-create/model-create.html',
             controller: 'CreateModelController',
             controllerAs: 'vm',
-        }).when('/train/:id', {
-            templateUrl: '/src/components/training/training.html',
-            controller: 'TrainingController',
-            controllerAs: 'vm',
         }).when('/:username', {
             templateUrl: '/src/components/profile/profile.html',
             controller: 'ProfileController',
