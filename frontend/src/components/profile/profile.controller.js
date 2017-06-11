@@ -48,15 +48,15 @@
               case 10: tile.background = "lightPurple";  break;
               case 11: tile.background = "yellow";       break;
             }
-            // End 
-            return tile; 
+            // End
+            return tile;
         }
 
         vm.viewModel = function(username, modelname) {
-            $location.path('/' + username + '/' + modelname); 
-        }; 
+            $location.path('/' + username + '/' + modelname);
+        };
 
-        
+
         vm.tiles = (function(){
             var tile, results = [ ];
 
@@ -67,24 +67,24 @@
                     try {
                         for (var j=0; j<response.data.rowCount; j++) {
 
-                            // Start: inspired by angularjs dynamic tiles 
-                            tile = {}; 
+                            // Start: inspired by angularjs dynamic tiles
+                            tile = {};
                             console.log('here');
                             console.log(response.data.rows[j].username);
-                            tile.modelname = response.data.rows[j].modelname; 
-                            tile.username = response.data.rows[j].username; 
+                            tile.modelname = response.data.rows[j].modelname;
+                            tile.username = response.data.rows[j].username;
                             console.log('here 2');
                             tile.span  = { row : 1, col : 1 };
-                            // End 
+                            // End
 
-                            tile = rotateTileStyle(j, tile); 
-                            
+                            tile = rotateTileStyle(j, tile);
+
                             results.push(tile);
                         }
-                    } catch(err) { console.log('error parsing models'); } 
-                }, function(err) { console.log(err); }); 
+                    } catch(err) { console.log('error parsing models'); }
+                }, function(err) { console.log(err); });
             return results;
-        })(); 
-        //console.log(vm.tiles); 
+        })();
+        //console.log(vm.tiles);
     }
 })();
