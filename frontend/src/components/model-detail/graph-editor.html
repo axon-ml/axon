@@ -5,7 +5,7 @@
       dnd-allowed-types="['container']">
         <li ng-repeat="container in vm.graph.containers"
         dnd-type="'container'">
-        <div ng-class="container.class" ng-if="container.class === 'sidebar'">
+        <div ng-class="container.class" ng-if="container.class === 'sidebar' && vm.editable">
                 <h3>Choose New Layers</h3>
                 <ul class="optionsList" class="buckets layout-wrap layout-align-center-center layout-row"  dnd-list="container.items"
                 dnd-allowed-types="[]"
@@ -38,7 +38,7 @@
                             <div class="layerOptionsWrapper">
                                 <div class="layerOptions" ng-repeat="opt in vm.inputParams">
                                     <label>{{opt}}</label>
-                                    <input ng-readonly="!vm.editable" ng-model="vm.input[opt]" type="text" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
+                                    <input ng-disabled="!vm.editable" ng-model="vm.input[opt]" type="text" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
                                     <select ng-disabled="!vm.editable" ng-model="vm.input[opt]" type="text" ng-if="vm.stringMapParams.hasOwnProperty(opt)">
                                         <option ng-repeat="val in vm.stringMapParams[opt]">{{val}}</option>
                                     </select>
@@ -51,6 +51,7 @@
                         <li ng-repeat="item in container.items">
                             <div class="md-primary md-raised md-button md-ink-ripple layers"
                                 ng-style="{'background-color': item.color}"
+                                dnd-disable-if="!vm.editable"
                                 dnd-draggable="item"
                                 dnd-type="'nn-item'"
                                 dnd-moved="container.items.splice($index, 1)"
@@ -60,7 +61,7 @@
                                 <div class="layerOptionsWrapper">
                                     <div class="layerOptions" ng-repeat="opt in item.opts">
                                         <label>{{opt}}</label>
-                                        <input ng-readonly="!vm.editable" ng-model="item.input[opt]" type="text" class="input" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
+                                        <input ng-disabled="!vm.editable" ng-model="item.input[opt]" type="text" class="input" ng-if="!vm.stringMapParams.hasOwnProperty(opt)"></input>
                                         <select ng-disabled="!vm.editable" ng-model="item.input[opt]" type="text" class="input" ng-if="vm.stringMapParams.hasOwnProperty(opt)">
                                             <option ng-value="val" ng-repeat="val in vm.stringMapParams[opt]">{{val}}</option>
                                         </select>
