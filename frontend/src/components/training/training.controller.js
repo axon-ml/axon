@@ -8,10 +8,9 @@
     TrainingController.$inject = ['axonUrls', '$websocket', '$routeParams', '$rootScope'];
     function TrainingController(axonUrls, $websocket, $routeParams, $rootScope) {
         // True when a training session has already occurred.
-        var started = true;
-
         var self = this;
         self.rawText = "";
+        self.running = true;
 
         console.log('in training controller');
 
@@ -28,6 +27,7 @@
 
         client.onClose(function() {
             console.log("Webosocket stream closed.");
+            self.running = false;
         });
 
         client.onMessage(function(msg) {

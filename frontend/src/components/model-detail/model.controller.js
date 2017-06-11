@@ -6,7 +6,7 @@
         .module('axonApp')
         .controller('ModelDetailController', ModelDetailController);
 
-    ModelController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService', '$rootScope', 'axonUrls'];
+    ModelDetailController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService', '$rootScope', 'axonUrls'];
 
     function ModelDetailController(compileService, $http, $routeParams, $location, dataService, starService, trainService, $rootScope, axonUrls) {
         var vm = this;

@@ -10,27 +10,16 @@
 	overflow: hidden;
 }
 
-#modelDetailContainer > div.rightPane {
-	/* TODO: make this scrollable */
-	height: 80vh;
-	overflow: auto;
-}
-
-.rightButtons {
-	float: right;
-	padding-right: 70px;
-}
-
-.topNav {
-	float: right;
-}
-
-div.leftpane {
-	min-width: 600px;
+div.pane {
+	display: flex;
+	flex-direction: column;
+	width: 700px;
+	padding: 10px;
 }
 
 md-content.md-padding {
 	min-width: 40vw;
 	min-height: 80vh;
+	display: inline-block;
 }
 

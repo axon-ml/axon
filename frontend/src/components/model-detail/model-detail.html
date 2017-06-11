@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="/src/components/model-detail/model-detail.css" />
 <div id="modelDetailContainer" ng-controller="ModelDetailController">
-  <div class="leftPane">
-    <md-content class="md-padding">
+  <!--<md-content class="md-padding">-->
+    <div class="pane">
       <md-nav-bar md-selected-nav-item="vm.leftNav" nav-bar-aria-label="navigation links">
         <md-nav-item md-nav-click="vm.renderMarkdown = false" name="editor">
           Editor
@@ -11,12 +11,9 @@
       </md-nav-bar>
       <div ng-if="!vm.renderMarkdown" class="ace_editor" ng-model="vm.markdown" ui-ace></div>
       <div ng-if="vm.renderMarkdown" btf-markdown="vm.markdown"></div>
-    </md-content>
-    </br>
-  </div>
-  <div class="rightPane">
-    <div class="rightButtons">
-      <md-content class="md-padding">
+    </div> <!-- No newlines space between the panes is allowed -->
+    <div class="pane">
+      <div class="rightButtons">
         <md-nav-bar md-selected-nav-item="vm.rightNav" nav-bar-aria-label="navigation links">
           <md-nav-item md-nav-click="vm.rightUrl = '/src/components/model-detail/graph-editor.html'" name="model">
             Model
@@ -32,7 +29,7 @@
           </md-button>
         </md-nav-bar>
         <div ng-include="vm.rightUrl"></div>
-      </md-content>
+      </div>
     </div>
-  </div>
+  <!--</md-content>-->
 </div>

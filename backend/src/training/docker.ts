@@ -167,6 +167,13 @@ export function watchContainer(
         stderr: true,
         follow: true,
     })
-    .then(res => res.on("data", ondata).on("close", onclose || (() => {})))
-    .catch(err => onfail(err));
+    .then(res => {
+        res.on("data", ondata);
+        res.on("close", () => {
+            console.log("Closing!");
+            if (onclose) {
+                onclose();
+            }
+        });
+    }).catch(err => onfail(err));
 }

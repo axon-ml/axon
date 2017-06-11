@@ -1,5 +1,7 @@
 html, body {
 	height: 100%;
+	min-width: 1430px;
+	overflow: scroll;
 }
 
 #index-body {
