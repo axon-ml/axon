@@ -17,8 +17,6 @@
 
         $rootScope.root.getMatches = getMatches;
         $rootScope.root.redirect = redirect;
-
-
         $rootScope.root.logout = logout;
 
         $rootScope.root.createModel = function() {
