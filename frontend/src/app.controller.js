@@ -8,15 +8,12 @@
     AxonController.$inject = ['credentialsService', 'searchService', '$rootScope', '$location', '$resource', '$http'];
     function AxonController(credentialsService, searchService, $rootScope, $location, $resource, $http) {
         var vm = this;
+        $rootScope.root = {};
         $rootScope.root.getMatches = getMatches;
         $rootScope.root.redirect = redirect;
 
-        if ($rootScope.root === undefined) {
-            $rootScope.root = {
-                loggedIn: false,
-                username: '',
-            };
-        }
+        $rootScope.root.loggedIn = false;
+        $rootScope.root.username = 'unknown';
         $rootScope.root.logout = logout;
 
         $rootScope.root.createModel = function() {
