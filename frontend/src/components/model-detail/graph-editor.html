@@ -56,7 +56,7 @@
                                 dnd-type="'nn-item'"
                                 dnd-moved="container.items.splice($index, 1)"
                                 dnd-effect-allowed="move">
-                                <i ng-click="container.items.splice($index, 1)" class="material-icons rightcorner">close</i>
+                                <i ng-if="vm.editable" ng-click="container.items.splice($index, 1)" class="material-icons rightcorner">close</i>
                                 <label>{{item.name}} Layer</label>
                                 <div class="layerOptionsWrapper">
                                     <div class="layerOptions" ng-repeat="opt in item.opts">
