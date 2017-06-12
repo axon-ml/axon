@@ -152,7 +152,7 @@ export class DataService extends Service {
         const query = `
         SELECT users.handle as handle, models.name as name
         FROM models, users
-        WHERE users.handle LIKE $1 OR models.name LIKE $1 AND models.owner = users.id
+        WHERE (users.handle LIKE $1 OR models.name LIKE $1) AND models.owner = users.id
         `;
         this.db.query(query, [`%${req.params.query}%`], (err, results) => {
             if (err) {
