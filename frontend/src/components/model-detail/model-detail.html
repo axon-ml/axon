@@ -1,15 +1,17 @@
 <link rel="stylesheet" type="text/css" href="/src/components/model-detail/model-detail.css" />
 <div id="modelDetailContainer" ng-controller="ModelDetailController">
-  <!--<md-content class="md-padding">-->
+  <div>
+    <md-button>
+      <i ng-if="vm.starred" class="fa fa-star"></i>
+      <i ng-if="!vm.starred" class="fa fa-star-o"></i>
+      {{vm.starCount}}
+    </md-button>
+  </div>
+
   <div class="pane">
     <md-nav-bar md-selected-nav-item="vm.leftNav" nav-bar-aria-label="navigation links">
-      <md-nav-item md-nav-click="vm.renderMarkdown = false" name="editor" ng-if="vm.editable">
-        Editor
-      </md-nav-item>
-
-      <md-nav-item md-nav-click="vm.renderMarkdown = true" name="preview">
-        Preview
-      </md-nav-item>
+      <md-nav-item md-nav-click="vm.renderMarkdown = false" name="editor" ng-if="vm.editable">Editor</md-nav-item>
+      <md-nav-item md-nav-click="vm.renderMarkdown = true" name="preview">Preview</md-nav-item>
     </md-nav-bar>
     <div ng-if="!vm.renderMarkdown" class="ace_editor" ng-model="vm.markdown" ui-ace></div>
     <div ng-if="vm.renderMarkdown" btf-markdown="vm.markdown"></div>
@@ -19,9 +21,8 @@
       <md-nav-item md-nav-click="null" name="model" value="model">Model</md-nav-item>
       <md-nav-item md-nav-click="null" name="code" value="code">Code</md-nav-item>
       <md-nav-item md-nav-click="null" name="train" value="train">Train</md-nav-item>
-
-      <md-button class="md-flat" aria-label="Save" style="position: absolute; right: 0px" ng-if="vm.editable">
-        <i class="fa fa-floppy-o fa-6" style="font-size: 20px" ng-click="vm.graph.save()"></i>
+      <md-button class="md-flat" aria-label="Save" style="position: absolute; right: 0px;" ng-if="vm.editable" ng-click="vm.graph.save()">
+        <i class="fa fa-floppy-o fa-6" style="font-size: 20px"></i>
       </md-button>
     </md-nav-bar>
     <div ng-include="vm.rightUrl"></div>

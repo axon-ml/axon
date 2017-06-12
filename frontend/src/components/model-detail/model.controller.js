@@ -270,17 +270,20 @@
             }).then(function(response) {
                 console.log('successful save');
                 console.log(response);
+                $mdToast.show($mdToast.simple()
+                    .textContent("Saved " + vm.model)
+                    .position('top right')
+                    .hideDelay(3000));
             }, function(err) {
-                console.log('failed save');
+                $mdToast.show($mdToast.simple()
+                    .textContent("Failed to save: " + err)
+                    .position('top right')
+                    .hideDelay(6000));
             });
         };
 
 
         vm.graph.train = function() {
-            // Train this
-            // This is a baaaaad idea.
-            // setTimeout(() => vm.rightNav = 'model', 500);
-
             if (!vm.graph.compiledCode) {
                 $mdToast.show($mdToast.simple()
                     .textContent("Click the 'Code' tab first to view compiled code before training.")
