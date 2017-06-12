@@ -79,6 +79,12 @@ export class TypeAssertions {
                                             && (!params.hasOwnProperty("right") || (typeof params.right === "number"));
     }
 
+    static isRNNParams(params: any): boolean {
+        return (typeof params === "object") && params.hasOwnProperty("output_units")
+                                            && (typeof params.output_units === "number")
+                                            && (!params.hasOwnProperty("activation") || (typeof params.activation === "string"));
+    }
+
 }
 
 /**
@@ -90,7 +96,8 @@ export type LayerKind  = "Input"
                        | "Pool2D"
                        | "Dropout"
                        | "ZeroPad"
-                       | "Flatten";
+                       | "Flatten"
+                       | "RNN";
 
 /**
  * Possible types of activation functions.
@@ -137,4 +144,9 @@ export interface IZeroPadParams {
 
 export interface IDropoutParams {
     probability: number;
+}
+
+export interface IRNNParams {
+    output_units: number;
+    activation?: Activation;
 }

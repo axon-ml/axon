@@ -46,5 +46,12 @@ followed by a final [softmax](https://en.wikipedia.org/wiki/Softmax_function) la
 `xent` indicates we are using the categorical cross-entropy as our loss function, and we can also see we''re using the Adam optimizer,
 a successor to SGD that has better convergence properties.');
 
+
+INSERT INTO models (id, name, owner, parent, repr, version, markdown) VALUES (2, 'mnist_rnn', 0, NULL, '{"layers":[{"name":"layer0","kind":"RNN","params":{"activation":"relu","output_units":100}},{"name":"layer1","kind":"FullyConnected","params":{"activation":"softmax","output_units":10}}],"input":[784,1],"loss":"xent","optimizer":"adagrad"}', 1, '
+# RNN Model
+
+Implementation of an RNN for the MNIST dataset.
+');
+
 -- Star the models
 INSERT INTO stars (userid, modelid) VALUES (1, 1);

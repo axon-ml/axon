@@ -6,7 +6,8 @@ import {IModel,
         IDropoutParams,
         IConv2DParams,
         IPool2DParams,
-        IZeroPadParams} from "./types";
+        IZeroPadParams,
+        IRNNParams} from "./types";
 import {mapWithIndex} from "../utils";
 
 /**
@@ -94,6 +95,12 @@ from keras.models import *
                 }
                 return this.genZeroPadLayer(name, params as IZeroPadParams, extraParams);
 
+            case "RNN":
+                if (!TypeAssertions.isRNNParams(params)) {
+                    throw errorLayerParams(name, "IRNNParams");
+                }
+                return this.genRNNLayer(name, params as IRNNParams, extraParams);
+
             case "Flatten":
                 return this.genFlattenLayer(name, extraParams);
 
@@ -166,6 +173,10 @@ from keras.models import *
 
     private genFlattenLayer(name: string, extraParams: string): string {
         return `${name} = Flatten(${extraParams})`;
+    }
+
+    private genRNNLayer(name: string, params: IRNNParams, extraParams: string): string {
+        return `${name} = SimpleRNN(${params.output_units}, activation='${params.activation ? params.activation : "relu"}'${extraParams ? ", " + extraParams : ""});`;
     }
 
     // Generate the model given the definition of the layers.

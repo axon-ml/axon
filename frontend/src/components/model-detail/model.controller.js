@@ -77,6 +77,10 @@
             "Flatten" : {
                 params: [],
                 color: "#c36882",
+            },
+            "RNN": {
+                params: ["activation", "output_units"],
+                color: "#226855",
             }
         };
 
@@ -169,7 +173,6 @@
 
         // Generate this into a format embeddable in vm.graph.containers[0].items
         function generateModel(repr) {
-            console.log("Building from repr:", repr);
             repr = JSON.parse(repr);
             if(!repr.layers) {
                 return [];
@@ -177,7 +180,6 @@
                 var layers = [];
                 repr.layers.forEach(function(layer) {
                     var key = layer.kind;
-                    console.log("key", key);
                     if (layerTypes.hasOwnProperty(key)) {
                         layers.push({
                             "name" : key,
@@ -211,16 +213,11 @@
 
         $http.get(axonUrls.apiBaseUrl + '/data/models/' + vm.username + '/' + vm.model, {}).then(function(response) {
             try {
-                console.log('before resp');
-                console.log(response);
-
                 // Set the layers.
                 vm.graph.containers[0].items = generateModel(response.data.rows[0].repr);
 
                 // Also set the input parameters.
                 vm.input = generateInputParams(response.data.rows[0].repr);
-                console.log("Inputs:", vm.input);
-
                 vm.markdown = response.data.rows[0].markdown;
                 if (vm.markdown) {
                     vm.leftNav = 'preview';
@@ -230,7 +227,7 @@
                 console.log(err);
             };
         }, function(err) {
-             console.log('error retrieving model');
+            console.log('error retrieving model');
         });
 
         function modelRepr() {
@@ -324,7 +321,6 @@
 
         // Watch changes to the rightNav that indicates which of the rightside tabs should be active.
         $scope.$watch('vm.rightNav', function(newValue, oldValue) {
-            console.log('Change to vm.rightNav:', newValue, 'from', oldValue);
             if (newValue === 'model') {
                 vm.rightUrl = '/src/components/model-detail/graph-editor.html'
             } else if (newValue === 'code') {
