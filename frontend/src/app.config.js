@@ -38,7 +38,7 @@
             controller: 'ModelDetailController',
             controllerAs: 'vm',
         }).otherwise({
-            redirectTo: '/login',
+            redirectTo: '/explore',
         });
     }
 

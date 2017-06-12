@@ -84,8 +84,8 @@ class LoggingCallback(Callback):
         sys.stdout.flush()
 
     def on_epoch_end(self, epoch, logs={}):
-        print("    |--loss={:.4g}".format(logs['loss']))
-        print("    |--accu={:.4g}".format(logs['acc']))
+        print("    |-- loss={:.4g}".format(logs['loss']))
+        print("    |-- accu={:.4g}".format(logs['acc']))
         sys.stdout.flush()
 
 log_callback = LoggingCallback()
