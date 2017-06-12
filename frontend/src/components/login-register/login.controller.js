@@ -30,7 +30,7 @@
                 } else {
                     credentialsService.store(vm.handle, token.data);
                     $rootScope.root.loggedIn = true;
-                    $location.url("/" + vm.handle);
+                    $location.url("/explore");
                 }
             }
         }

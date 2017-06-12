@@ -6,9 +6,10 @@
         .module('axonApp')
         .controller('ModelDetailController', ModelDetailController);
 
-    ModelDetailController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService', '$rootScope', 'axonUrls'];
+    ModelDetailController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService', '$rootScope', 'axonUrls', '$mdToast', '$scope'];
 
-    function ModelDetailController(compileService, $http, $routeParams, $location, dataService, starService, trainService, $rootScope, axonUrls) {
+    function ModelDetailController(compileService, $http, $routeParams, $location, dataService,
+                                    starService, trainService, $rootScope, axonUrls, $mdToast, $scope) {
         var vm = this;
         vm.username = $routeParams.username;
         vm.model = $routeParams.model;
@@ -49,20 +50,10 @@
             });
         }
 
-        // begin old graph-editor.controller.js
-
-        // vm.inputLayer = {
-        //         params: ["dimensions", "loss", "optimizer"],
-        //         color: "#96ceb4",
-        // }};
         vm.inputParams = ["dimensions", "loss", "optimizer"]
         vm.input = {};
 
         var layerTypes = {
-            // "Input" : {
-            //     params: ["dimensions"],
-            //     color: "#96ceb4",
-            // },
             "FullyConnected" : {
                 params: ["activation", "output_units"],
                 color: "#e92a28",
@@ -137,7 +128,6 @@
          * compile service
          */
         function formatModel(layerList) {
-            //console.log(layerList);
             var model = {};
 
             model.layers = [];
@@ -153,6 +143,11 @@
                     formattedLayer.params = {};
                 }
                 for (var key in formattedLayer.params) {
+                    if (!formattedLayer.params[key]) {
+                        // Remove the key for empty params.
+                        delete formattedLayer.params[key];
+                        continue;
+                    }
                     if (!formattedLayer.params.hasOwnProperty(key)) continue;
                     if (listParams.has(key)) {              // is a list of numbers
                         formattedLayer.params[key] = parseNumberList(layerList[i].input[key]);
@@ -169,10 +164,6 @@
             model.input = parseNumberList(vm.input.dimensions); // TODO: use real values
             model.loss = vm.input.loss;
             model.optimizer = vm.input.optimizer;
-            model.connections = [{
-                head: 'layer0',
-                tail: 'layer' + (layerList.length - 1),
-            }];
             return model;
         }
 
@@ -218,33 +209,31 @@
             };
         }
 
-        console.log('testing');
-        $http.get(axonUrls.apiBaseUrl + '/data/models/' + vm.username + '/' + vm.model, {}).then(
-            function(response) {
-                try {
-                    console.log('before resp');
-                    console.log(response);
+        $http.get(axonUrls.apiBaseUrl + '/data/models/' + vm.username + '/' + vm.model, {}).then(function(response) {
+            try {
+                console.log('before resp');
+                console.log(response);
 
-                    // Set the layers.
-                    vm.graph.containers[0].items = generateModel(response.data.rows[0].repr);
+                // Set the layers.
+                vm.graph.containers[0].items = generateModel(response.data.rows[0].repr);
 
-                    // Also set the input parameters.
-                    vm.input = generateInputParams(response.data.rows[0].repr);
-                    console.log("Inputs:", vm.input);
+                // Also set the input parameters.
+                vm.input = generateInputParams(response.data.rows[0].repr);
+                console.log("Inputs:", vm.input);
 
-                    vm.markdown = response.data.rows[0].markdown;
-                    if (vm.markdown) {
-                        vm.leftNav = 'preview';
-                        vm.renderMarkdown = true;
-                    }
-                } catch(err) {
-                    console.log(err);
-                };
+                vm.markdown = response.data.rows[0].markdown;
+                if (vm.markdown) {
+                    vm.leftNav = 'preview';
+                    vm.renderMarkdown = true;
+                }
+            } catch(err) {
+                console.log(err);
+            };
         }, function(err) {
              console.log('error retrieving model');
         });
 
-        var modelRepr = function() {
+        function modelRepr() {
             return JSON.parse(angular.toJson(formatModel(vm.graph.containers[0].items)));
         }
 
@@ -255,9 +244,13 @@
             console.log(angular.toJson(compiled));
             compileService.gen(compiled, function(err, res) {
                 if (err) {
-                    console.log('error');
-                    console.log(err);
-                    vm.graph.errorMessage = 'Compilation error!';
+                    // Change tab
+                    vm.rightNav = 'model'
+                    // Show alert dialog in bottom.
+                    $mdToast.show($mdToast.simple()
+                        .textContent(err)
+                        .position('top right')
+                        .hideDelay(3000));
                 } else {
                     console.log('success!!');
                     console.log(res);
@@ -267,8 +260,6 @@
                 }
             });
         };
-
-        vm.rightUrl = '/src/components/model-detail/graph-editor.html';
 
         vm.graph.save = function() {
             if(vm.markdown === undefined) {
@@ -285,38 +276,67 @@
             }, function(err) {
                 console.log('failed save');
             });
-            // TODO: Implement saving of models so we can restore them later from the JSON.
         };
 
 
         vm.graph.train = function() {
             // Train this
-            if (vm.graph.compiledCode) {
-                trainService.start(vm.graph.compiledCode, "mnist", function(err, containerId) {
-                    if (err) {
-                        console.error("Error when training:", err);
-                    } else {
-                        // Redirect to the training output.
-                        console.log('containerid = ' + containerId);
-                        $rootScope.root.trainId = containerId;
-                        //$location.path('/train/' + containerId);
-                        vm.rightUrl = '/src/components/training/training.html';
-                    }
+            // This is a baaaaad idea.
+            // setTimeout(() => vm.rightNav = 'model', 500);
+
+            if (!vm.graph.compiledCode) {
+                $mdToast.show($mdToast.simple()
+                    .textContent("Click the 'Code' tab first to view compiled code before training.")
+                    .position('top right')
+                    .hideDelay(3000));
+
+                // Ewwww, this is gross, but I can seem to figure out why vm.rightNav seems to be overwritten with 'train'
+                // $timeout(() => {
+                vm.rightNav = 'model';
+                // }, 1000);
+                return;
+            }
+
+            trainService.start(vm.graph.compiledCode, "mnist", function(err, containerId) {
+                if (err) {
+                    console.error("Error when training:", err);
+                } else {
+                    // Redirect to the training output.
+                    console.log('containerid = ' + containerId);
+                    $rootScope.root.trainId = containerId;
+                    //$location.path('/train/' + containerId);
+                    vm.rightUrl = '/src/components/training/training.html';
+                }
+            });
+        };
+
+        // Generate initial options
+        for (var key in layerTypes) {
+            if (layerTypes.hasOwnProperty(key)) {
+                vm.graph.containers[1].items.push({
+                    "name" : key,
+                    "opts" : layerTypes[key].params,
+                    "input" : {},
+                    "color": layerTypes[key].color,
                 });
             }
         }
 
-        // Generate initial options
-         for (var key in layerTypes) {
-                    if (layerTypes.hasOwnProperty(key)) {
-                        vm.graph.containers[1].items.push({
-                            "name" : key,
-                            "opts" : layerTypes[key].params,
-                            "input" : {},
-                            "color": layerTypes[key].color,
-                        });
-                    }
-                }
+        // Watch changes to the rightNav that indicates which of the rightside tabs should be active.
+        $scope.$watch('vm.rightNav', function(newValue, oldValue) {
+            console.log('Change to vm.rightNav:', newValue, 'from', oldValue);
+            if (newValue === 'model') {
+                vm.rightUrl = '/src/components/model-detail/graph-editor.html'
+            } else if (newValue === 'code') {
+                vm.graph.compile();
+            } else if (newValue === 'train') {
+                vm.graph.train();
+            } else {
+                // Nothing.
+                console.error("Invalid rightNav value:", newValue);
+            }
+        });
 
+        vm.rightUrl = '/src/components/model-detail/graph-editor.html';
     }
 })();

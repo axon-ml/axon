@@ -1,35 +1,29 @@
 <link rel="stylesheet" type="text/css" href="/src/components/model-detail/model-detail.css" />
 <div id="modelDetailContainer" ng-controller="ModelDetailController">
   <!--<md-content class="md-padding">-->
-    <div class="pane">
-      <md-nav-bar md-selected-nav-item="vm.leftNav" nav-bar-aria-label="navigation links">
-        <md-nav-item md-nav-click="vm.renderMarkdown = false" name="editor" ng-if="vm.editable">
-          Editor
-        </md-nav-item>
-        <md-nav-item md-nav-click="vm.renderMarkdown = true" name="preview">
-          Preview
-      </md-nav-bar>
-      <div ng-if="!vm.renderMarkdown" class="ace_editor" ng-model="vm.markdown" ui-ace></div>
-      <div ng-if="vm.renderMarkdown" btf-markdown="vm.markdown"></div>
-    </div> <!-- No newlines space between the panes is allowed -->
-    <div class="pane">
-      <div class="rightButtons">
-        <md-nav-bar md-selected-nav-item="vm.rightNav" nav-bar-aria-label="navigation links">
-          <md-nav-item md-nav-click="vm.rightUrl = '/src/components/model-detail/graph-editor.html'" name="model">
-            Model
-          </md-nav-item>
-          <md-nav-item md-nav-click="vm.graph.compile()" name="code">
-            Code
-          </md-nav-item>
-          <md-nav-item md-nav-click="vm.graph.train()" name="train">
-            Train
-          </md-nav-item>
-          <md-button class="md-flat" aria-label="Save" style="position: absolute; right: 0px" ng-if="vm.graph.editable">
-            <i class="fa fa-floppy-o fa-6" style="font-size: 20px" ng-click="vm.graph.save()"></i>
-          </md-button>
-        </md-nav-bar>
-        <div ng-include="vm.rightUrl"></div>
-      </div>
-    </div>
-  <!--</md-content>-->
+  <div class="pane">
+    <md-nav-bar md-selected-nav-item="vm.leftNav" nav-bar-aria-label="navigation links">
+      <md-nav-item md-nav-click="vm.renderMarkdown = false" name="editor" ng-if="vm.editable">
+        Editor
+      </md-nav-item>
+
+      <md-nav-item md-nav-click="vm.renderMarkdown = true" name="preview">
+        Preview
+      </md-nav-item>
+    </md-nav-bar>
+    <div ng-if="!vm.renderMarkdown" class="ace_editor" ng-model="vm.markdown" ui-ace></div>
+    <div ng-if="vm.renderMarkdown" btf-markdown="vm.markdown"></div>
+  </div>
+  <div class="pane">
+    <md-nav-bar md-selected-nav-item="vm.rightNav" nav-bar-aria-label="navigation links">
+      <md-nav-item md-nav-click="null" name="model" value="model">Model</md-nav-item>
+      <md-nav-item md-nav-click="null" name="code" value="code">Code</md-nav-item>
+      <md-nav-item md-nav-click="null" name="train" value="train">Train</md-nav-item>
+
+      <md-button class="md-flat" aria-label="Save" style="position: absolute; right: 0px" ng-if="vm.editable">
+        <i class="fa fa-floppy-o fa-6" style="font-size: 20px" ng-click="vm.graph.save()"></i>
+      </md-button>
+    </md-nav-bar>
+    <div ng-include="vm.rightUrl"></div>
+  </div>
 </div>

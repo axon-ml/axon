@@ -29,7 +29,7 @@
             templateUrl: '/src/components/model-create/model-create.html',
             controller: 'CreateModelController',
             controllerAs: 'vm',
-        }).when('/:username', {
+        }).when('/explore', {
             templateUrl: '/src/components/profile/profile.html',
             controller: 'ProfileController',
             controllerAs: 'vm',
@@ -65,7 +65,7 @@
         });
 
         if ($location.path() == '/' && $rootScope.root.loggedIn) {
-            $location.path('/' + $rootScope.root.username);
+            $location.path('/explore');
         }
     }
 })();

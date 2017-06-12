@@ -10,17 +10,6 @@
         var vm = this;
         vm.displayName = $routeParams.username;
 
-        // // Set the models statically.
-        // dataService.getAllModels(null, function(err, response) {
-        //     if (err) {
-        //         console.error("Error executing dataService.getAllModels:", err);
-        //         vm.models = [];
-        //     } else {
-        //         vm.models = response.models;
-        //         // Store the currently accessed model at the top-level.
-        //     }
-        // });
-
         function rotateTileStyle(j, tile) {
             // Start: code derived from angularJS dynamic tiles template code
             switch(j+1) {
@@ -63,17 +52,13 @@
             $http.get(axonUrls.apiBaseUrl.concat('/data/models/all')).then(
                 function(response) {
                     //resp = JSON.parse(JSON.stringify(response));
-                    console.log(response);
                     try {
                         for (var j=0; j<response.data.rowCount; j++) {
 
                             // Start: inspired by angularjs dynamic tiles
                             tile = {};
-                            console.log('here');
-                            console.log(response.data.rows[j].username);
                             tile.modelname = response.data.rows[j].modelname;
                             tile.username = response.data.rows[j].username;
-                            console.log('here 2');
                             tile.span  = { row : 1, col : 1 };
                             // End
 
@@ -85,6 +70,5 @@
                 }, function(err) { console.log(err); });
             return results;
         })();
-        //console.log(vm.tiles);
     }
 })();
