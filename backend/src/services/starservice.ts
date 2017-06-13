@@ -23,7 +23,7 @@ export class StarSevice extends Service {
             .post("/:id", (req, res) => this.handleStar(req, res))
             .delete("/:id", (req, res) => this.handleUnstar(req, res))
             .get("/count/:modelId", (req, res) => this.handleCount(req, res))
-            .get("/:userId/:modelId", (req, res) => this.handleQuery(req, res));
+            .get("/:modelId", (req, res) => this.handleQuery(req, res));
     }
 
     // Add a star for the given model from the logged-In user.
@@ -106,19 +106,41 @@ export class StarSevice extends Service {
     }
 
     private handleQuery(req: Request, res: Response) {
-        const query = `
-        SELECT COUNT(*) AS count
-        FROM stars
-        WHERE userid = (select users.id from users where handle = $1) AND modelid = $2
-        `;
-        this.db.query(query, [req.params.userId, parseInt(req.params.modelId)], (err, result) => {
-            if (err) {
-                LOGGER.error(`${req.path} Postgres error: ${err}`);
-                return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+        // If the Bearer token was attached, then verify it, extract the user and place for that user.
+        const header = req.header("authorization");
+        if (!header || !header.startsWith("Bearer ")) {
+            return res.status(HttpCodes.FORBIDDEN).send("Must attach Authorization: Bearer XXX with token!");
+        }
+
+        try {
+            const tokenStr = btoa(header.substring(7));
+            LOGGER.info(`Parsing token: ${tokenStr}`);
+            const token = JSON.parse(tokenStr) as Token;
+            // check signature
+            // TODO: check the issue date to see if the token is outdated!
+
+            if (!verify(token)) {
+                return res.status(HttpCodes.FORBIDDEN).send("Failed to verify token");
             }
-            LOGGER.info(`${req.path} Count=${result.rows[0].count}`);
-            return res.json({starred: (result.rows[0].count > 0)});
-        });
+            LOGGER.info(`Query Request, valid token (userid=${token.claim.userId} modelid=${req.params.id})`);
+
+            const query = `
+            SELECT COUNT(*) AS count
+            FROM stars
+            WHERE userid = $1 AND modelid = $2
+            `;
+            this.db.query(query, [token.claim.userId, parseInt(req.params.modelId)], (err, result) => {
+                if (err) {
+                    LOGGER.error(`${req.path} Postgres error: ${err}`);
+                    return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+                }
+                LOGGER.info(`${req.path} Count=${result.rows[0].count}`);
+                return res.json({starred: (result.rows[0].count > 0)});
+            });
+        } catch (err) {
+            LOGGER.error(`${req.path} Received error: ${err}`);
+            return res.status(HttpCodes.BAD_REQUEST).send(err);
+        }
     }
 
     private handleCount(req: Request, res: Response) {

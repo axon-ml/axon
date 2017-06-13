@@ -15,6 +15,37 @@
         vm.model = $routeParams.model;
         vm.renderMarkdown = false;
         vm.starCount = undefined;
+        vm.starDisabled = true; // Set to true to disable starring to prevent races as best we can.
+        vm.starred = false;
+        vm.modelId = undefined;
+
+        // Check if we have starred, enable starring/unstarring
+        dataService.id(vm.username, vm.model, function(err, result) {
+            if (err) {
+                $mdToast.show($mdToast.simple()
+                    .textContent('Error loading star information, see console')
+                    .position('top left')
+                    .hideDelay(3000));
+                console.error(err);
+                return;
+            }
+
+            vm.modelId = result.id;
+            starService.hasStarred(vm.username, vm.modelId, function(err, result) {
+                if (err) {
+                    $mdToast.show($mdToast.simple()
+                        .textContent('Error loading star information, see console')
+                        .position('top left')
+                        .hideDelay(3000));
+                    console.error(err);
+                    return;
+                }
+
+                vm.starred = result.starred;
+                vm.starDisabled = false;
+            });
+        });
+
 
         // Only make components editable for logged-in user's models.
         vm.editable = vm.username === $rootScope.root.username;
@@ -39,30 +70,36 @@
         });
 
         vm.star = function() {
-            // Grab the ID of the currently active model, send a star request.
-            dataService.id(vm.username, vm.model, function(err, res) {
+            vm.starDisabled = true;
 
-                starService.hasStarred(vm.username, res.id, function(err2, res2) {
-                    if(!err2) {
-                        console.log(res2);
-                        if(res2.starred) {
-                            starService.unstar(res.id, function(err3, res3) {
-                                if(err3) {
-                                    console.log("err3");
-                                } else {
-                                    console.log("no error");
-                                }
-                                vm.starCount--; 
-                            });
-                        } else {
-                            starService.star(res.id, function(err3, res3) {
-                                vm.starCount++; 
-                            }); 
-                        }
-                    }
-                });    
+            starService.star(vm.modelId, function(err, result) {
+                if (err) {
+                    console.error(err);
+                    vm.starDisabled = false;
+                    return;
+                }
+
+                vm.starCount++;
+                vm.starDisabled = false;
+                vm.starred = true;
             });
-        }; 
+        };
+
+        vm.unstar = function() {
+            vm.starDisabled = true;
+
+            starService.unstar(vm.modelId, function(err, result) {
+                if (err) {
+                    console.error(err);
+                    vm.starDisabled = false;
+                    return;
+                }
+
+                vm.starCount--;
+                vm.starDisabled = false;
+                vm.starred = false;
+            });
+        };
 
         vm.inputParams = ["dimensions", "loss", "optimizer"]
         vm.input = {};
