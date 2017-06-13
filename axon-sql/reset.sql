@@ -5,7 +5,8 @@ DROP TABLE IF EXISTS stars CASCADE;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
-  id INT PRIMARY KEY,
+  -- https://chartio.com/resources/tutorials/how-to-define-an-auto-increment-primary-key-in-postgresql/
+  id SERIAL PRIMARY KEY,
   name VARCHAR,
   handle VARCHAR NOT NULL,
 

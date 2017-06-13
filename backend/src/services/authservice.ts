@@ -26,7 +26,8 @@ export class AuthService extends Service {
         // Note: because we're using JWT's, credentials are stored purely on the client, which means
         // we don't even need a logout handler, the user will simply start to do things.
         return Router()
-            .post("/login", (req, res) => this.handleLogin(req, res));
+            .post("/login", (req, res) => this.handleLogin(req, res))
+            .post("/register", (req, res) => this.handleRegister(req, res));
     }
 
     /**
@@ -65,6 +66,28 @@ export class AuthService extends Service {
                         }
                 });
             }
+        });
+    }
+
+    private handleRegister(req: Request, res: Response) {
+        const {name, username, password} = req.body;
+        LOGGER.info(`Creating new user with username=${username}`);
+        const pwd = bcrypt.hashSync(password, 5);
+        const query = `
+        INSERT INTO users
+        (name, handle, pass_bcrypt)
+        VALUES
+        ($1, $2, $3)
+        RETURNING id`;
+        this.db.query(query, [name, username, pwd]).then((result) => {
+            if (result.rowCount === 0) {
+                res.status(500).send("No rows");
+                return;
+            }
+            // Send back the OK with the new information.
+            res.json({
+                id: result.rows[0].id,
+            });
         });
     }
 }
