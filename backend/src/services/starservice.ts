@@ -21,6 +21,7 @@ export class StarSevice extends Service {
     protected setupRoutes(): Router {
         return Router()
             .post("/:id", (req, res) => this.handleStar(req, res))
+            .delete("/:id", (req, res) => this.handleUnstar(req, res))
             .get("/count/:modelId", (req, res) => this.handleCount(req, res))
             .get("/:userId/:modelId", (req, res) => this.handleQuery(req, res));
     }
@@ -51,6 +52,44 @@ export class StarSevice extends Service {
             (userid, modelid)
             VALUES ($1, $2);
             `;
+            this.db.query(query, [token.claim.userId, parseInt(req.params.id)], (err, result) => {
+                if (err) {
+                    LOGGER.error(`${req.path} Error from postgres: ${err}`);
+                    return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+                }
+
+                // Send the all-clear in the good case.
+                return res.sendStatus(HttpCodes.OK);
+            });
+        } catch (err) {
+            LOGGER.error(`${req.path} Received error: ${err}`);
+            return res.status(HttpCodes.BAD_REQUEST).send(err);
+        }
+    }
+
+    private handleUnstar(req: Request, res: Response) {
+        // If the Bearer token was attached, then verify it, extract the user and place for that user.
+        const header = req.header("authorization");
+        if (!header || !header.startsWith("Bearer ")) {
+            return res.status(HttpCodes.FORBIDDEN).send("Must attach Authorization: Bearer XXX with token!");
+        }
+
+        try {
+            const tokenStr = btoa(header.substring(7));
+            LOGGER.info(`Parsing token: ${tokenStr}`);
+            const token = JSON.parse(tokenStr) as Token;
+            // check signature
+            // TODO: check the issue date to see if the token is outdated!
+
+            if (!verify(token)) {
+                return res.status(HttpCodes.FORBIDDEN).send("Failed to verify token");
+            }
+            LOGGER.info(`Unstar Request, valid token (userid=${token.claim.userId} modelid=${req.params.id})`);
+
+            // If we succeed, check the claim, find the userID, place a new row for this user.
+            const query = `
+            DELETE FROM stars
+            WHERE userid = $1 AND modelid = $2;`;
             this.db.query(query, [token.claim.userId, parseInt(req.params.id)], (err, result) => {
                 if (err) {
                     LOGGER.error(`${req.path} Error from postgres: ${err}`);

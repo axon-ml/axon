@@ -34,6 +34,27 @@
     }
 
     /**
+     * Makes the logged-in user remove star on the given model.
+     */
+    StarService.prototype.unstar = function(modelId, cb) {
+        // Send a request to unstar the model with the given name.
+        var URL = this.apiBaseUrl + '/star/' + modelId;
+        this.$http.delete(URL).then(successCb, errorCb);
+
+        function successCb(response) {
+            if (cb) {
+                cb(null, response);
+            }
+        }
+
+        function errorCb(err) {
+            if (cb) {
+                cb(err, null);
+            }
+        }
+    }
+
+    /**
      * Boolean function, whether or not logged-in user has starred the specified model.
      */
     StarService.prototype.hasStarred = function(modelId, cb) {
