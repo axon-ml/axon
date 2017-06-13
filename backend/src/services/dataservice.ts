@@ -70,7 +70,7 @@ export class DataService extends Service {
 
     private getAllModels(req: Request, res: Response) {
         const query = `
-        select models.name as modelname, users.handle as username from models, users where models.owner = users.id`;
+        select models.name as modelname, users.handle as username, users.name as fullname from models, users where models.owner = users.id`;
         this.db.query(query, [], (err, result) => {
             if (err) {
                 LOGGER.error(err.message);

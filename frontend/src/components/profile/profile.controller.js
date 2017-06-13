@@ -59,6 +59,7 @@
                             tile = {};
                             tile.modelname = response.data.rows[j].modelname;
                             tile.username = response.data.rows[j].username;
+                            tile.fullname = response.data.rows[j].fullname; 
                             tile.span  = { row : 1, col : 1 };
                             // End
 
