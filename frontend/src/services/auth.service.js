@@ -12,6 +12,7 @@
      */
     function AuthService(axonUrls, $http) {
         this.loginUrl = axonUrls.apiBaseUrl + '/auth/login';
+        this.registerUrl = axonUrls.apiBaseUrl + '/auth/register';
         this.$http = $http;
     }
 
@@ -28,6 +29,18 @@
 
         function errorCb(err) {
             cb(err, null);
+        }
+    }
+
+    AuthService.prototype.register = function(loginParams, cb) {
+        this.$http.post(this.registerUrl, loginParams).then(success, error);
+
+        function success(response) {
+            cb(null, response.data);
+        }
+
+        function error(response) {
+            cb(response.data, null);
         }
     }
 })();
