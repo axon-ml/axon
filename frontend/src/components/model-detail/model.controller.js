@@ -6,9 +6,9 @@
         .module('axonApp')
         .controller('ModelDetailController', ModelDetailController);
 
-    ModelDetailController.$inject = ['compileService', '$http', '$routeParams', '$location', 'dataService', 'starService', 'trainService', '$rootScope', 'axonUrls', '$mdToast', '$scope'];
+    ModelDetailController.$inject = ['compileService', '$http', '$routeParams', '$location', '$window', 'dataService', 'starService', 'trainService', '$rootScope', 'axonUrls', '$mdToast', '$scope'];
 
-    function ModelDetailController(compileService, $http, $routeParams, $location, dataService,
+    function ModelDetailController(compileService, $http, $routeParams, $location, $window, dataService,
                                     starService, trainService, $rootScope, axonUrls, $mdToast, $scope) {
         var vm = this;
         vm.username = $routeParams.username;
@@ -22,21 +22,13 @@
         // Check if we have starred, enable starring/unstarring
         dataService.id(vm.username, vm.model, function(err, result) {
             if (err) {
-                $mdToast.show($mdToast.simple()
-                    .textContent('Error loading star information, see console')
-                    .position('top left')
-                    .hideDelay(3000));
                 console.error(err);
                 return;
             }
 
             vm.modelId = result.id;
-            starService.hasStarred(vm.username, vm.modelId, function(err, result) {
+            starService.hasStarred(vm.modelId, function(err, result) {
                 if (err) {
-                    $mdToast.show($mdToast.simple()
-                        .textContent('Error loading star information, see console')
-                        .position('top left')
-                        .hideDelay(3000));
                     console.error(err);
                     return;
                 }
@@ -99,6 +91,36 @@
                 vm.starDisabled = false;
                 vm.starred = false;
             });
+        };
+
+        /**
+         * Fork the model into our own scope. We can only do this if:
+         *  1. The model is not our model
+         *  2. The model is not already a fork of another model.
+         */
+        vm.fork = function() {
+            // Check if we are the owner, or if the model is a fork of another model.
+            var URL = axonUrls.apiBaseUrl + '/data/fork/' + vm.modelId;
+            $http.post(URL).then(success, error);
+
+            function success(response) {
+                var data = response.data;
+                // We get the name of the model.
+                $mdToast.show($mdToast.simple()
+                    .textContent('Forked to ' + $rootScope.root.username + '/' + vm.model)
+                    .position('top left')
+                    .hideDelay(4000));
+                $location.path('/' + $rootScope.root.username + '/' + vm.model);
+            }
+
+            function error(response) {
+                var err = response.data;
+                console.error(err);
+                $mdToast.show($mdToast.simple()
+                    .textContent('Cannot fork a repo that you have already forked')
+                    .position('top right')
+                    .hideDelay(4000));
+            }
         };
 
         vm.inputParams = ["dimensions", "loss", "optimizer"]
