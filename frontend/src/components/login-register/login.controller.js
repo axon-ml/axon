@@ -14,6 +14,9 @@
         var vm = this;
         vm.handle = '';
         vm.password = '';
+        vm.newName = '';
+        vm.newHandle = '';
+        vm.newPassword = '';
         vm.login = login;
         vm.register = register;
 
@@ -43,9 +46,9 @@
         function register() {
             // Send the username and password up to server.
             var params = {
-                name: vm.name,
-                username: vm.handle,
-                password: vm.password,
+                name: vm.newName,
+                username: vm.newHandle,
+                password: vm.newPassword,
             };
             authService.register(params, callback);
 
@@ -56,9 +59,9 @@
                         .position('top right')
                         .hideDelay(3000));
                 } else {
-                    credentialsService.store(vm.handle, token.data);
+                    credentialsService.store(vm.newHandle, token.data);
                     $rootScope.root.loggedIn = true;
-                    $rootScope.root.username = vm.handle;
+                    $rootScope.root.username = vm.newHandle;
                     $location.url("/explore");
                 }
             }

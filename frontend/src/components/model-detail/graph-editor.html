@@ -75,7 +75,7 @@
                         </br>
                         <li ng-class="draggedElem === true ? 'selectedNewLayer' : 'newLayer'"
                             ondragenter="draggedElem = true">
-                            <i class="material-icons">add_circle_outline</i>
+                            <i ng-if="vm.editable" class="material-icons">add_circle_outline</i>
                         </li>
                         </br>
                 </ul>

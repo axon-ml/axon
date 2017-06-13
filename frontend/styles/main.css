@@ -92,3 +92,7 @@ h1, h2, h3 {
 	width: 1000px;
 	background-color: white;
 }
+
+.md-toast-text {
+	color: white;
+}

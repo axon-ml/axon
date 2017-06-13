@@ -28,7 +28,7 @@
             $http.defaults.headers.common.Authorization = '';
             $rootScope.root = {};
             credentialsService.clear();
-            $location.path("/login");
+            $location.path("/landing");
         };
 
         /**
