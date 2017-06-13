@@ -2,6 +2,8 @@ import { HttpCodes } from "../httpcodes";
 import { contentType } from "../middleware";
 import { Service } from "./service";
 import { createLogger } from "../logger";
+import { verify, Token } from "../tokens";
+import { btoa } from "../base64";
 
 import { Request, Response, Router } from "express";
 import * as pg from "pg";
@@ -26,9 +28,11 @@ export class DataService extends Service {
             .get("/models/all", (req, res) => this.getAllModels(req, res))
             .post("/models/save", (req, res) => this.saveModel(req, res))
             .get("/models/:username", (req, res) => this.handleModels(req, res))
+            .get("/models/info/:id", (req, res) => this.handleModelInfo(req, res))
             .get("/id/:username", (req, res) => this.handleReverseLookupUserId(req, res))
             .get("/id/:username/:modelname", (req, res) => this.handleReverseLookupModelId(req, res))
-            .get("/search/model/:query", (req, res) => this.handleModelSearch(req, res));
+            .get("/search/model/:query", (req, res) => this.handleModelSearch(req, res))
+            .post("/fork/:id", (req, res) => this.handleFork(req, res));
     }
 
     private getModel(req: Request, res: Response) {
@@ -70,7 +74,12 @@ export class DataService extends Service {
 
     private getAllModels(req: Request, res: Response) {
         const query = `
-        select models.name as modelname, users.handle as username, users.name as fullname from models, users where models.owner = users.id`;
+        select  models.name as modelname,
+                users.handle as username,
+                users.name as fullname,
+                models.parent as parent
+        from models, users
+        where models.owner = users.id`;
         this.db.query(query, [], (err, result) => {
             if (err) {
                 LOGGER.error(err.message);
@@ -166,5 +175,65 @@ export class DataService extends Service {
 
             return res.json(results.rows.map(row => ({ handle: row.handle, model: row.name }))).end();
         });
+    }
+
+    private handleModelInfo(req: Request, res: Response) {
+        const query = `
+        SELECT id, name, owner, parent
+        FROM models
+        WHERE models.id = $1`;
+        this.db.query(query, [req.params.id]).then(result => {
+            // Query here
+            if (result.rowCount === 0) {
+                return res.status(HttpCodes.NOT_FOUND).send();
+            }
+            return res.json(JSON.stringify(result.rows[0]));
+        }).catch(err => {
+            return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
+        });
+    }
+
+    private handleFork(req: Request, res: Response) {
+
+        // If the Bearer token was attached, then verify it, extract the user and place for that user.
+        const header = req.header("authorization");
+        if (!header || !header.startsWith("Bearer ")) {
+            return res.status(HttpCodes.FORBIDDEN).send("Must attach Authorization: Bearer XXX with token!");
+        }
+
+        try {
+            const tokenStr = btoa(header.substring(7));
+            const token = JSON.parse(tokenStr) as Token;
+            if (!verify(token)) {
+                return res.status(HttpCodes.FORBIDDEN).send("Failed to verify token");
+            }
+
+            // Grab all information for the model at the current point in time, use for insertion.
+            const modelId = req.params.id;
+            const query = `
+            INSERT INTO models
+                (
+                    name,
+                    owner,
+                    markdown,
+                    parent,
+                    repr
+                )
+                SELECT
+                    name,
+                    $1,
+                    markdown,
+                    CAST($2 as BIGINT),
+                    repr
+                FROM models
+                WHERE models.id = $2
+            RETURNING models.id`;
+            this.db.query(query, [token.claim.userId, modelId])
+                .then(result => res.json(result.rows[0]))
+                .catch(err => res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err));
+        } catch (err) {
+            LOGGER.error(`${req.path} Received error: ${err}`);
+            return res.status(HttpCodes.BAD_REQUEST).send(err);
+        }
     }
 }
