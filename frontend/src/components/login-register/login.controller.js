@@ -15,6 +15,7 @@
         vm.handle = '';
         vm.password = '';
         vm.login = login;
+        vm.register = register;
 
         function login() {
             // Send the username and password up to server.
@@ -23,6 +24,30 @@
                 password: vm.password,
             };
             authService.login(params, callback);
+
+            function callback(err, token) {
+                if (err) {
+                    $mdToast.show($mdToast.simple()
+                        .textContent('Username or password incorrect.')
+                        .position('top right')
+                        .hideDelay(3000));
+                } else {
+                    credentialsService.store(vm.handle, token.data);
+                    $rootScope.root.loggedIn = true;
+                    $rootScope.root.username = vm.handle;
+                    $location.url("/explore");
+                }
+            }
+        }
+
+        function register() {
+            // Send the username and password up to server.
+            var params = {
+                name: vm.name,
+                username: vm.handle,
+                password: vm.password,
+            };
+            authService.register(params, callback);
 
             function callback(err, token) {
                 if (err) {

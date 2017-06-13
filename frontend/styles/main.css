@@ -17,7 +17,7 @@ background: -webkit-linear-gradient(-45deg, #ff6700 18%,#f67e2c 40%); /* Chrome1
 background: linear-gradient(135deg, #ff6700 18%,#f67e2c 40%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff6700', endColorstr='#f67e2c',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
-background: rgba(255,255,255,.1);
+background: rgba(255,100,0,.1);
 
 position: fixed;
 top: 0;
@@ -63,4 +63,32 @@ body::-webkit-scrollbar-track {
 body::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
+}
+
+* {
+	font-family: Montserrat, sans-serif;
+	color: #222;
+}
+
+h1, h2, h3 {
+	font-family: Lato, sans-serif;
+}
+
+.md-button {
+	text-transform: none;
+}
+
+.md-whiteframe-z1 {
+	box-shadow: none;
+}
+
+#input-0 {
+	width: 1000px;
+	background-color: rgb(255,193,83);
+	border: 1px solid white;
+}
+
+#input-0:focus {
+	width: 1000px;
+	background-color: white;
 }
