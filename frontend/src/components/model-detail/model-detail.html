@@ -4,16 +4,19 @@
     <button class="md-flat" ng-click="vm.star()">
       {{vm.starCount}}
         <i ng-if="vm.starred" class="fa fa-star"></i>
-        <i ng-if="!vm.starred" class="fa fa-star-o"></i> 
+        <i ng-if="!vm.starred" class="fa fa-star-o"></i>
     </button>
   </div> -->
   <div class="pane">
     <md-nav-bar md-selected-nav-item="vm.leftNav" nav-bar-aria-label="navigation links">
       <md-nav-item md-nav-click="vm.renderMarkdown = false" name="editor" ng-if="vm.editable">Editor</md-nav-item>
       <md-nav-item md-nav-click="vm.renderMarkdown = true" name="preview">Preview</md-nav-item>
-      <md-button class="md-flat" aria-label="Star" ng-click="vm.star()" style="position: absolute; right: 0px">
-        <i ng-if="vm.starred" class="fa fa-star"></i>
-        <i ng-if="!vm.starred" class="fa fa-star-o"></i> 
+      <md-button ng-if="vm.starred" class="md-flat" aria-label="Star" ng-click="vm.unstar()" style="position: absolute; right: 0px" ng-disabled="vm.starDisabled">
+        <i class="fa fa-star"></i>
+         {{vm.starCount}}
+      </md-button>
+      <md-button ng-if="!vm.starred" class="md-flat" aria-label="Star" ng-click="vm.star()" style="position: absolute; right: 0px" ng-disabled="vm.starDisabled">
+        <i class="fa fa-star-o"></i>
          {{vm.starCount}}
       </md-button>
     </md-nav-bar>

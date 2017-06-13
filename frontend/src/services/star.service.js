@@ -59,7 +59,7 @@
      */
     StarService.prototype.hasStarred = function(userId, modelId, cb) {
         // Send a request to check if the user has starred a location.
-        var URL = this.apiBaseUrl + '/star/' + userId + '/' + modelId;
+        var URL = this.apiBaseUrl + '/star/' + modelId;
         this.$http.get(URL).then(success, error);
 
         function success(response) {
@@ -73,7 +73,7 @@
                 cb(err, null);
             }
         }
-        
+
     }
 
     StarService.prototype.count = function(modelId, cb) {
