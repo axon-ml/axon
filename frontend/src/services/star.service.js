@@ -57,8 +57,23 @@
     /**
      * Boolean function, whether or not logged-in user has starred the specified model.
      */
-    StarService.prototype.hasStarred = function(modelId, cb) {
+    StarService.prototype.hasStarred = function(userId, modelId, cb) {
         // Send a request to check if the user has starred a location.
+        var URL = this.apiBaseUrl + '/star/' + userId + '/' + modelId;
+        this.$http.get(URL).then(success, error);
+
+        function success(response) {
+            if (cb) {
+                cb(null, response.data);
+            }
+        }
+
+        function error(err) {
+            if (cb) {
+                cb(err, null);
+            }
+        }
+        
     }
 
     StarService.prototype.count = function(modelId, cb) {

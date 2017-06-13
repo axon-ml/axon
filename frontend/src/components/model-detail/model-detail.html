@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="/src/components/model-detail/model-detail.css" />
 <div id="modelDetailContainer" ng-controller="ModelDetailController">
   <div>
-    <md-button>
+    <md-button ng-click="vm.star()">
       <i ng-if="vm.starred" class="fa fa-star"></i>
       <i ng-if="!vm.starred" class="fa fa-star-o"></i>
       {{vm.starCount}}

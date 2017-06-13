@@ -13,9 +13,7 @@
         var vm = this;
         vm.username = $routeParams.username;
         vm.model = $routeParams.model;
-
         vm.renderMarkdown = false;
-        vm.star = star;
         vm.starCount = undefined;
 
         // Only make components editable for logged-in user's models.
@@ -40,15 +38,31 @@
             });
         });
 
-        function star() {
+        vm.star = function() {
             // Grab the ID of the currently active model, send a star request.
             dataService.id(vm.username, vm.model, function(err, res) {
-                // Star that model.
-                starService.star(res.id, function(newStars) {
-                    vm.starCount++;
-                });
+
+                starService.hasStarred(vm.username, res.id, function(err2, res2) {
+                    if(!err2) {
+                        console.log(res2);
+                        if(res2.starred) {
+                            starService.unstar(res.id, function(err3, res3) {
+                                if(err3) {
+                                    console.log("err3");
+                                } else {
+                                    console.log("no error");
+                                }
+                                vm.starCount--; 
+                            });
+                        } else {
+                            starService.star(res.id, function(err3, res3) {
+                                vm.starCount++; 
+                            }); 
+                        }
+                    }
+                });    
             });
-        }
+        }; 
 
         vm.inputParams = ["dimensions", "loss", "optimizer"]
         vm.input = {};

@@ -109,9 +109,9 @@ export class StarSevice extends Service {
         const query = `
         SELECT COUNT(*) AS count
         FROM stars
-        WHERE userid = $1 AND modelid = $2
+        WHERE userid = (select users.id from users where handle = $1) AND modelid = $2
         `;
-        this.db.query(query, [parseInt(req.params.userId), parseInt(req.params.modelId)], (err, result) => {
+        this.db.query(query, [req.params.userId, parseInt(req.params.modelId)], (err, result) => {
             if (err) {
                 LOGGER.error(`${req.path} Postgres error: ${err}`);
                 return res.status(HttpCodes.INTERNAL_SERVER_ERROR).send(err);
