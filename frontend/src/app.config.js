@@ -33,12 +33,16 @@
             templateUrl: '/src/components/profile/profile.html',
             controller: 'ProfileController',
             controllerAs: 'vm',
+        }).when('/landing', {
+            templateUrl: '/src/components/landing/landing.html',
+            controller: 'LandingController',
+            controllerAs: 'vm',
         }).when('/:username/:model', {
             templateUrl: '/src/components/model-detail/model-detail.html',
             controller: 'ModelDetailController',
             controllerAs: 'vm',
         }).otherwise({
-            redirectTo: '/explore',
+            redirectTo: '/landing',
         });
     }
 
@@ -59,8 +63,10 @@
 
         console.log("Logged In:", $rootScope.root.loggedIn);
         $rootScope.$on('$locationChangeStart', function (ev, next, curr) {
-            if (!$location.url().startsWith('/login') && !$rootScope.root.loggedIn) {
-                $location.path('/login');
+            if (!$location.url().startsWith('/landing')
+                    && !$location.url().startsWith('/login')
+                    && !$rootScope.root.loggedIn) {
+                $location.path('/landing');
             }
         });
 

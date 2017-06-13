@@ -4,6 +4,13 @@
   width: %;
   height: 30%; }*/
 
+.gridListdemoDynamicTiles {
+  display: flex;
+  justify-content: center;
+  background-color:#ffcc5c;
+  padding-top: 64px;
+}
+
 .gridListdemoDynamicTiles md-grid-tile {
   cursor: pointer;
 }

@@ -1,0 +1,36 @@
+div.landing {
+	overflow-y: scroll;
+	display: flex;
+	flex-direction: column;
+}
+
+#welcome, #registration {
+	background-image: url('/static/bg.jpg');
+	background-position: -1060px 50%;
+	background-size: auto;
+	background-clip: content-box;
+	position: relative;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+#welcome > h2 {
+	font-family: Lato, sans-serif;
+	color: rgb(.8,.8,.8);
+	margin: 0;
+	font-size: 70px;
+	display: block;
+}
+
+#welcome > button {
+	font-family: Lato, sans-serif;
+	color: rgb(.8,.8,.8);
+	margin-top: 30px;
+	font-size: 20px;
+	padding: 10px 30px;
+	border-radius: 60px;
+	display: block;
+}

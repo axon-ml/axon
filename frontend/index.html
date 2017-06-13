@@ -5,6 +5,7 @@
         <link rel="stylesheet" type="text/css" href="/node_modules/angular-material/angular-material.css" />
         <link rel="stylesheet" type="text/css" href="/styles/main.css" />
         <link rel="stylesheet" type="text/css" href="/src/components/training/training.css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato|Montserrat" rel="stylesheet">
         <base href="/"></base>
     </head>
 
@@ -20,6 +21,7 @@
                     </span>
                     <span flex="5"></span>
                     <md-autocomplete
+                        ng-if="root.loggedIn"
                         md-selected-item="selectedItem"
                         md-search-text="searchText"
                         md-items="item in root.getMatches(searchText)"
@@ -40,7 +42,7 @@
                         <span flex><md-button ng-click="root.createModel()"><md-tooltip>New Model</md-tooltip><i class="fa fa-plus"></i></md-button> </span>
                         <!-- Put this back in after we have a true profile page. -->
                         <!--<span flex><md-button href="/{{root.username}}"><md-tooltip>{{root.username}}</md-tooltip><i class="fa fa-user"></i></md-button></span>-->
-                        <span flex><md-button ng-click="root.logout()"><md-tooltip>Logout</md-tooltip><i class="fa fa-sign-out"></i></md-button></span>
+                        <span flex><md-button ng-click="root.logout()">Logout</span>
                     </span>
                 </div>
             </md-toolbar>
