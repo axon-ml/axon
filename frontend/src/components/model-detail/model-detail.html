@@ -28,7 +28,7 @@
       <md-nav-item md-nav-click="null" name="model" value="model">Model</md-nav-item>
       <md-nav-item md-nav-click="null" name="code" value="code">Code</md-nav-item>
       <md-nav-item md-nav-click="null" name="train" value="train">Train</md-nav-item>
-      <md-button lass="md-flat" aria-label="Fork" style="position: absolute; right: 90px;">
+      <md-button ng-click="vm.fork()" lass="md-flat" aria-label="Fork" style="position: absolute; right: 90px;">
         <i class="fa fa-code-fork" style="font-size: 20px"></i>
       </md-button>
       <md-button class="md-flat" aria-label="Save" style="position: absolute; right: 0px;" ng-if="vm.editable" ng-click="vm.graph.save()">
