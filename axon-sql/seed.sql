@@ -1,10 +1,10 @@
 -- Seed the database with some fake user data (Fake News!)
 
--- Password for root is 'root'
-INSERT INTO users VALUES (DEFAULT, 'Administrator', 'root', '$2a$10$rVOOqaTxwGrffy.2Z6ur3.dlW.3FeFUndaFfrHTckNn5cbLT56J0W');
+-- Password for lecun is 'root'
+INSERT INTO users VALUES (DEFAULT, 'Yann LeCun', 'lecun', '$2a$10$rVOOqaTxwGrffy.2Z6ur3.dlW.3FeFUndaFfrHTckNn5cbLT56J0W');
 
--- Password for user1 is 'user1'
-INSERT INTO users VALUES (DEFAULT, 'Regular User', 'user1', '$2a$10$0FlfWR4Y7l0KXQAEHwCRNu2lyQOAyp.yJoJiSwYZqDkUN9ahBquJ.');
+-- Password for karpathy is 'user1'
+INSERT INTO users VALUES (DEFAULT, 'Andrej Karpathy', 'karpathy', '$2a$10$0FlfWR4Y7l0KXQAEHwCRNu2lyQOAyp.yJoJiSwYZqDkUN9ahBquJ.');
 
 -- -- Create some models for the users
 -- INSERT INTO models (id, name, owner, parent, repr, version) VALUES (0, 'root-net', 0, NULL, NULL, 1);
@@ -53,6 +53,10 @@ INSERT INTO models (id, name, owner, parent, repr, version, markdown) VALUES (DE
 # RNN Model
 
 Implementation of an RNN for the MNIST dataset.
+');
+
+INSERT INTO models (id, name, owner, parent, repr, version, markdown) VALUES (DEFAULT, 'mnist_cnn', 2, NULL, '{ "input": [28, 28, 1], "layers": [ { "name": "conv1", "kind": "Conv2D", "params": { "activation": "relu", "filters": 32, "kernel_size": [3, 3] } }, { "name": "conv2", "kind": "Conv2D", "params": { "activation": "relu", "filters": 64, "kernel_size": [3, 3] } }, { "name": "maxpool1", "kind": "Pool2D", "params": { "pool_size": [2, 2], "stride": [2, 2] } }, { "name": "dropout_1", "kind": "Dropout", "params": { "probability": 0.25 } }, { "name": "flatten1", "kind": "Flatten" }, { "name": "fc1", "kind": "FullyConnected", "params": { "output_units": 128, "activation": "relu" } }, { "name": "dropout_1", "kind": "Dropout", "params": { "probability": 0.5 } }, { "name": "fc2", "kind": "FullyConnected", "params": { "output_units": 10, "activation": "softmax" } } ], "loss": "xent" }', 1, '# CNN Model
+This model uses a Convolutional Neural Network.
 ');
 
 -- Star the models
