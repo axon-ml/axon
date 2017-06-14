@@ -1,5 +1,4 @@
 div.landing {
-	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;
 }
@@ -33,4 +32,5 @@ div.landing {
 	padding: 10px 30px;
 	border-radius: 60px;
 	display: block;
+	border: 1px solid rgb(255,87,34);
 }

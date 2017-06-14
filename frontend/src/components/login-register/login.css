@@ -9,7 +9,7 @@
 	/*align-content: center; */
 	height: 100vh;
 	bottom: 20%;
-	background-color:#ffcc5c;
+	background-color:white;
 }
 
 .login > div {
@@ -21,7 +21,7 @@
 .login h2 {
 	margin-top: 10px;
 	margin-bottom: 10px;
-	color: #ff6700;
+	color: rgb(255,87,34);
 	font-size: 35px;
 }
 
@@ -35,8 +35,8 @@
 }
 
 .login button {
-	border: 1px #ff6700 solid;
-	color: #ff6700;
+	border: 1px rgb(255,87,34) solid;
+	color: rgb(255,87,34);
 }
 
 input {

@@ -13,9 +13,9 @@
     function LandingController(authService, credentialsService, $http, $location, $rootScope, $mdToast) {
         var vm = this;
 
-        vm.register = register;
+        vm.redirectToLogin = redirectToLogin;
 
-        function register() {
+        function redirectToLogin() {
             $location.path('/login');
         }
     }

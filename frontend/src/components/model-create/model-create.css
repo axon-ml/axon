@@ -2,7 +2,7 @@
 #modelCreateWrapper {
     display: flex;
 	justify-content: center;
-	background-color:#ffcc5c;
+	background-color: white;
 	padding-top: 64px;
 	min-height: 100vh;
 }
