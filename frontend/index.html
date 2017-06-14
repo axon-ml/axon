@@ -10,7 +10,7 @@
     </head>
 
 
-    <body id="index-body" layout="column" ng-controller="AxonController">
+    <body id="index-body" layout="column" ng-controller="AxonController" ng-cloak>
         <div class="main-toolbar">
             <md-toolbar id="index-toolbar" layout="row" class="md-hue-2">
                 <div class="md-toolbar-tools">
@@ -28,12 +28,12 @@
                         md-item-text="item.handle + '/' + item.model"
                         md-selected-item-change="root.redirect(selectedItem); searchText=''"
                         class="searchBox">
-                    <md-item-template>
-                        <span md-highlight-text="searchText">{{item.handle + '/' + item.model}}</span>
-                    </md-item-template>
-                    <md-not-found>
-                        No matches found.
-                    </md-not-found>
+                        <md-item-template>
+                            <span md-highlight-text="searchText">{{item.handle + '/' + item.model}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No matches found.
+                        </md-not-found>
                     </md-autocomplete>
                     <span flex="60"></span>
 
