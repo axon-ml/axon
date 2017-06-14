@@ -31,7 +31,7 @@
 	<p>OR</p>
 	<div class="statusMessages" id="loginBox">
 		<h2>Login</h2>
-		<form layout="column">
+		<form ng-submit="vm.login()" layout="column">
 			<md-label>
 				User Name
 				<md-input-container>
@@ -44,7 +44,7 @@
 					<input type="password" ng-model="vm.password" required>	</input>
 				</md-input-container>
 			</md-label>
-			<md-button ng-click="vm.login()">Login</md-button>
+			<md-button type="submit">Login</md-button>
 		</form>
 	</div>
 </div>

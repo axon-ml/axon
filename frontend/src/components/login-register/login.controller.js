@@ -39,6 +39,7 @@
                     $rootScope.root.loggedIn = true;
                     $rootScope.root.username = vm.handle;
                     $location.path("/explore");
+                    location.reload();
                 }
             }
         }

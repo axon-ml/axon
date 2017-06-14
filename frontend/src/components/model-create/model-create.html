@@ -5,10 +5,10 @@
 <div id="modelCreateWrapper">
 	<div ng-controller="CreateModelController">
 		<h2> New Model </h2>
-		<label>
-			Model Name
+		<form ng-submit="vm.registerModel(vm.modelName)">
+			<label>Model Name</label>
 			<input ng-model="vm.modelName" type="text"></input>
-			<button ng-click="vm.registerModel(vm.modelName)">Submit</button>
-		</label>
+			<md-button type="submit">Submit</md-button>
+		</form>
 	</div>
 </div>
