@@ -6,7 +6,7 @@
         <li ng-repeat="container in vm.graph.containers"
         dnd-type="'container'">
         <div ng-class="container.class" ng-if="container.class === 'sidebar' && vm.editable">
-                <h3>Choose New Layers</h3>
+                <h3>Drag and Drop New Layers</h3>
                 <ul class="optionsList" class="buckets layout-wrap layout-align-center-center layout-row"  dnd-list="container.items"
                 dnd-allowed-types="[]"
                 dnd-effect-allowed="move">

@@ -10,13 +10,11 @@ html, body {
 /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff6700+18,f67e2c+40 */
 
 /* Orange gradient */
-background: rgb(255,87,34); /* Old browsers */
-background: -moz-linear-gradient(-45deg, rgb(255,87,34) 18%, #f67e2c 40%); /* FF3.6-15 */
-background: -webkit-linear-gradient(-45deg, rgb(255,87,34) 18%,#f67e2c 40%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(135deg, rgb(255,87,34) 18%,#f67e2c 40%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgb(255,87,34)', endColorstr='#f67e2c',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
-background: #f67e2c;
+background: #ff6700; /* Old browsers */
+background: -moz-linear-gradient(-45deg, #ff6700 18%, #f67e2c 40%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, #ff6700 18%,#f67e2c 40%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, #ff6700 18%,#f67e2c 40%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff6700', endColorstr='#f67e2c',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
 position: fixed;
 top: 0;
@@ -82,7 +80,7 @@ h1, h2, h3 {
 	box-shadow: none;
 }
 
-#input-0 {
+#input-0 { /* search bar */
 	width: 1000px;
 	background: #f78f3d;
 	transition: background 0.2s ease-in-out 0s;

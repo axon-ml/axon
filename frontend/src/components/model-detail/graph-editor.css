@@ -66,3 +66,8 @@ div.layerOptions {
 .layerOptions > select.input {
 	margin-left: 5px;
 }
+
+.optionsList p {
+	color: white;
+	word-wrap: break-word;
+}

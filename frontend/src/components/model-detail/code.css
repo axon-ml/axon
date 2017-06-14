@@ -1,3 +1,7 @@
 .codeViewer {
     /* overflow: scroll; */
 }
+
+button.clipboard {
+    border: 1px solid #222;
+}

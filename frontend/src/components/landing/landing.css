@@ -5,7 +5,7 @@ div.landing {
 
 #welcome, #registration {
 	background-image: url('/static/bg.jpg');
-	background-position: -1060px 50%;
+	background-position: -2060px 50%;
 	background-size: auto;
 	background-clip: content-box;
 	position: relative;

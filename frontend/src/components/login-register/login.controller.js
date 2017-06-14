@@ -38,7 +38,7 @@
                     credentialsService.store(vm.handle, token.data);
                     $rootScope.root.loggedIn = true;
                     $rootScope.root.username = vm.handle;
-                    $location.url("/explore");
+                    $location.path("/explore");
                 }
             }
         }
@@ -52,17 +52,18 @@
             };
             authService.register(params, callback);
 
-            function callback(err, token) {
+            function callback(err, res) {
                 if (err) {
                     $mdToast.show($mdToast.simple()
-                        .textContent('Username or password incorrect.')
+                        .textContent('Please check your registration information.')
                         .position('top right')
                         .hideDelay(3000));
                 } else {
-                    credentialsService.store(vm.newHandle, token.data);
-                    $rootScope.root.loggedIn = true;
-                    $rootScope.root.username = vm.newHandle;
-                    $location.url("/explore");
+                    $mdToast.show($mdToast.simple()
+                        .textContent('Please log in with your new credentials.')
+                        .position('top right')
+                        .hideDelay(3000));
+                    $location.path("/landing");
                 }
             }
         }

@@ -410,5 +410,22 @@
         });
 
         vm.rightUrl = '/src/components/model-detail/graph-editor.html';
+
+        vm.clipboard = clipboard;
+
+        function clipboard() {
+            var code = document.getElementById("compiledCode").textContent;
+            console.log(code);
+            var ta = document.createElement('textarea');
+            ta.textContent = code;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            $mdToast.show($mdToast.simple()
+                .textContent("Copied to clipboard.")
+                .position('top right')
+                .hideDelay(3000));
+        }
     }
 })();
