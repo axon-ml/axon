@@ -12,7 +12,7 @@ const server = http.createServer((req, res) => {
             if (err) {
                 console.error('Error: ', err);
                 res.writeHead(500);
-                res.end(err);
+                res.end(data);
                 return;
             }
             res.end(data);
@@ -23,7 +23,7 @@ const server = http.createServer((req, res) => {
             if (err) {
                 console.error('Error: ', err);
                 res.writeHead(500);
-                res.end(err);
+                res.end(data);
                 return;
             }
             res.end(data);
